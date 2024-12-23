@@ -20,7 +20,7 @@ Before using these configurations, ensure you have the following:
 * settings.yaml
 
 ### Note:
-Edit in your own settings before running ```docker compose up -d```
+Chenge necessary settings in compose.yaml before running ```docker compose up -d``` to install Homepage container.
 
 ## Screenshots:
 ![Home](https://github.com/user-attachments/assets/e1fe3151-75ca-403a-97e6-1054c20a67a3)
