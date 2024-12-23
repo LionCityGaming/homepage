@@ -19,6 +19,7 @@ Before using these configurations, ensure you have the following:
 * forest.webp (Wallpaper)
 * services.yaml
 * settings.yaml
+* widgets.yaml
 
 ### Note:
 Make the necessary changes to settings in compose.yaml before running ```docker compose up -d``` to install Homepage container.
