@@ -10,3 +10,7 @@ Includes:
 * services.yaml
 
 * settings.yaml
+
+Screenshots:
+
+* https://zipline.abdulmuizz.dev/r/zen_fA2b4NHXC3.png
