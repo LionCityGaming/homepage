@@ -1,6 +1,6 @@
 # Homepage Config Files
 
-## Collection of config files for Homepage.
+## Collection of config files for Homepage (https://github.com/gethomepage/homepage)
 
 Includes:
 * compose.yaml
