@@ -1,11 +1,12 @@
 # Homepage Config Files
 Collection of config files for Homepage.
+
 Includes:
 
-*compose.yaml
+* compose.yaml
 
-*custom.css
+* custom.css
 
-*services.yaml
+* services.yaml
 
-*settings.yaml
+* settings.yaml
