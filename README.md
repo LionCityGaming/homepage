@@ -1,7 +1,7 @@
 <img width="1024" alt="banner_light@2x" src="https://github.com/user-attachments/assets/02b96251-d0a9-42e2-acc8-0e8fdb2d5ced" />
 
 # Homepage Config Files
-A personal collection of example configuration files for ![gethomepage/homepage](https://github.com/gethomepage/homepage)
+A personal collection of example configuration files for ![gethomepage/homepage](https://github.com/gethomepage/homepage).
 
 ## Prerequisites
 
