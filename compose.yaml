@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  homepage:
+    container_name: homepage
+    image: ghcr.io/gethomepage/homepage:dev
+    mem_limit: 4g
+    cpu_shares: 768
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - 3333:3000
+    volumes:
+      - ./:/app/config:rw
+      - ./images:/app/public/images
+      - /volume1:/volume1
+      - /volume2:/volume2
+      - /volumeUSB1:/volumeUSB1
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - docker
+    environment:
+      - TZ=Asia/Singapore
+      - DOCKER_HOST=tcp://192.168.1.69:2375
+      - LOG_LEVEL=debug
+    env_file:
+      - .env
+networks:
+  docker:
+    external: true

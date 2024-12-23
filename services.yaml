@@ -1,0 +1,1026 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+- Weather:
+    - " ":
+        id: weatherwidget
+        # icon: /images/icons/weather.png
+        widget:
+          type: iframe
+          name: weatherWidget
+          src: "{{HOMEPAGE_VAR_WEATHER_WIDGET_URL}}"
+          classes: weather # optional, use tailwind height classes
+          referrerPolicy: same-origin # optional, no default
+          allowPolicy: fullscreen # optional, no default
+          loadingStrategy: lazy # optional, default: eager
+          allowScrolling: no # optional, default: yes
+          refreshInterval: 900000 # optional, no default
+
+- Calendars1:
+    - Upcoming Movie Releases:
+        # icon: /images/icons/movie.png
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/radarr-light.webp
+        id: upcomingmovies
+        widget:
+          type: calendar
+          showTime: true
+          maxEvents: 11
+          view: agenda
+          integrations:
+            - type: radarr
+              service_group: Applications
+              service_name: Radarr
+              color: amber
+
+    - Upcoming Events:
+        icon: /images/icons/calendar.png
+        href: https://calendar.google.com/calendar/u/1/r
+        id: events
+        widget:
+          type: calendar
+          initialLoad: true
+          showTime: true
+          #timezone: Asia/Singapore
+          maxEvents: 11
+          view: agenda # optional - possible values monthly, agenda
+          integrations:         
+            - type: ical
+              url: "{{HOMEPAGE_VAR_GOOGLE_CALENDAR_PUBLIC_HOLIDAYS}}"
+              name: Public Holidays
+              color: red
+            - type: ical
+              url: "{{HOMEPAGE_VAR_GOOGLE_CALENDAR_FAMILY}}"
+              name: Family
+              color: green
+            - type: ical
+              url: "{{HOMEPAGE_VAR_GOOGLE_CALENDAR_WORK}}"
+              name: Work
+              color: sky                  
+
+    - Upcoming TV Episodes:
+        # icon: /images/icons/television.png
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sonarr.webp
+        id: upcomingtv
+        widget:
+          type: calendar
+          showTime: true
+          maxEvents: 11
+          view: agenda
+          integrations:
+            - type: sonarr
+              service_group: Applications
+              service_name: Sonarr
+              color: cyan
+
+- Calendars2:
+    - Recently Downloaded Movies:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/radarr-light.webp
+        id: tautulli_recent_movies
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_LOCAL_IP}}:3008/recent-movies"
+          method: GET
+          display: list
+          mappings:
+            - field:
+                0: added_at
+              additionalField:
+                field:
+                  0: title
+            - field:
+                1: added_at
+              additionalField:
+                field:
+                  1: title
+            - field:
+                2: added_at
+              additionalField:
+                field:
+                  2: title
+            - field:
+                3: added_at
+              additionalField:
+                field:
+                  3: title
+            - field:
+                4: added_at
+              additionalField:
+                field:
+                  4: title
+            - field:
+                5: added_at
+              additionalField:
+                field:
+                  5: title
+            - field:
+                6: added_at
+              additionalField:
+                field:
+                  6: title
+            - field:
+                7: added_at
+              additionalField:
+                field:
+                  7: title
+            - field:
+                8: added_at
+              additionalField:
+                field:
+                  8: title
+            - field:
+                9: added_at
+              additionalField:
+                field:
+                  9: title
+            - field:
+                10: added_at
+              additionalField:
+                field:
+                  10: title
+            # - field:
+            #     11: added_at
+            #   additionalField:
+            #     field:
+            #       11: title
+            # - field:
+            #     12: added_at
+            #   additionalField:
+            #     field:
+            #       12: title
+            # - field:
+            #     13: added_at
+            #   additionalField:
+            #     field:
+            #       13: title
+            # - field:
+            #     14: added_at
+            #   additionalField:
+            #     field:
+            #       14: title
+            # - field:
+            #     15: added_at
+            #   additionalField:
+            #     field:
+            #       15: title
+            # - field:
+            #     16: added_at
+            #   additionalField:
+            #     field:
+            #       16: title
+            # - field:
+            #     17: added_at
+            #   additionalField:
+            #     field:
+            #       17: title
+            # - field:
+            #     18: added_at
+            #   additionalField:
+            #     field:
+            #       18: title
+            # - field:
+            #     19: added_at
+            #   additionalField:
+            #     field:
+            #       19: title
+            # - field:
+            #     20: added_at
+            #   additionalField:
+            #     field:
+            #       20: title
+            # - field:
+            #     21: added_at
+            #   additionalField:
+            #     field:
+            #       21: title
+            # - field:
+            #     22: added_at
+            #   additionalField:
+            #     field:
+            #       22: title
+            # - field:
+            #     23: added_at
+            #   additionalField:
+            #     field:
+            #       23: title
+            # - field:
+            #     24: added_at
+            #   additionalField:
+            #     field:
+            #       24: title
+
+    - English Premier League:
+        icon: /images/icons/epl.png
+        id: epl
+        widget:
+          type: calendar
+          initialLoad: true
+          showTime: true
+          maxEvents: 11
+          view: agenda # optional - possible values monthly, agenda
+          integrations:
+            - type: ical
+              url: "{{HOMEPAGE_VAR_GOOGLE_CALENDAR_EPL}}"
+              name: EPL Fixtures
+              color: purple
+
+    - Recently Downloaded TV Episodes:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sonarr.webp
+        id: tautulli_recent_shows
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_LOCAL_IP}}:3008/recent-shows"
+          method: GET
+          display: list
+          mappings:
+            - field:
+                0: added_at
+              additionalField:
+                field:
+                  0: title
+            - field:
+                1: added_at
+              additionalField:
+                field:
+                  1: title
+            - field:
+                2: added_at
+              additionalField:
+                field:
+                  2: title
+            - field:
+                3: added_at
+              additionalField:
+                field:
+                  3: title
+            - field:
+                4: added_at
+              additionalField:
+                field:
+                  4: title
+            - field:
+                5: added_at
+              additionalField:
+                field:
+                  5: title
+            - field:
+                6: added_at
+              additionalField:
+                field:
+                  6: title
+            - field:
+                7: added_at
+              additionalField:
+                field:
+                  7: title
+            - field:
+                8: added_at
+              additionalField:
+                field:
+                  8: title
+            - field:
+                9: added_at
+              additionalField:
+                field:
+                  9: title
+            - field:
+                10: added_at
+              additionalField:
+                field:
+                  10: title
+            # - field:
+            #     11: added_at
+            #   additionalField:
+            #     field:
+            #       11: title
+            # - field:
+            #     12: added_at
+            #   additionalField:
+            #     field:
+            #       12: title
+            # - field:
+            #     13: added_at
+            #   additionalField:
+            #     field:
+            #       13: title
+            # - field:
+            #     14: added_at
+            #   additionalField:
+            #     field:
+            #       14: title
+            # - field:
+            #     15: added_at
+            #   additionalField:
+            #     field:
+            #       15: title
+            # - field:
+            #     16: added_at
+            #   additionalField:
+            #     field:
+            #       16: title
+            # - field:
+            #     17: added_at
+            #   additionalField:
+            #     field:
+            #       17: title
+            # - field:
+            #     18: added_at
+            #   additionalField:
+            #     field:
+            #       18: title
+            # - field:
+            #     19: added_at
+            #   additionalField:
+            #     field:
+            #       19: title
+            # - field:
+            #     20: added_at
+            #   additionalField:
+            #     field:
+            #       20: title
+            # - field:
+            #     21: added_at
+            #   additionalField:
+            #     field:
+            #       21: title
+            # - field:
+            #     22: added_at
+            #   additionalField:
+            #     field:
+            #       22: title
+            # - field:
+            #     23: added_at
+            #   additionalField:
+            #     field:
+            #       23: title
+            # - field:
+            #     24: added_at
+            #   additionalField:
+            #     field:
+            #       24: title
+
+- Home Assistant:
+    - Home Assistant:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        id: hawidget
+        href: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8123
+        #container: homeassistant
+        # description: Home Automation
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: homeassistant
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8123
+          key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_API_KEY}}"
+          refreshInterval: 10
+          custom:
+            # - template: "{{ states.person|selectattr('state','equalto','home')|list|length }}"
+            #   label: at home
+            - template: "{{ states.climate|selectattr('state','equalto','cool')|list|length }}"
+              label: A/C on
+            - template: "{{ states.fan|rejectattr('entity_id', 'in', []) | selectattr('state','equalto','on')|list|length }}"
+              label: fans on
+            - template: "{{ states.light | rejectattr('entity_id', 'in', ['light.dining_centre', 'light.dining_left', 'light.dining_right', 'light.washroom_main_light_local', 'light.washroom_mirror_left_local', 'light.washroom_mirror_centre_local', 'light.washroom_mirror_right_local', 'light.washroom_mirror_right', 'light.washroom_mirror_left', 'light.washroom_mirror_centre', 'light.bedroom_washroom_main', 'light.bedroom_toilet_main_new', 'light.bedroom_washroom_main_light_local', 'light.bedroom_washroom_mirror_centre_2', 'light.bedroom_washroom_mirror_centre_local', 'light.bedroom_washroom_mirror_left_local', 'light.bedroom_washroom_mirror_right_local', 'switch.roborock_s7_maxv_status_indicator_light']) | selectattr('state', 'equalto', 'on') | list | length }}"  
+              label: lights on 
+            - template: "{{ states.remote | rejectattr('entity_id', 'in', ['remote.android_tv_192_168_1_51', 'remote.back_office', 'remote.bedroom', 'remote.front_office', 'remote.living_room']) | selectattr('state', 'equalto', 'on') | list | length }}"  
+              label: TV on 
+    - " ":
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_HOME_ASSISTANT_WIDGET_URL}}"
+          classes: home-assistant # optional, use tailwind height classes
+          loadingStrategy: lazy # optional, default: eager
+          referrerPolicy: same-origin # optional, no default
+          allowPolicy: fullscreen # optional, no default
+- News:
+    - " ":
+        widget:
+          type: iframe
+          src: "https://glance.abdulmuizz.dev"
+          classes: glance # optional, use tailwind height classes
+          loadingStrategy: lazy # optional, default: eager
+          referrerPolicy: same-origin # optional, no default
+          allowPolicy: fullscreen # optional, no default
+
+- Now Playing:
+    - Plex:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/plex.webp
+        id: plex
+        # href: http://{{HOMEPAGE_VAR_LOCAL_IP}}:32400
+        href: https://app.plex.tv/desktop/#!/
+        #container: plex
+        # description: Now Playing
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: tautulli
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8181
+          key: "{{HOMEPAGE_VAR_TAUTULLI_API_KEY}}"
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: true
+          enableUser: true
+    - Spotify:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/spotify.webp
+        id: spotify
+        # # description: Now Playing
+        # siteMonitor: https://spotify.com/
+        widget:
+          type: customapi
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:4646/now-playing
+          refreshInterval: 10000
+          method: GET
+          mappings:
+            - field: name
+              label: Track
+              format: text
+            - field: artist
+              label: Artist
+              format: text
+            - field: album
+              label: Album
+
+- Applications:
+    - AdGuard Home:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/adguard-home.webp
+        href: https://adguard.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: adguard
+        # description: DNS Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: adguard
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:9080
+          username: "{{HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}}"
+          fields: ["queries", "blocked", "latency"]
+    - Audiobookshelf:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
+        href: https://audiobookshelf.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: audiobookshelf
+        # description: Audiobook & Podcast Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: audiobookshelf
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:13378
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+          fields: ["books", "booksDuration"]
+    - Authentik:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/authentik.webp
+        href: https://authentik.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: authentik-server
+        # description: Identity Provider
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: authentik
+          url: https://authentik.{{HOMEPAGE_VAR_DOMAIN}}
+          key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
+          fields: ["loginsLast24H", "failedLoginsLast24H"]
+    - Bazarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
+        href: https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: bazarr
+        # description: Subtitle Downloader & Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: bazarr
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:6767
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+    - Calibre-Web:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/calibre-web.webp
+        href: https://calibre-web.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: calibre-web-automated
+        # description: Ebook Management Web Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: calibreweb
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8083
+          username: "{{HOMEPAGE_VAR_CALIBRE_WEB_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_CALIBRE_WEB_PASSWORD}}"
+    - Crowdsec:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
+        href: https://app.crowdsec.net/security-engines
+        #container: crowdsec
+        # description: Collaborative Security Stack
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: crowdsec
+          url: http://crowdsec:7272
+          username: "{{HOMEPAGE_VAR_CROWDSEC_USERNAME}}" # machine_id in crowdsec
+          password: "{{HOMEPAGE_VAR_CROWDSEC_PASSWORD}}"                
+    - Dockge:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dockge.webp
+        href: https://dockge.{{HOMEPAGE_VAR_DOMAIN}}/
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        #container: dockge
+        widget:
+          type: customapi
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:2375/info # https://docs.docker.com/reference/api/engine/version/v1.47/#tag/System/operation/SystemInfo
+          mappings:
+            - field: ContainersRunning
+              label: Running
+              format: number
+            - field: ContainersStopped
+              label: Stopped
+              format: number
+            - field: Containers
+              label: Total
+              format: number
+            - field: Images
+              label: Images
+              format: number
+    - FreshRSS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
+        href: https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: freshrss
+        # description: Feed Aggregator
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: freshrss
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:9009
+          username: "{{HOMEPAGE_VAR_FRESHRSS_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_FRESHRSS_PASSWORD}}"   
+    - Gotify:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
+        href: https://gotify.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: gotify
+        # description: Notification Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: gotify
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:6742
+          key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
+          fields: ["apps", "messages"]
+    - Immich:
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/immich.png
+        href: https://immich.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: immich_postgres
+        # description: Photo & Video Backup Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: immich
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:2283
+          key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"  
+          version: 2
+    - Kavita:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/kavita.webp
+        href: https://kavita.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: kavita
+        # description: Ebook Reader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: kavita
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:5471
+          username: "{{HOMEPAGE_VAR_KAVITA_USERNAME}}"	
+          password: "{{HOMEPAGE_VAR_KAVITA_PASSWORD}}"
+    - Mealie:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
+        href: https://mealie.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: mealie
+        # description: Recipe Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: mealie
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:9925
+          key: "{{HOMEPAGE_VAR_MEALIE_API_KEY}}"
+          fields: ["users", "recipes", "tags"]
+          version: 2
+    - Mylar3:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mylar3.webp
+        href: https://mylar.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: mylar3
+        # description: Comic Book Downloader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: mylar
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8090
+          key: "{{HOMEPAGE_VAR_MYLAR_API_KEY}}"
+    - MySpeed:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/myspeed.webp
+        href: http://{{HOMEPAGE_VAR_LOCAL_IP}}:5216/
+        #container: myspeed
+        # description: Internet Speed Test
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: myspeed
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:5216
+    - NetAlertX:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/netalertx.webp
+        href: https://netalertx.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: netalertx
+        # description: Network Intrusion Detector
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: netalertx
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:17811
+          # url: https://netalertx.{{HOMEPAGE_VAR_DOMAIN}}/
+          fields: ["total", "connected", "new_devices"]
+    - Overseerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/overseerr.webp
+        href: https://overseerr.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: overseerr
+        # description: Media Request Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: overseerr
+          url: https://overseerr.{{HOMEPAGE_VAR_DOMAIN}}
+          key: "{{HOMEPAGE_VAR_OVERSEERR_API_KEY}}"
+          fields: ["approved", "available", "processing"]
+    - Paperless-ngx:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
+        href: https://paperless.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: paperless-webserver  
+        # description: Document Management System
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: paperlessngx
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8585
+          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
+    - Prowlarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/prowlarr.webp
+        href: https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: prowlarr          
+        # description: Indexer Manager 
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: prowlarr
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:9696
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+          fields: ["numberOfGrabs", "numberOfQueries"]
+    - Radarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/radarr-light.webp
+        href: https://radarr.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: radarr
+        # description: Movie Collection Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: radarr
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:7878
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+    - RomM:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/romm.webp
+        href: https://romm.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: romm  
+        # description: Emulator ROM Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: romm
+          url: https://romm.{{HOMEPAGE_VAR_DOMAIN}}
+          username: "{{HOMEPAGE_VAR_ROMM_USERNAME}}" # optional
+          password: "{{HOMEPAGE_VAR_ROMM_PASSWORD}}" # optional
+    - SABnzbd:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
+        href: https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: sabnzbd
+        # description: Usenet Downloader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: sabnzbd
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8080
+          key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
+    - Scutiny:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/scrutiny-light.webp
+        href: https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: scrutiny
+        # description: NAS Drive Health Check
+        server: "{{HOMEPAGE_VAR_SERVER}}" 
+        widget:
+          type: scrutiny
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:6090
+          fields: ["passed", "failed"]
+    - Sonarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sonarr.webp
+        href: https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: sonarr
+        # description:  TV Show Collection Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: sonarr
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8989
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+    - Tautulli:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
+        href: https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: tautulli
+        # description: Plex Analytics & Monitoring
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: plex
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:32400
+          key: "{{HOMEPAGE_VAR_PLEX_API_KEY}}"
+          fields: ["movies", "tv"]
+    - TitleCardMaker:
+        icon: /images/icons/tcm.png
+        href: https://tcm.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: titlecardmaker
+        # description: TV Show Titlecards
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: customapi
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:4242/api/statistics/system
+          method: GET      
+          mappings: 
+            - field:
+                1: value
+              label: Series      
+            - field:
+                4: value
+              label: Episodes   
+            - field:
+                0: value
+              label: Cards   
+            - field:
+                5: value_text
+              label: Size    
+              suffix: GB      
+    - SWAG Dashboard:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/nginx.webp
+        href: https://swag.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: swag
+        # description: Reverse Proxy Dashboard
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: swagdashboard
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:81
+          fields: ["proxied", "auth", "outdated"]
+    - Syncthing:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/syncthing.webp
+        href: "http://syncthing.{{HOMEPAGE_VAR_DOMAIN}}"
+        #container: syncthing
+        # description: Data Synchronisation
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: customapi
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:8384/rest/svc/report
+          headers:
+            X-API-Key: "{{HOMEPAGE_VAR_SYNCTHING_API_KEY}}"
+          mappings:
+            - field: totMiB
+              label: Stored
+              format: number
+              scale: 0.0009765625
+              suffix: GB
+            - field: numFolders
+              label: Folders
+              format: number
+            - field: totFiles
+              label: Files
+              format: number
+            - field: numDevices
+              label: Devices
+              format: number     
+    - Uptime Kuma:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/uptime-kuma.webp
+        href: https://uptime-kuma.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: uptime-kuma
+        # description: Uptime Monitoring Tool
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: uptimekuma
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:3001
+          slug: websites
+    - Watchtower:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/watchtower.webp
+        #container: watchtower
+        # description: Container Auto-Updater
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: watchtower
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:1234
+          key: "{{HOMEPAGE_VAR_WATCHTOWER_API_KEY}}"
+          fields: ["containers_updated", "containers_failed"]
+    - WG-Easy:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wireguard.webp
+        href: https://wg-easy.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: wg-easy
+        # description: VPN Tunnel
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        widget:
+          type: wgeasy
+          url: http://{{HOMEPAGE_VAR_LOCAL_IP}}:51821
+          password: "{{HOMEPAGE_VAR_WIREGUARD_PASSWORD}}"
+
+- Applications 2:
+    - Apollo:
+       icon: /images/icons/apollo.png
+      #  siteMonitor: https://{{HOMEPAGE_VAR_PC_IP}}:47990
+       href: https://{{HOMEPAGE_VAR_PC_IP}}:47990
+      #  description: Game Streaming
+    - Backrest:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/backrest-light.webp
+        href: https://backrest.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: backrest
+        # description: Restic Backup GUI
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Code-server:
+        icon: code-server.png
+        href: https://code-server.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: code-server
+        # description: VS Code Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"     
+    - CWA Book D/L:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/calibre-web.webp
+        href: https://bookdownload.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: calibre-web-automated
+        # description: Ebook Management Web Server
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - DAPS-UI:
+        icon: /images/icons/daps-ui.png
+        href: https://daps.{{HOMEPAGE_VAR_DOMAIN}}/ 
+        #container: daps-ui
+        # description: Container Manager 
+        server: "{{HOMEPAGE_VAR_SERVER}}"   
+    - Dozzle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dozzle.webp
+        href: https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: dozzle
+        # description: Log Viewer
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - File Browser:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/file-browser.webp
+        href: https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: filebrowser
+        # description: Web File Browser
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Gitea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        href: https://gitea.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: gitea
+        # description: Git Repository
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - HA-Fusion:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant-light.webp
+        href: http://{{HOMEPAGE_VAR_LOCAL_IP}}:5050/
+        #container: ha-fusion
+        # description: HA Dashboard
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Joplin:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/joplin.webp
+        href: https://joplin.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: joplin
+        # description: Note-Taking
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Linkding:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+        href: https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: linkding
+        # description: Bookmarks Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - LinkStack:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkstack.webp
+        href: https://portfolio.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: linkstack
+        # description: Link Pages
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Maintainerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
+        href: https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: maintainerr
+        # description: Media Pruner
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - MeTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
+        href: https://metube.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: metube
+        # description: YouTube Downloader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - OpenBooks:
+        icon: /images/icons/openbooks.png
+        href: https://openbooks.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: openbooks   
+        # description: Ebook Downloader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - PairDrop:
+        # icon: snapdrop.png
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/pairdrop.webp
+        href: https://pairdrop.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: pairdrop
+        # description: P2P File Sharing
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Sshwifty:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sshwifty.webp
+        href: https://sshwifty.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: sshwifty
+        # description: SSH & Telnet Client
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Stremio:
+        icon: /images/icons/stremio.png
+        href: https://web.stremio.com/
+        #container: stremio
+        # description: Media Streaming
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Vaultwarden:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
+        href: https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: vaultwarden
+        # description: Password Manager
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Wallos:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wallos.webp
+        href: https://wallos.{{HOMEPAGE_VAR_DOMAIN}}/
+        #container: wallos
+        # description: Subscriptions
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+    - Zipline:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/zipline.webp
+        href: https://zipline.{{HOMEPAGE_VAR_DOMAIN}}
+        #container: zipline
+        # description: Image Sharing
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+
+- Bookmarks:
+    - ChatGPT:
+        icon: chatgpt.png
+        href: https://chatgpt.com/
+        # description: AI Chatbot
+    - Claude:
+        icon: /images/icons/claude.png
+        href: https://claude.ai/new
+        # description: AI Chatbot    
+    - Cloudflare:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/cloudflare.webp
+        href: https://cloudflare.com
+        # description: Connectivity Cloud
+    - Facebook:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/facebook.webp
+        href: https://facebook.com/
+        # description: Social Media
+    - FPL Official:
+        icon: /images/icons/epl.png
+        href: https://fantasy.premierleague.com/
+        # description: Fantasy Football
+    - FPL Team:
+        icon: /images/icons/fplteam.png
+        href: https://fpl.team/
+        # description: FPL Team Planner
+    - Github:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
+        href: https://github.com/
+        # description: Git Repository
+    - Gmail:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gmail.webp
+        href: https://mail.google.com/mail/u/0/#inbox
+        # description: Personal Email    
+    - Homepage Wiki:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/homepage.webp
+        href: https://gethomepage.dev/
+        # description: Homepage Wiki
+    - LinkedIn:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkedin.webp
+        href: https://sg.linkedin.com/
+        # description: Social Media
+    - MariusHosting:
+        icon: /images/icons/marius.png
+        href: https://mariushosting.com/
+        # description:  Selfhosted Tech
+    - mdblist:
+        icon: /images/icons/mdblist.png
+        href: https://mdblist.com/
+        # description: Media Playlists
+    - Photopea: 
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/photopea.webp
+        href: https://photopea.com
+        # description: Photo Editing
+    - r/selfhosted:
+        icon: selfhosted-light.png
+        href: https://old.reddit.com/r/selfhosted
+        # description: Subreddit
+    - Reddit:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/reddit.webp
+        href: https://old.reddit.com/
+        # description: Social Forum
+    - Romsfun:
+        icon: /images/icons/romsfun.png
+        href: https://romsfun.com/
+        # description: Emulator ROMs     
+    - Router:
+        icon: asus-light.png
+        href: https://192.168.1.1:8443
+        # description: Asus ZenWiFi XT8
+    - selfh.st:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: https://selfh.st/apps/
+        # description: Software and Apps
+    - selfh.st Icons:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: https://selfh.st/icons/
+        # description: Dashboard Icons
+    - TPDb:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tpdb.webp
+        href: https://theposterdb.com/
+        # description: Media Posters
+    - Trakt:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/trakt.webp
+        href: https://trakt.tv/dashboard
+        # description: Media Tracker
+    # - walkxcode:
+    #     icon: https://avatars.githubusercontent.com/u/71191962?s=48&v=4
+    #     href: https://github.com/walkxcode/dashboard-icons/blob/main/ICONS.md
+    #     # description: Dashboard Icons
+    - Wikipedia:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wikipedia.webp
+        href: https://www.wikipedia.org/
+        # description: Free Encyclopedia
+    - YouTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/youtube.webp
+        href: https://youtube.com
+        # description: Video Streaming
+    - ZLibrary:
+       icon: https://i.imgur.com/WPBZvOJ.jpg
+       href: https://z-library.sk
+      #  description: Ebook Repo

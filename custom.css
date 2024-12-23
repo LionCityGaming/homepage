@@ -1,0 +1,528 @@
+/* CSS Variables */
+:root {
+  --card-border: 5px solid darkslategrey;
+  --card-border-hover: darkseagreen;
+  --card-border-focus: darkseagreen;
+  --card-bg: rgba(24, 25, 26, 1.0);
+  --card-bg-hover: rgba(0, 100, 0, 0.2);
+  --text-shadow: 0 0 10px rgba(24, 25, 26, 1.0);
+  --transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  --focus-ring: 0 0 0 2px var(--card-border-focus);
+  --font-family-base: 'Segoe UI Variable', system-ui, -apple-system, sans-serif;
+  --card-padding: 0px;
+  --card-margin: 0px;
+  --border-radius: .375rem;
+}
+
+/* Firefox-specific styles */
+@-moz-document url-prefix() {
+  /* Link highlight removal */
+  .service-card a,
+  .service-card a *,
+  .service-card div[onclick],
+  .service-card [role="link"],
+  .service-card [role="button"] {
+    background-color: transparent !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+  }
+
+  /* Tab spacing fixes */
+  #myTab {
+    margin-bottom: 0px !important;
+  }
+  
+  .tabcontent.active {
+    margin-top: 10px !important;
+  }
+
+  /* Service icon sizing */
+  .service-icon img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  /* Link states */
+  .service-card a:-moz-any-link {
+    background-color: transparent !important;
+  }
+
+  .service-card a:focus,
+  .service-card a:hover,
+  .service-card div[onclick]:hover {
+    background-color: transparent !important;
+    outline: none !important;
+  }
+}
+
+/* Layout positioning */
+#tabs {
+  margin-left: 900px !important;
+  margin-right: 32px !important;
+}
+
+#information-widgets {
+  margin-bottom: -10px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#upcomingmovies {
+  width: 430px !important;
+  margin-top: 70px !important;
+  margin-left: 70px !important;
+  margin-right: 70px !important;
+}
+
+#events {
+  width:430px !important;
+  margin-left: 75px !important;
+  margin-right: 75px !important;
+  margin-top: 70px !important;
+}
+
+#upcomingtv {
+  width: 430px !important;
+  margin-left: 70px !important;
+  margin-right: 70px !important;
+  margin-top: 70px !important;
+}
+
+#tautulli_recent_movies {
+  width: 430px !important;
+  margin-top: 70px !important;
+  margin-left: 70px !important;
+  margin-right: 70px !important;
+}
+
+#epl {
+  width: 430px !important;
+  margin-left: 75px !important;
+  margin-top: 75px !important;
+}
+
+#tautulli_recent_shows {
+  width: 430px !important;
+  margin-left: 70px !important;
+  margin-right: 70px !important;
+  margin-top: 70px !important;
+}
+
+/* Widget positioning */
+#weatherwidget {
+  margin-left: 870px;
+  margin-right: 0px;
+}
+
+#hawidget {
+  margin-left: 870px !important;
+  margin-right: 0px !important;
+}
+
+#plex {
+  margin-left: 868px !important;
+  width: 425px !important;
+}
+
+#spotify {
+  margin-left: 435px !important;
+  width: 425px !important;
+}
+
+/* Spacing adjustments */
+div.max-w\:full:nth-child(3) > div:nth-child(2),
+div.max-w\:full:nth-child(4) > div:nth-child(2),
+div.max-w\:full:nth-child(5) > div:nth-child(2),
+div.max-w\:full:nth-child(6) > div:nth-child(2),
+div.max-w\:full:nth-child(7) > div:nth-child(2),
+div.max-w\:full:nth-child(8) > div:nth-child(2) {
+  margin-bottom: 5px !important;
+}
+
+div.max-w\:full:nth-child(1) > div:nth-child(1) {
+  margin-left: 10px;
+}
+
+div.max-w\:full:nth-child(3) {
+  padding-left: 27px;
+}
+
+#information-widgets-right {
+  margin-right: 10px;
+}
+
+/* Information widget styles */
+.information-widget-resource {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Typography */
+.service-card > div:first-child:not(.service-container),
+.service-card > span:first-child,
+.service-card > h1:first-child,
+.service-card > h2:first-child,
+.service-card > h3:first-child,
+.service-card > h4:first-child,
+.service-card > h5:first-child,
+.service-card > h6:first-child,
+.service-card > p:first-child,
+.bookmark,
+.widget-container,
+.information-widget-resource,
+[id$="-tab"],
+#information-widgets > * {
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+/* Performance optimized base styles */
+.service-card,
+.bookmark,
+.widget-container,
+.information-widget-resource,
+[id$="-tab"],
+#information-widgets > * {
+  font-family: var(--font-family-base);
+  font-weight: 700;
+  white-space: nowrap;
+  contain: content;
+  will-change: transform;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Card styles */
+.service-card,
+[id$="-tab"],
+#information-widgets > * {
+  position: relative;
+  border: var(--card-border);
+  border-radius: var(--border-radius);
+  padding: var(--card-padding);
+  margin: var(--card-margin);
+  transition: var(--transition);
+  backdrop-filter: brightness(30%) blur(15px) saturate(75%);
+  text-shadow: var(--text-shadow);
+}
+
+.service-card {
+  font-size: 8px !important;
+}
+
+/* Service block styles */
+.service-block {
+  position: relative;
+  border: 1px solid darkslategrey;
+  border-radius: var(--border-radius);
+}
+
+.service-block:has(.glance),
+.service-block:has(.uptimekuma),
+.service-block:has(.home-assistant) {
+  border: none;
+}
+
+.service-block:has(.weather) {
+  border-color: #191c1d;
+}
+
+/* Background and hover effects */
+.service-card::before,
+[id$="-tab"]::before,
+#information-widgets > *::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  background-color: var(--card-bg);
+  z-index: -1;
+  border-radius: var(--border-radius);
+}
+
+.service-card:hover,
+[id$="-tab"]:hover {
+  background-color: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tab styles */
+[id$="-tab"] {
+  padding: 20px 15px;
+  margin: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+[id$="-tab"]:is(:focus, .tab-focused) {
+  border-color: var(--card-border-focus);
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+[id$="-tab"].active {
+  background-color: var(--card-bg-hover);
+  border-color: var(--card-border-focus);
+}
+
+/* Reset link styles */
+.service-card :where(a, button, [role="button"]),
+#information-widgets :where(a, button, [role="button"]) {
+  all: unset;
+  cursor: pointer;
+}
+
+/* Tab container and content */
+#myTab {
+  font: 16px/2 var(--font-family-base);
+  padding: 0;
+  margin: 0;
+  background: none;
+  backdrop-filter: none;
+  display: flex;
+  gap: 15px;
+}
+
+.tabcontent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  display: none;
+  overflow-y: auto;
+  transition: opacity 0.3s, visibility 0.3s;
+  margin: 0;
+  padding: 0;
+}
+
+.tabcontent.active {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  margin-bottom: 15px;
+}
+
+/* Hidden dropdown area */
+#myTabContent,
+.tab-content,
+.dropdown-area {
+  margin: 0;
+  padding: 0;
+}
+
+/* Iframe styles */
+.home-assistant,
+.glance,
+.weather {
+  width: 100%;
+  border: 0;
+}
+
+.home-assistant {
+  height: 850px;
+  margin: -20px -35px -10px -35px;
+}
+
+.glance {
+  height: 775px;
+  margin: -45px 0px -32px 0px;
+}
+
+.weather {
+  height: 112px;
+  width: 50%;
+  margin-top: -35px;
+  margin-bottom: 0px;
+  padding-right: 20px;
+  background-color: #191c1d;
+  pointer-events: none;
+}
+
+.stremio {
+  height: 1050px;
+}
+
+/* Plex Recently Added styles */
+#tautulli_recent_movies .flex.flex-row.text-right,
+#tautulli_recent_shows .flex.flex-row.text-right {
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+  margin: -1.8px 0 -0.9px 3px;
+  border-radius: 100%;
+}
+
+#tautulli_recent_movies .flex.flex-row.text-right > div,
+#tautulli_recent_shows .flex.flex-row.text-right > div {
+  display: inline-block;
+  width: 60px;
+  font-family: var(--font-family-base);
+  font-weight: 400 !important;
+  text-align: left;
+  position: relative;
+  padding-left: 0;
+}
+
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child,
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child {
+  margin-right: 35px;
+  font-size: 8px !important;
+}
+
+#tautulli_recent_movies .flex.flex-row.text-right > div:last-child,
+#tautulli_recent_shows .flex.flex-row.text-right > div:last-child {
+  margin-left: -18px;
+  font-size: 8px !important;
+}
+
+/* Media indicator circles */
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after,
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after {
+  background-color: rgb(6, 182, 212);
+}
+
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
+  background-color: rgb(245, 158, 11);
+}
+
+#tautulli_recent_movies > div > div.relative.flex.flex-row.w-full.service-container > div > div,
+#tautulli_recent_shows > div > div.relative.flex.flex-row.w-full.service-container > div > div {
+  display: block;
+  text-align: left;
+  font-size: 10px !important;
+  margin: 2px 0 2px 3px;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  text-shadow: var(--text-shadow);
+  margin-block-end: .06rem;
+}
+
+/* Animations */
+@keyframes updatePulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+@keyframes loadingBar {
+  0% { width: 0; opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { width: 100%; opacity: 0.5; }
+}
+
+.service-card.updating {
+  animation: updatePulse 0.5s ease;
+}
+
+.service-card.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--card-border-hover);
+  animation: loadingBar 2s infinite linear;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  :root {
+    --card-padding: 10px;
+    --card-margin: 3px;
+  }
+
+  .service-card,
+  [id$="-tab"] {
+    font-size: 14px;
+  }
+
+  #myTab {
+    flex-direction: column;
+    gap: 5px;
+    padding: 0;
+    margin: 0;
+  }
+
+  [id$="-tab"] {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tabcontent {
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Hide elements on mobile */
+  .information-widget-resource,
+  [id^="information-widget"],
+  #information-widgets > *,
+  iframe,
+  .home-assistant,
+  .glance,
+  .uptimekuma,
+  .weather,
+  .service-block:has(iframe),
+  div[class*="widget"],
+  [class*="-container"]:has(iframe),
+  [class*="widget-area"],
+  .service-container:has(iframe) {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-card,
+  [id$="-tab"] {
+    font-size: 12px;
+  }
+
+  #myTab {
+    gap: 3px;
+  }
+}
+
+/* Special selectors */
+#headlessui-disclosure-panel-\:r6\: > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > div:nth-child(1) {
+  margin: -100px;
+}

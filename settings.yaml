@@ -1,0 +1,79 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/settings
+title: The Lion's Den
+favicon: /images/icons/logo.png
+disableCollapse: false
+background:
+  image: /images/backgrounds/forest.webp
+cardBlur: xl
+theme: dark
+color: emerald
+headerStyle: clean
+iconStyle: theme
+statusStyle: dot
+quicklaunch:
+  searchDescriptions: true
+hideVersion: true
+hideErrors: true
+fiveColumns: true
+useEqualHeights: true
+preloadAllWidgets: true
+layout:
+  Weather:
+    header: false
+    tab: Home
+    style: row
+    columns: 1
+  News:
+    header: false
+    tab: Home
+    style: row
+    columns: 1
+  Bookmarks:
+    header: false
+    tab: Home
+    style: row
+    columns: 8
+  Now Playing:
+    header: false
+    tab: Applications
+    style: row
+    columns: 2
+  Applications:
+    header: false
+    tab: Applications
+    style: row
+    columns: 5
+  Applications 2:
+    header: false
+    tab: Applications
+    style: row
+    columns: 8
+  Calendars1:
+    header: false
+    tab: Calendars
+    style: row
+    columns: 3
+  Calendars2:
+    header: false
+    tab: Calendars
+    style: row
+    columns: 3
+  Home Assistant:
+    header: false
+    tab: Smart Home
+    style: row
+    columns: 1 
+  # Stremio:
+  #   header: false
+  #   tab: Stremio
+  #   style: row
+  #   columns: 1 
+
+
+
+
+
+
+
