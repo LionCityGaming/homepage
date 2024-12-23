@@ -13,4 +13,5 @@ Includes:
 
 Screenshots:
 
-* https://zipline.abdulmuizz.dev/r/zen_fA2b4NHXC3.png
+(https://github.com/user-attachments/assets/030098a5-9c90-4dcb-b63a-a65cc1a4bab2)
+
