@@ -16,6 +16,7 @@ Before using these configurations, ensure you have the following:
 * custom.css
 * custom.js
 * docker.yaml
+* forest.webp
 * services.yaml
 * settings.yaml
 
