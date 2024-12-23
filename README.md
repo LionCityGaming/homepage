@@ -10,7 +10,8 @@ Before using these configurations, ensure you have the following:
 * Docker installed on your system
 * A user-defined Docker network
 * A .env file with required environment variables
-
+* 
+### Note:
 Please also read through the ![Homepage Wiki](https://gethomepage.dev/) site thoroughly before using the config files.
 
 ## Files Included:
