@@ -12,12 +12,15 @@ Before using these configurations, ensure you have the following:
 * A .env file with required environment variables
 
 ## Files:
-* compose.yaml (Sample - Edit in your own settings before running ```docker compose up -d```)
+* compose.yaml 
 * custom.css
 * custom.js
 * docker.yaml
 * services.yaml
 * settings.yaml
+
+  ### Note:
+Edit in your own settings before running ```docker compose up -d```)
 
 ## Screenshots:
 ![Home](https://github.com/user-attachments/assets/e1fe3151-75ca-403a-97e6-1054c20a67a3)
