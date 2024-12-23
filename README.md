@@ -2,6 +2,7 @@
 
 # Collection of config files for Homepage
 ![Homepage Github](https://github.com/gethomepage/homepage)
+
 ![Homepage Wiki](https://gethomepage.dev/)
 
 Includes:
