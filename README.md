@@ -10,11 +10,6 @@ Before using these configurations, ensure you have the following:
 * A user-defined Docker network
 * A .env file with required environment variables
 
-
-![Homepage Github](https://github.com/gethomepage/homepage)
-
-![Homepage Wiki](https://gethomepage.dev/)
-
 ## Included in repo:
 * compose.yaml
 * custom.css
@@ -29,4 +24,15 @@ Before using these configurations, ensure you have the following:
 ![Calendars](https://github.com/user-attachments/assets/a5ff6719-c675-4795-9c84-8c3bc8bd4f9c)
 
 ![Smart Home](https://github.com/user-attachments/assets/14bee095-cd71-432f-9eba-83ae66c9d0fc)
+
+## Useful Links
+
+![Homepage Github](https://github.com/gethomepage/homepage)
+
+![Homepage Wiki](https://gethomepage.dev/)
+
+## Credits
+
+Homepage Dashboard by ![gethomepage](https://github.com/gethomepage/homepage)
+
 
