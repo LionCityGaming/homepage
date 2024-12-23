@@ -38,6 +38,8 @@ Make the necessary changes to settings in compose.yaml before running ```docker 
 
 ## Useful Links
 
+![Homepage Discord](https://discord.gg/qbDkDUT2)
+
 ![Homepage Github](https://github.com/gethomepage/homepage)
 
 ![Homepage Wiki](https://gethomepage.dev/)
