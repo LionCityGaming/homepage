@@ -12,7 +12,7 @@ Before using these configurations, ensure you have the following:
 * A .env file with required environment variables
 
 ## Files:
-* compose.yaml > Sample - Edit in your own settings before running {docker compose up -d}
+* compose.yaml (Sample - Edit in your own settings before running ```docker compose up -d```)
 * custom.css
 * custom.js
 * docker.yaml
