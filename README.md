@@ -5,7 +5,7 @@
 
 ![Homepage Wiki](https://gethomepage.dev/)
 
-Includes:
+Included in repo:
 * compose.yaml
 * custom.css
 * services.yaml
