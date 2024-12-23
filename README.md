@@ -11,6 +11,8 @@ Before using these configurations, ensure you have the following:
 * A user-defined Docker network
 * A .env file with required environment variables
 
+Please also read through the ![Homepage Wiki](https://gethomepage.dev/) before using the config files.
+
 ## Files Included:
 * compose.yaml 
 * custom.css
