@@ -6,9 +6,9 @@
 
 Before using these configurations, ensure you have the following:
 
-* Docker installed on your system (Install Docker).
-* A user-defined Docker network, such as dsn (create one with docker network create dsn).
-* A .env.homepage file with required environment variables.
+* Docker installed on your system
+* A user-defined Docker network
+* A .env file with required environment variables
 
 
 ![Homepage Github](https://github.com/gethomepage/homepage)
