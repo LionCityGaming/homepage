@@ -13,6 +13,8 @@ Before using these configurations, ensure you have the following:
 ## Included in repo:
 * compose.yaml
 * custom.css
+* custom.js
+* docker.yaml
 * services.yaml
 * settings.yaml
 
