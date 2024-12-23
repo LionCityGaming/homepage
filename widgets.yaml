@@ -1,0 +1,41 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/widgets
+- logo:
+    icon: /images/icons/logo.png
+    
+- greeting:
+   text_size: 2xl
+   text: "LION CITY GAMING"
+
+- datetime:
+    locale: en-sg
+    text_size: 2xl
+    format:
+      dateStyle: full
+      hour12: true
+      timeStyle: short
+
+- resources:
+    label: CPU
+    cpu: true
+
+- resources:
+    label: Memory
+    memory: true
+
+- resources:
+    label: Docker
+    disk: /
+
+- resources:
+    label: NAS
+    disk: /volume1
+
+- resources:
+    label: External USB
+    disk: /volumeUSB1
+
+- resources:
+    label: Uptime
+    uptime: true
