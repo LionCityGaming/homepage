@@ -10,7 +10,7 @@ Before using these configurations, ensure you have the following:
 * A user-defined Docker network
 * A .env file with required environment variables
 
-## Included in repo:
+## Files:
 * compose.yaml
 * custom.css
 * custom.js
