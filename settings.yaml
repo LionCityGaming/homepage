@@ -1,11 +1,11 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/settings
-title: The Lion's Den
+title: 
 favicon: /images/icons/logo.png
 disableCollapse: false
 background:
-  image: /images/backgrounds/forest.webp
+  image: /images/backgrounds/background.png
 cardBlur: xl
 theme: dark
 color: emerald
