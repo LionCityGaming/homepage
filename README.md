@@ -1,6 +1,7 @@
 <img width="1024" alt="banner_light@2x" src="https://github.com/user-attachments/assets/02b96251-d0a9-42e2-acc8-0e8fdb2d5ced" />
 
-# Collection of config files for Homepage (https://github.com/gethomepage/homepage)
+# Collection of config files for Homepage
+##(https://github.com/gethomepage/homepage)
 
 Includes:
 * compose.yaml
