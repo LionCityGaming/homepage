@@ -19,7 +19,7 @@ Before using these configurations, ensure you have the following:
 * services.yaml
 * settings.yaml
 
-  ### Note:
+### Note:
 Edit in your own settings before running ```docker compose up -d```)
 
 ## Screenshots:
