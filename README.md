@@ -42,6 +42,8 @@ Make the necessary changes to settings in compose.yaml before running ```docker 
 
 ![Homepage Wiki](https://gethomepage.dev/)
 
+![MountainGod's Home Page Config Files](https://github.com/MountainGod2/homepage-config)
+
 ## Credits
 
 Homepage Dashboard by ![gethomepage](https://github.com/gethomepage/homepage)
