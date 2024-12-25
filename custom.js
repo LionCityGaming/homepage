@@ -37,15 +37,15 @@ const RELOAD_BUTTON_SELECTORS = [
 const IFRAME_CONFIG = [
     {
         selector: '.home-assistant',
-        src: 'URL'
+        src: "{{HOMEPAGE_VAR_HOME_ASSISTANT_WIDGET_URL}}"
     },
     {
         selector: '.glance',
-        src: 'URL'
+        src: "{{HOMEPAGE_VAR_GLANCE_WIDGET_URL}}"
     },
     {
         selector: '.weather',
-        src: 'URL'
+        src: "{{HOMEPAGE_VAR_WEATHER_WIDGET_URL}}"
     }
 ];
 
