@@ -32,7 +32,7 @@ Make the necessary changes to settings in compose.yaml before running ```docker 
 
 ![Applications](https://github.com/user-attachments/assets/4cd169dc-0ed8-4e74-a26c-d047d8b75f75)
 
-![Calendars](https://github.com/user-attachments/assets/a5ff6719-c675-4795-9c84-8c3bc8bd4f9c)
+![Calendars](https://zipline.abdulmuizz.dev/view/zen_Y046ugd4as.png)
 
 ![Smart Home](https://github.com/user-attachments/assets/14bee095-cd71-432f-9eba-83ae66c9d0fc)
 
