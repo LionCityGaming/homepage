@@ -1,17 +1,17 @@
 /* CSS Variables */
 :root {
-  --card-border: 5px solid darkslategrey;
+  --card-border: 3.5px solid darkslategrey;
   --card-border-hover: darkseagreen;
   --card-border-focus: darkseagreen;
   --card-bg: rgba(24, 25, 26, 1.0);
   --card-bg-hover: rgba(0, 100, 0, 0.2);
   --text-shadow: 0 0 10px rgba(24, 25, 26, 1.0);
   --transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-  --focus-ring: 0 0 0 2px var(--card-border-focus);
+  --focus-ring: 0 0 0 0px var(--card-border-focus);
   --font-family-base: 'Segoe UI Variable', system-ui, -apple-system, sans-serif;
   --card-padding: 0px;
   --card-margin: 0px;
-  --border-radius: .375rem;
+  --border-radius: .500rem;
 }
 
 /* Firefox-specific styles */
@@ -74,54 +74,57 @@
 
 #upcomingmovies {
   width: 430px !important;
-  margin-top: 70px !important;
-  margin-left: 70px !important;
-  margin-right: 70px !important;
+  margin-right: auto; 
+  margin-left: 0;
 }
 
 #events {
   width:430px !important;
-  margin-left: 75px !important;
-  margin-right: 75px !important;
-  margin-top: 70px !important;
+  margin: auto;
 }
 
 #upcomingtv {
   width: 430px !important;
-  margin-left: 70px !important;
-  margin-right: 70px !important;
-  margin-top: 70px !important;
+  margin-left: auto; 
+  margin-right: 0;
 }
 
 #tautulli_recent_movies {
   width: 430px !important;
-  margin-top: 70px !important;
-  margin-left: 70px !important;
-  margin-right: 70px !important;
+  margin-right: auto; 
+  margin-left: 0;
 }
 
 #epl {
-  width: 430px !important;
-  margin-left: 75px !important;
-  margin-top: 75px !important;
+  width:430px !important;
+  margin: auto;
 }
 
 #tautulli_recent_shows {
   width: 430px !important;
-  margin-left: 70px !important;
-  margin-right: 70px !important;
-  margin-top: 70px !important;
+  margin-left: auto; 
+  margin-right: 0;
 }
+
+/* #glance {
+  margin-left: 120px !important;
+  margin-right: 120px !important;
+} */
 
 /* Widget positioning */
 #weatherwidget {
-  margin-left: 870px;
-  margin-right: 0px;
+  margin-left: 868px !important;
+  margin-right: 0 !important;
+}
+
+#steam {
+  margin-left: 868px !important;
+  margin-right: 0 !important;
 }
 
 #hawidget {
-  margin-left: 870px !important;
-  margin-right: 0px !important;
+  margin-left: 868px !important;
+  margin-right: 0 !important;
 }
 
 #plex {
@@ -331,18 +334,18 @@ div.max-w\:full:nth-child(3) {
 .home-assistant,
 .glance,
 .weather {
-  width: 100%;
+  width: 110%;
   border: 0;
 }
 
 .home-assistant {
   height: 850px;
-  margin: -20px -35px -10px -35px;
+  margin: -10px 0px 0px 0px;
 }
 
 .glance {
-  height: 775px;
-  margin: -45px 0px -32px 0px;
+  height: 790px;
+  margin: -30px 0px -30px 0px;
 }
 
 .weather {
