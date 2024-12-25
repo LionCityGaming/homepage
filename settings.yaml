@@ -1,11 +1,11 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/settings
-title: 
+title: The Lion's Den
 favicon: /images/icons/logo.png
 disableCollapse: false
 background:
-  image: /images/backgrounds/background.png
+  image: /images/backgrounds/forest.webp
 cardBlur: xl
 theme: dark
 color: emerald
@@ -50,6 +50,11 @@ layout:
     tab: Applications
     style: row
     columns: 8
+  Steam:
+    header: false
+    tab: Calendars
+    style: row
+    columns: 1
   Calendars1:
     header: false
     tab: Calendars
@@ -65,15 +70,3 @@ layout:
     tab: Smart Home
     style: row
     columns: 1 
-  # Stremio:
-  #   header: false
-  #   tab: Stremio
-  #   style: row
-  #   columns: 1 
-
-
-
-
-
-
-
