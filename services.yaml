@@ -16,6 +16,28 @@
           allowScrolling: no # optional, default: yes
           refreshInterval: 900000 # optional, no default
 
+- Steam:
+    - Steam Recent Activity:
+        icon: steam.png
+        id: steam
+        widget:
+          type: customapi
+          url: https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key={{HOMEPAGE_VAR_STEAM_API_KEY}}&steamid={{HOMEPAGE_VAR_STEAM_ID}}&count=1
+          method: GET
+          display: block
+          mappings:
+            - field:
+                response:
+                  games:
+                    0: name
+              label: Last Played          
+            - field:
+                response:
+                  games:
+                    0: playtime_forever
+              scale: /60
+              suffix: Hours
+              label: Total Playtime
 - Calendars1:
     - Upcoming Movie Releases:
         # icon: /images/icons/movie.png
@@ -383,6 +405,7 @@
             - template: "{{ states.remote | rejectattr('entity_id', 'in', ['remote.android_tv_192_168_1_51', 'remote.back_office', 'remote.bedroom', 'remote.front_office', 'remote.living_room']) | selectattr('state', 'equalto', 'on') | list | length }}"  
               label: TV on 
     - " ":
+        id: HA
         widget:
           type: iframe
           src: "{{HOMEPAGE_VAR_HOME_ASSISTANT_WIDGET_URL}}"
@@ -392,9 +415,10 @@
           allowPolicy: fullscreen # optional, no default
 - News:
     - " ":
+        id: glance
         widget:
           type: iframe
-          src: "https://glance.abdulmuizz.dev"
+          src: "{{HOMEPAGE_VAR_GLANCE_WIDGET_URL}}"
           classes: glance # optional, use tailwind height classes
           loadingStrategy: lazy # optional, default: eager
           referrerPolicy: same-origin # optional, no default
