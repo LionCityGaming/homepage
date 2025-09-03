@@ -15,7 +15,6 @@ Before using these configurations, ensure you have the following:
 Please also read through the ![Homepage Wiki](https://gethomepage.dev/) site thoroughly before using the config files.
 
 ## Files Included:
-* compose.yaml 
 * custom.css
 * custom.js
 * forest.webp (Wallpaper)
