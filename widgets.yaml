@@ -1,41 +1,25 @@
----
-# For configuration options and examples, please see:
-# https://gethomepage.dev/latest/configs/widgets
 - logo:
     icon: /images/icons/logo.png
-    
 - greeting:
-   text_size: 2xl
-   text: "LION CITY GAMING"
-
+    text_size: 3xl
+    text: THE LION'S DEN
 - datetime:
     locale: en-sg
-    text_size: 2xl
+    text_size: 3xl
     format:
       dateStyle: full
-      hour12: true
+      hour12: false
       timeStyle: short
-
 - resources:
-    label: CPU
-    cpu: true
-
-- resources:
-    label: Memory
-    memory: true
-
-- resources:
-    label: Docker
-    disk: /
-
 - resources:
     label: NAS
-    disk: /volume1
-
+    disk: /data
 - resources:
-    label: External USB
-    disk: /volumeUSB1
-
+    label: Proxmox
+    disk: /
 - resources:
-    label: Uptime
-    uptime: true
+    label: Synology
+    disk: /docker
+- resources:
+    label: Backups
+    disk: /usb
