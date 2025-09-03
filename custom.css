@@ -1,165 +1,77 @@
-/* CSS Variables */
 :root {
   --card-border: 3.5px solid darkslategrey;
   --card-border-hover: darkseagreen;
   --card-border-focus: darkseagreen;
-  --card-bg: rgba(24, 25, 26, 1.0);
-  --card-bg-hover: rgba(0, 100, 0, 0.2);
-  --text-shadow: 0 0 10px rgba(24, 25, 26, 1.0);
+  --card-bg: rgba(24, 25, 26, 1);
+  --card-bg-hover: #00640033;
+  --text-shadow: 0 0 10px rgba(24, 25, 26, 1);
   --transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
   --focus-ring: 0 0 0 0px var(--card-border-focus);
-  --font-family-base: 'Segoe UI Variable', system-ui, -apple-system, sans-serif;
+  --font-family-base: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --card-padding: 0px;
   --card-margin: 0px;
-  --border-radius: .500rem;
+  --border-radius: 1.5rem;
+  --base-font-size: 14px;
+}
+#myTab {
+  margin-bottom: 0px;
+  font: 18px/2 var(--font-family-base);
+  padding: 0;
+  background: none;
+  backdrop-filter: none;
+  display: flex;
+  gap: 15px;
 }
 
-/* Firefox-specific styles */
-@-moz-document url-prefix() {
-  /* Link highlight removal */
-  .service-card a,
-  .service-card a *,
-  .service-card div[onclick],
-  .service-card [role="link"],
-  .service-card [role="button"] {
-    background-color: transparent !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    color: inherit !important;
-  }
-
-  /* Tab spacing fixes */
-  #myTab {
-    margin-bottom: 0px !important;
-  }
-  
-  .tabcontent.active {
-    margin-top: 10px !important;
-  }
-
-  /* Service icon sizing */
-  .service-icon img {
-    width: 32px !important;
-    height: 32px !important;
-  }
-
-  /* Link states */
-  .service-card a:-moz-any-link {
-    background-color: transparent !important;
-  }
-
-  .service-card a:focus,
-  .service-card a:hover,
-  .service-card div[onclick]:hover {
-    background-color: transparent !important;
-    outline: none !important;
-  }
+.tabcontent.active {
+  margin-top: 10px;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  margin-bottom: 15px;
+}
+.tabcontent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  display: none;
+  overflow-y: auto;
+  transition: opacity 0.3s, visibility 0.3s;
+  margin: 0;
+  padding: 0;
 }
 
-/* Layout positioning */
-#tabs {
-  margin-left: 900px !important;
-  margin-right: 32px !important;
+#myTabContent,
+.tab-content,
+.dropdown-area {
+  margin: 0;
+  padding: 0;
 }
-
 #information-widgets {
-  margin-bottom: -10px !important;
+  margin-bottom: -10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-#upcomingmovies {
-  width: 430px !important;
-  margin-right: auto; 
-  margin-left: 0;
-}
-
-#events {
-  width:430px !important;
-  margin: auto;
-}
-
-#upcomingtv {
-  width: 430px !important;
-  margin-left: auto; 
-  margin-right: 0;
-}
-
-#tautulli_recent_movies {
-  width: 430px !important;
-  margin-right: auto; 
-  margin-left: 0;
-}
-
-#epl {
-  width:430px !important;
-  margin: auto;
-}
-
-#tautulli_recent_shows {
-  width: 430px !important;
-  margin-left: auto; 
-  margin-right: 0;
-}
-
-/* #glance {
-  margin-left: 120px !important;
-  margin-right: 120px !important;
-} */
-
-/* Widget positioning */
-#weatherwidget {
-  margin-left: 868px !important;
-  margin-right: 0 !important;
-}
-
-#steam {
-  margin-left: 868px !important;
-  margin-right: 0 !important;
-}
-
-#hawidget {
-  margin-left: 868px !important;
-  margin-right: 0 !important;
-}
-
-#plex {
-  margin-left: 868px !important;
-  width: 425px !important;
-}
-
-#spotify {
-  margin-left: 435px !important;
-  width: 425px !important;
-}
-
-/* Spacing adjustments */
-div.max-w\:full:nth-child(3) > div:nth-child(2),
-div.max-w\:full:nth-child(4) > div:nth-child(2),
-div.max-w\:full:nth-child(5) > div:nth-child(2),
-div.max-w\:full:nth-child(6) > div:nth-child(2),
-div.max-w\:full:nth-child(7) > div:nth-child(2),
-div.max-w\:full:nth-child(8) > div:nth-child(2) {
-  margin-bottom: 5px !important;
-}
-
-div.max-w\:full:nth-child(1) > div:nth-child(1) {
-  margin-left: 10px;
-}
-
-div.max-w\:full:nth-child(3) {
-  padding-left: 27px;
-}
-
 #information-widgets-right {
   margin-right: 10px;
 }
 
-/* Information widget styles */
+.information-widget-greeting {
+  flex-grow: 1;
+}
+
+.container {
+  max-width: 90%;
+}
+
+.information-widget-resources {
+  position: relative;
+}
+
 .information-widget-resource {
   text-align: center;
   display: flex;
@@ -168,8 +80,54 @@ div.max-w\:full:nth-child(3) {
   width: 100%;
   margin: 0 auto;
 }
+.service-card,
+[id$="-tab"],
+#information-widgets > * {
+  position: relative;
+  border: var(--card-border);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  backdrop-filter: brightness(30%) blur(15px) saturate(75%);
+  text-shadow: var(--text-shadow);
+}
+.service-block {
+  position: relative;
+  border: 2px solid darkslategrey;
+  border-radius: var(--border-radius);
+}
+.service-card::before,
+[id$="-tab"]::before,
+#information-widgets > *::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  background-color: var(--card-bg);
+  z-index: -1;
+  border-radius: var(--border-radius);
+}
 
-/* Typography */
+.service-card:hover,
+[id$="-tab"]:hover {
+  background-color: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.service-card,
+.bookmark,
+.widget-container,
+.information-widget-resource,
+[id$="-tab"],
+#information-widgets > * {
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  white-space: nowrap;
+  contain: content;
+  will-change: transform;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
 .service-card > div:first-child:not(.service-container),
 .service-card > span:first-child,
 .service-card > h1:first-child,
@@ -184,91 +142,16 @@ div.max-w\:full:nth-child(3) {
 .information-widget-resource,
 [id$="-tab"],
 #information-widgets > * {
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-}
-
-/* Performance optimized base styles */
-.service-card,
-.bookmark,
-.widget-container,
-.information-widget-resource,
-[id$="-tab"],
-#information-widgets > * {
-  font-family: var(--font-family-base);
   font-weight: 700;
-  white-space: nowrap;
-  contain: content;
-  will-change: transform;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 200px;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  text-transform: uppercase;
 }
-
-/* Card styles */
-.service-card,
-[id$="-tab"],
-#information-widgets > * {
-  position: relative;
-  border: var(--card-border);
-  border-radius: var(--border-radius);
-  padding: var(--card-padding);
-  margin: var(--card-margin);
-  transition: var(--transition);
-  backdrop-filter: brightness(30%) blur(15px) saturate(75%);
-  text-shadow: var(--text-shadow);
-}
-
-.service-card {
-  font-size: 8px !important;
-}
-
-/* Service block styles */
-.service-block {
-  position: relative;
-  border: 1px solid darkslategrey;
-  border-radius: var(--border-radius);
-}
-
-.service-block:has(.glance),
-.service-block:has(.uptimekuma),
-.service-block:has(.home-assistant) {
-  border: none;
-}
-
-.service-block:has(.weather) {
-  border-color: #191c1d;
-}
-
-/* Background and hover effects */
-.service-card::before,
-[id$="-tab"]::before,
-#information-widgets > *::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background-color: var(--card-bg);
-  z-index: -1;
-  border-radius: var(--border-radius);
-}
-
-.service-card:hover,
-[id$="-tab"]:hover {
-  background-color: var(--card-bg-hover);
-  border-color: var(--card-border-hover);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Tab styles */
 [id$="-tab"] {
-  padding: 20px 15px;
   margin: 0;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 46px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
@@ -285,84 +168,139 @@ div.max-w\:full:nth-child(3) {
   border-color: var(--card-border-focus);
 }
 
-/* Reset link styles */
-.service-card :where(a, button, [role="button"]),
-#information-widgets :where(a, button, [role="button"]) {
-  all: unset;
-  cursor: pointer;
+.tab-focused {
+  outline: 2px solid #007bff;
+  outline-offset: -2px;
+}
+.service-card a:-moz-any-link {
+  background-color: transparent;
 }
 
-/* Tab container and content */
-#myTab {
-  font: 16px/2 var(--font-family-base);
-  padding: 0;
-  margin: 0;
-  background: none;
-  backdrop-filter: none;
+.service-card a:focus,
+.service-card a:hover,
+.service-card div[onclick]:hover {
+  background-color: transparent;
+  outline: none;
+}
+.service-icon img {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+}
+div[class*="max-w-full"]:nth-child(3) > div:nth-child(2),
+div[class*="max-w-full"]:nth-child(4) > div:nth-child(2),
+div[class*="max-w-full"]:nth-child(5) > div:nth-child(2),
+div[class*="max-w-full"]:nth-child(6) > div:nth-child(2),
+div[class*="max-w-full"]:nth-child(7) > div:nth-child(2),
+div[class*="max-w-full"]:nth-child(8) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(3) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(4) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(5) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(6) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(7) > div:nth-child(2),
+div[class*="max-w:full"]:nth-child(8) > div:nth-child(2) {
+  margin-bottom: 5px;
+}
+
+div[class*="max-w-full"]:nth-child(1) > div:nth-child(1),
+div[class*="max-w:full"]:nth-child(1) > div:nth-child(1) {
+  margin-left: 10px;
+}
+
+div[class*="max-w-full"]:nth-child(3),
+div[class*="max-w:full"]:nth-child(3) {
+  padding-left: 27px;
+}
+.service-card {
   display: flex;
-  gap: 15px;
+  flex-direction: column;
 }
 
-.tabcontent {
-  position: relative;
+.service-card > div:first-child,
+.service-card > div.service-header,
+.service-card > .service-title {
+  margin-bottom: 1px;
+}
+
+.service-card > div:nth-child(2),
+.service-card > div.service-body,
+.service-card > .service-content {
+  margin-top: 1px;
+}
+.service-card:has(iframe) .service-container {
+  margin-top: 0;
+  padding-top: 0;
+}
+iframe {
   width: 100%;
-  height: 100%;
-  inset: 0;
-  display: none;
-  overflow-y: auto;
-  transition: opacity 0.3s, visibility 0.3s;
-  margin: 0;
-  padding: 0;
-}
-
-.tabcontent.active {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  margin-bottom: 15px;
-}
-
-/* Hidden dropdown area */
-#myTabContent,
-.tab-content,
-.dropdown-area {
-  margin: 0;
-  padding: 0;
-}
-
-/* Iframe styles */
-.home-assistant,
-.glance,
-.weather {
-  width: 110%;
   border: 0;
+  background-color: transparent;
 }
-
+.service-block:has(iframe) {
+  border: none;
+}
 .home-assistant {
-  height: 850px;
-  margin: -10px 0px 0px 0px;
+  height: 955px;
+  margin: -20px -20px 0px -20px;
 }
 
+.todo {
+  height: 454px;
+  margin: -20px 0px 0px 0px;
+}
+
+.ha-calendar {
+  height: 1044px;
+  margin-top: -30px;
+}
+
+.epl-calendar {
+  height: 575px;
+  margin-top: -30px;
+  margin-bottom: -10px;
+  pointer-events: none;
+}
 .glance {
-  height: 790px;
-  margin: -30px 0px -30px 0px;
+  height: 880px;
+  margin: -20px 0px -40px 0px;
+}
+
+.epl {
+  height: 1044px;
+  margin: -30px -80px 0px -80px;
+}
+
+.fixtures {
+  height: 920px;
+  margin-top: 20px;
+  margin-bottom: -20px;
+  margin-left: 40px;
+  padding-top: -30px;
+  padding-bottom: 0px;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .weather {
-  height: 112px;
+  height: 95px;
   width: 50%;
-  margin-top: -35px;
-  margin-bottom: 0px;
-  padding-right: 20px;
-  background-color: #191c1d;
+  margin-top: -32px;
+  background-color: #18191a;
   pointer-events: none;
 }
 
 .stremio {
   height: 1050px;
 }
-
-/* Plex Recently Added styles */
+.service-block:has(.epl),
+.service-block:has(.uptime),
+.service-block:has(.fixtures),
+.service-block:has(.chelsea),
+.service-block:has(.todo),
+.service-block:has(.weather) {
+  border-color: #191c1d;
+}
+#upcominggames .flex.flex-row.text-right,
 #tautulli_recent_movies .flex.flex-row.text-right,
 #tautulli_recent_shows .flex.flex-row.text-right {
   text-align: left;
@@ -370,78 +308,123 @@ div.max-w\:full:nth-child(3) {
   justify-content: flex-start;
   align-items: center;
   gap: 0;
-  margin: -1.8px 0 -0.9px 3px;
-  border-radius: 100%;
+  margin: -1.8px 0 -0.9px 10px;
+  border-radius: 0.5rem;
+  font-weight: 400;
 }
 
+#upcominggames .flex.flex-row.text-right > div,
 #tautulli_recent_movies .flex.flex-row.text-right > div,
 #tautulli_recent_shows .flex.flex-row.text-right > div {
   display: inline-block;
   width: 60px;
   font-family: var(--font-family-base);
-  font-weight: 400 !important;
+  font-weight: 400;
   text-align: left;
   position: relative;
   padding-left: 0;
 }
 
+#upcominggames .flex.flex-row.text-right > div:first-child,
 #tautulli_recent_movies .flex.flex-row.text-right > div:first-child,
 #tautulli_recent_shows .flex.flex-row.text-right > div:first-child {
-  margin-right: 35px;
-  font-size: 8px !important;
+  margin-right: 23px;
+  font-family: var(--font-family-base);
 }
 
+#upcominggames .flex.flex-row.text-right > div:last-child,
 #tautulli_recent_movies .flex.flex-row.text-right > div:last-child,
 #tautulli_recent_shows .flex.flex-row.text-right > div:last-child {
   margin-left: -18px;
-  font-size: 8px !important;
+  font-family: var(--font-family-base);
 }
-
-/* Media indicator circles */
+#upcominggames .flex.flex-row.text-right > div:first-child::after,
 #tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after,
 #tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: 0.5rem;
   position: absolute;
-  left: 60px;
+  left: 50px;
   top: 50%;
   transform: translateY(-50%);
 }
 
+#upcominggames > div:nth-child(1) > div:nth-child(2),
+#tautulli_recent_movies > div:nth-child(1) > div:nth-child(2),
+#tautulli_recent_shows > div:nth-child(1) > div:nth-child(2) {
+  margin-bottom: 3px;
+  margin-top: 1px;
+}
+
+#upcominggames .flex.flex-row.text-right > div:first-child::after {
+  background-color: rgb(0, 120, 212);
+}
 #tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after {
-  background-color: rgb(6, 182, 212);
+  background-color: rgb(0, 203, 254);
 }
 
 #tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
   background-color: rgb(245, 158, 11);
 }
 
-#tautulli_recent_movies > div > div.relative.flex.flex-row.w-full.service-container > div > div,
-#tautulli_recent_shows > div > div.relative.flex.flex-row.w-full.service-container > div > div {
+#upcominggames
+  > div
+  > div.relative.flex.flex-row.w-full.service-container
+  > div
+  > div,
+#tautulli_recent_movies
+  > div
+  > div.relative.flex.flex-row.w-full.service-container
+  > div
+  > div,
+#tautulli_recent_shows
+  > div
+  > div.relative.flex.flex-row.w-full.service-container
+  > div
+  > div {
   display: block;
   text-align: left;
-  font-size: 10px !important;
-  margin: 2px 0 2px 3px;
+  font-size: 12px;
+  margin: 3px 3px 1px 3px;
   font-family: var(--font-family-base);
-  font-weight: 500;
+  font-weight: 400;
   text-shadow: var(--text-shadow);
-  margin-block-end: .06rem;
+  border-radius: 0.4rem;
 }
-
-/* Animations */
+#headlessui-disclosure-panel-\:r6\:
+  > ul:nth-child(1)
+  > li:nth-child(1)
+  > div:nth-child(1)
+  > div:nth-child(1) {
+  margin: -100px;
+}
 @keyframes updatePulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes loadingBar {
-  0% { width: 0; opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { width: 100%; opacity: 0.5; }
+  0% {
+    width: 0;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.5;
+  }
 }
 
 .service-card.updating {
@@ -449,7 +432,7 @@ div.max-w\:full:nth-child(3) {
 }
 
 .service-card.loading::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -458,8 +441,30 @@ div.max-w\:full:nth-child(3) {
   background: var(--card-border-hover);
   animation: loadingBar 2s infinite linear;
 }
+.flex.flex-row {
+  display: flex;
+  flex-direction: row;
+}
 
-/* Mobile styles */
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.w-full {
+  width: 100%;
+}
+.relative {
+  position: relative;
+}
+.active {
+  opacity: 1;
+  visibility: visible;
+}
 @media (max-width: 768px) {
   :root {
     --card-padding: 10px;
@@ -490,27 +495,21 @@ div.max-w\:full:nth-child(3) {
     padding: 0;
     margin: 0;
   }
-
-  /* Hide elements on mobile */
   .information-widget-resource,
   [id^="information-widget"],
   #information-widgets > *,
   iframe,
-  .home-assistant,
-  .glance,
-  .uptimekuma,
-  .weather,
   .service-block:has(iframe),
   div[class*="widget"],
   [class*="-container"]:has(iframe),
   [class*="widget-area"],
   .service-container:has(iframe) {
-    display: none !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
+    display: none;
+    height: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
   }
 }
 
@@ -523,9 +522,4 @@ div.max-w\:full:nth-child(3) {
   #myTab {
     gap: 3px;
   }
-}
-
-/* Special selectors */
-#headlessui-disclosure-panel-\:r6\: > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > div:nth-child(1) {
-  margin: -100px;
 }
