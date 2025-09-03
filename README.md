@@ -18,7 +18,6 @@ Please also read through the ![Homepage Wiki](https://gethomepage.dev/) site tho
 * compose.yaml 
 * custom.css
 * custom.js
-* docker.yaml
 * forest.webp (Wallpaper)
 * services.yaml
 * settings.yaml
