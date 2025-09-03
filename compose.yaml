@@ -3,18 +3,15 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     environment:
-      - TZ=Asia/Singapore
-      - DOCKER_HOST=tcp://192.168.1.88:2375
+      - TZ=
+      - DOCKER_HOST=
       - LOG_LEVEL=debug
-      - HOMEPAGE_ALLOWED_HOSTS=homepage.abdulmuizz.dev,192.168.1.69:3333,192.168.1.88:3333
+      - HOMEPAGE_ALLOWED_HOSTS=
     env_file:
       - .env
     volumes:
-      - ./config:/app/config:rw  # Separated from compose directory
+      - ./config:/app/config:rw 
       - ./images:/app/public/images
-      - /mnt/data:/data:ro  # Read-only access to data
-      - /mnt/usb:/usb:ro   # Read-only access to USB
-      - /mnt/docker:/docker:ro  # Read-only access to docker data
     ports:
       - "3333:3000"
     restart: unless-stopped
@@ -26,13 +23,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
-    # Memory limits only (no CPU limits for cgroup compatibility)
-    mem_limit: 512m  # Reduced from 4g - Homepage is lightweight
+    mem_limit: 512m
     memswap_limit: 2g
-    # cpus: "0.25"
     security_opt:
       - no-new-privileges:true
-    # Log management
     logging:
       driver: "json-file"
       options:
