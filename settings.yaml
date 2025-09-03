@@ -1,12 +1,9 @@
----
-# For configuration options and examples, please see:
-# https://gethomepage.dev/latest/configs/settings
-title: The Lion's Den
+title: THE LION'S DEN
 favicon: /images/icons/logo.png
 disableCollapse: false
 background:
-  image: /images/backgrounds/forest.webp
-cardBlur: xl
+  image: /images/backgrounds/landscape.jpg
+cardBlur: 4xl
 theme: dark
 color: emerald
 headerStyle: clean
@@ -20,53 +17,52 @@ fiveColumns: true
 useEqualHeights: true
 preloadAllWidgets: true
 layout:
-  Weather:
+  Home:
     header: false
     tab: Home
     style: row
-    columns: 1
+    columns: 5
+  Home Assistant:
+    header: false
+    tab: Home
+    style: column
   News:
     header: false
     tab: Home
-    style: row
-    columns: 1
-  Bookmarks:
+    style: columns
+  EPL:
     header: false
-    tab: Home
-    style: row
-    columns: 8
-  Now Playing:
+    tab: Calendars
+    style: columns
+    useEqualHeights: false
+  To Do:
+    header: false
+    tab: Calendars
+    style: columns
+  Calendars:
+    header: false
+    tab: Calendars
+    style: columns
+  Recently Downloaded:
+    header: false
+    tab: Calendars
+    style: columns
+  Upcoming:
+    header: false
+    tab: Calendars
+    style: columns
+  Applications2:
     header: false
     tab: Applications
     style: row
-    columns: 2
+    columns: 7
   Applications:
     header: false
     tab: Applications
     style: row
     columns: 5
-  Applications 2:
+  Bookmarks:
     header: false
     tab: Applications
     style: row
     columns: 8
-  Steam:
-    header: false
-    tab: Calendars
-    style: row
-    columns: 1
-  Calendars1:
-    header: false
-    tab: Calendars
-    style: row
-    columns: 3
-  Calendars2:
-    header: false
-    tab: Calendars
-    style: row
-    columns: 3
-  Home Assistant:
-    header: false
-    tab: Smart Home
-    style: row
-    columns: 1 
