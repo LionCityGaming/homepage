@@ -27,13 +27,11 @@ Please also read through the ![Homepage Wiki](https://gethomepage.dev/) site tho
 Make the necessary changes to settings in compose.yaml before running ```docker compose up -d``` to install Homepage container.
 
 ## Screenshots:
-![Home](https://github.com/user-attachments/assets/e1fe3151-75ca-403a-97e6-1054c20a67a3)
+![Home](https://github.com/user-attachments/assets/f0b91267-a2c7-48c4-b0e1-4afd527ac0ab)
 
-![Applications](https://github.com/user-attachments/assets/4cd169dc-0ed8-4e74-a26c-d047d8b75f75)
+![Calendars](https://github.com/user-attachments/assets/d54a5ab9-907f-4d73-91bc-5237b0c12f7c)
 
-![Calendars](https://github.com/user-attachments/assets/4e235adf-f84d-4d5c-a551-244bc342e66e)
-
-![Smart Home](https://github.com/user-attachments/assets/14bee095-cd71-432f-9eba-83ae66c9d0fc)
+![Applications](https://github.com/user-attachments/assets/0ceb00e8-6a2e-4b3d-936f-d8213ff51128)
 
 ## Useful Links
 
