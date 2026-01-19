@@ -42,8 +42,6 @@
 
 ## Prerequisites
 
-Before you begin, ensure you have:
-
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | [Homepage](https://gethomepage.dev/) | v0.8+ | Dashboard framework |
@@ -163,7 +161,8 @@ cp custom.css custom.js /path/to/homepage/config/
 
 ## Custom Widgets
 
-This dashboard includes several custom API widgets that extend Homepage's functionality:
+<details>
+<summary><strong>14 custom API widgets extending Homepage's functionality</strong></summary>
 
 | Widget | Description | Refresh Rate |
 |--------|-------------|--------------|
@@ -182,6 +181,8 @@ This dashboard includes several custom API widgets that extend Homepage's functi
 | **Zigbee2MQTT Stats** | Device counts and battery status | 5 minutes |
 | **Zipline Stats** | File count and storage usage | 5 minutes |
 
+</details>
+
 ---
 
 ## File Structure
@@ -198,8 +199,6 @@ This dashboard includes several custom API widgets that extend Homepage's functi
 ---
 
 ## Environment Variables
-
-All sensitive data uses the `HOMEPAGE_VAR_` prefix pattern:
 
 | Pattern | Example | Description |
 |---------|---------|-------------|
@@ -265,12 +264,7 @@ See [.env.example](.env.example) for the complete list of required variables.
 
 ## Credits
 
-- [Homepage](https://gethomepage.dev/) — Dashboard framework
-- [Homepage Discord](https://discord.gg/ppNwk9Skux) — Community support
-- [selfh.st Icons](https://selfh.st/icons/) — Service icons
-- [Home Assistant](https://www.home-assistant.io/) — Smart home platform
-- [Shields.io](https://shields.io/) — README badges
-- [r/selfhosted](https://www.reddit.com/r/selfhosted/) — Community inspiration
+[Homepage](https://gethomepage.dev/) · [Homepage Discord](https://discord.gg/ppNwk9Skux) · [selfh.st Icons](https://selfh.st/icons/) · [Home Assistant](https://www.home-assistant.io/) · [r/selfhosted](https://www.reddit.com/r/selfhosted/)
 
 ---
 
