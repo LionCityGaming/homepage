@@ -56,12 +56,17 @@
 <summary><strong>Media Management</strong></summary>
 
 - Plex / Tautulli (streaming & analytics)
-- Sonarr, Radarr, Bazarr (TV, movies, subtitles)
+- Sonarr (TV shows)
+- Radarr (movies)
+- Bazarr (subtitles)
 - Prowlarr (indexers)
 - SABnzbd (downloads)
 - Jellyseerr (requests)
 - Audiobookshelf (audiobooks)
 - Dispatcharr (IPTV)
+- TitleCardMaker (title cards)
+- Maintainerr (media maintenance)
+- RomM (ROM management)
 
 </details>
 
@@ -73,6 +78,7 @@
 - Synology NAS (storage)
 - Scrutiny (disk health)
 - WatchYourLAN (network devices)
+- Zigbee2MQTT (Zigbee network)
 
 </details>
 
@@ -84,8 +90,10 @@
 - FreshRSS (news)
 - Linkding (bookmarks)
 - Booklore (ebooks)
+- Shelfmark (book downloads)
 - Wallos (subscriptions)
 - Immich (photos)
+- SilverBullet (notes)
 
 </details>
 
@@ -95,16 +103,27 @@
 - AdGuard Home (DNS)
 - Caddy (reverse proxy)
 - CrowdSec (security)
-- WireGuard (VPN)
+- WireGuard / WG-Easy (VPN)
 - Komodo (containers)
 - Backrest (backups)
+- Dozzle (Docker logs)
+- File Browser (file management)
 
 </details>
 
 <details>
 <summary><strong>Utilities</strong></summary>
 
-- Gitea, Vaultwarden, Gotify, MeTube, Zipline, and more
+- Gitea (Git repository)
+- Vaultwarden (passwords)
+- Gotify (notifications)
+- Apprise (notification service)
+- MeTube (YouTube downloader)
+- Zipline (file sharing)
+- Code-server (cloud IDE)
+- Profilarr (profile management)
+- Steam (games library)
+- DAPS Dashboard (DAPS interface)
 
 </details>
 
