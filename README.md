@@ -19,22 +19,6 @@
 
 ---
 
-<p align="center">
-<a href="#screenshots">Screenshots</a> ·
-<a href="#features">Features</a> ·
-<a href="#prerequisites">Prerequisites</a> ·
-<a href="#quick-start">Quick Start</a> ·
-<a href="#services">Services</a> ·
-<a href="#custom-widgets">Custom Widgets</a> ·
-<a href="#file-structure">File Structure</a> ·
-<a href="#environment-variables">Environment Variables</a> ·
-<a href="#troubleshooting">Troubleshooting</a> ·
-<a href="#credits">Credits</a> ·
-<a href="#license">License</a>
-</p>
-
----
-
 ## Screenshots
 
 <details open>
