@@ -1,0 +1,916 @@
+---
+# ============================================================================
+# HOME SECTION - Core Dashboard & Monitoring
+# ============================================================================
+- Home:
+    - Home Assistant:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        id: hawidget
+        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}"
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}"
+        widget:
+          type: homeassistant
+          url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_API_KEY}}"
+          refreshInterval: 10000
+          custom:
+            - template: "{{ states.climate|selectattr('state','equalto','cool')|list|length }}"
+              label: A/C on
+            - template: "{{ states.fan|rejectattr('entity_id','in',['fan.living_room_fan_old'])|selectattr('state','equalto','on')|list|length }}"
+              label: fans on
+            - template: "{{ states.light|selectattr('entity_id','in',['light.back_office_fan_local','light.balcony_fan_local','light.bedroom_fan_local','light.bedroom_door_light_local','light.bedroom_washroom','light.dining_area_lights_zigbee','light.entryway_local','light.front_office_fan_local','light.kitchen_light_local','light.living_room_fan_local','light.washroom'])|selectattr('state','equalto','on')|list|length }}"
+              label: lights on
+            - template: "{{ states.remote|rejectattr('entity_id','in',['remote.android_tv_192_168_1_51','remote.back_office','remote.bedroom','remote.front_office','remote.living_room'])|selectattr('state','equalto','on')|list|length }}"
+              label: TV on
+
+    - Plex:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/plex.webp
+        id: plex2
+        href: "{{HOMEPAGE_VAR_PLEX_URL}}"
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        siteMonitor: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+        widget:
+          type: tautulli
+          url: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+          key: "{{HOMEPAGE_VAR_TAUTULLI_API_KEY}}"
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: true
+          enableUser: true
+
+    - Proxmox Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+        widget:
+          type: proxmox
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+          username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
+          fields: [resources.cpu, resources.mem]
+
+    - Synology NAS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/synology.webp
+        href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+        widget:
+          type: diskstation
+          url: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+          username: "{{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}"
+          fields: [resources.cpu, resources.mem]
+
+# ============================================================================
+# NEWS & INFORMATION SECTION
+# ============================================================================
+- News:
+    - Singapore Dollar Exchange:
+        icon: /images/icons/singapore-dollar.png
+        widgets:
+          - type: customapi
+            url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/sgd.json"
+            refreshInterval: 3600000
+            mappings:
+              - field: { sgd: myr }
+                label: Malaysian Ringgit
+                format: float
+                precision: 2
+              - field: { sgd: usd }
+                label: US Dollars
+                format: float
+                precision: 2
+              - field: { sgd: eur }
+                label: Euros
+                format: float
+                precision: 2
+              - field: { sgd: jpy }
+                label: Japanese Yen
+                format: float
+                precision: 2
+
+          - type: iframe
+            src: "{{HOMEPAGE_VAR_GLANCE_WIDGET_URL}}"
+            classes: glance
+            loadingStrategy: lazy
+            referrerPolicy: same-origin
+            allowPolicy: fullscreen
+
+# ============================================================================
+# HOME ASSISTANT FULL VIEW
+# ============================================================================
+- Home Assistant:
+    - " ":
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_HOME_ASSISTANT_WIDGET_URL}}"
+          classes: home-assistant
+          loadingStrategy: lazy
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+
+# ============================================================================
+# PRODUCTIVITY SECTION - Calendars & Tasks
+# ============================================================================
+- Calendars:
+    - " ":
+        id: ha-calendar
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_CALENDAR_WIDGET_URL}}"
+          classes: ha-calendar
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: lazy
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+- To Do:
+    - " ":
+        id: todo
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_TODO_WIDGET_URL}}"
+          classes: todo
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: lazy
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+    - EPL Calendar:
+        id: epl-calendar
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_EPL_CALENDAR_WIDGET_URL}}"
+          classes: epl-calendar
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: lazy
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+# ============================================================================
+# UPCOMING RELEASES SECTION
+# ============================================================================
+- Upcoming:
+    - PC Game Releases:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/microsoft-windows.webp
+        id: upcominggames
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_UPCOMING_GAMES_API_URL}}"
+          display: list
+          refreshInterval: 86400000
+          mappings:
+            - field: { "0": released }
+              additionalField: { field: { "0": name } }
+            - field: { "1": released }
+              additionalField: { field: { "1": name } }
+            - field: { "2": released }
+              additionalField: { field: { "2": name } }
+            - field: { "3": released }
+              additionalField: { field: { "3": name } }
+            - field: { "4": released }
+              additionalField: { field: { "4": name } }
+            - field: { "5": released }
+              additionalField: { field: { "5": name } }
+            - field: { "6": released }
+              additionalField: { field: { "6": name } }
+            - field: { "7": released }
+              additionalField: { field: { "7": name } }
+            - field: { "8": released }
+              additionalField: { field: { "8": name } }
+            - field: { "9": released }
+              additionalField: { field: { "9": name } }
+            - field: { "10": released }
+              additionalField: { field: { "10": name } }
+            - field: { "11": released }
+              additionalField: { field: { "11": name } }
+            - field: { "12": released }
+              additionalField: { field: { "12": name } }
+            - field: { "13": released }
+              additionalField: { field: { "13": name } }
+            - field: { "14": released }
+              additionalField: { field: { "14": name } }
+
+    - Media Releases:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        id: upcomingtv
+        widget:
+          type: calendar
+          showTime: false
+          maxEvents: 22
+          view: agenda
+          integrations:
+            - type: sonarr
+              service_group: Applications
+              service_name: Sonarr
+              color: cyan
+            - type: radarr
+              service_group: Applications
+              service_name: Radarr
+              color: amber
+
+# ============================================================================
+# RECENTLY DOWNLOADED MEDIA SECTION
+# ============================================================================
+- Recently Downloaded:
+    - Movies:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
+        id: tautulli_recent_movies
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_RECENT_MOVIES_API_URL}}"
+          display: list
+          refreshInterval: 300000
+          mappings:
+            - field: { "0": added_at }
+              additionalField: { field: { "0": title } }
+            - field: { "1": added_at }
+              additionalField: { field: { "1": title } }
+            - field: { "2": added_at }
+              additionalField: { field: { "2": title } }
+            - field: { "3": added_at }
+              additionalField: { field: { "3": title } }
+            - field: { "4": added_at }
+              additionalField: { field: { "4": title } }
+            - field: { "5": added_at }
+              additionalField: { field: { "5": title } }
+            - field: { "6": added_at }
+              additionalField: { field: { "6": title } }
+            - field: { "7": added_at }
+              additionalField: { field: { "7": title } }
+            - field: { "8": added_at }
+              additionalField: { field: { "8": title } }
+            - field: { "9": added_at }
+              additionalField: { field: { "9": title } }
+            - field: { "10": added_at }
+              additionalField: { field: { "10": title } }
+            - field: { "11": added_at }
+              additionalField: { field: { "11": title } }
+            - field: { "12": added_at }
+              additionalField: { field: { "12": title } }
+            - field: { "13": added_at }
+              additionalField: { field: { "13": title } }
+            - field: { "14": added_at }
+              additionalField: { field: { "14": title } }
+            - field: { "15": added_at }
+              additionalField: { field: { "15": title } }
+            - field: { "16": added_at }
+              additionalField: { field: { "16": title } }
+            - field: { "17": added_at }
+              additionalField: { field: { "17": title } }
+
+    - TV Episodes:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
+        id: tautulli_recent_shows
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_RECENT_SHOWS_API_URL}}"
+          display: list
+          refreshInterval: 300000
+          mappings:
+            - field: { "0": added_at }
+              additionalField: { field: { "0": title } }
+            - field: { "1": added_at }
+              additionalField: { field: { "1": title } }
+            - field: { "2": added_at }
+              additionalField: { field: { "2": title } }
+            - field: { "3": added_at }
+              additionalField: { field: { "3": title } }
+            - field: { "4": added_at }
+              additionalField: { field: { "4": title } }
+            - field: { "5": added_at }
+              additionalField: { field: { "5": title } }
+            - field: { "6": added_at }
+              additionalField: { field: { "6": title } }
+            - field: { "7": added_at }
+              additionalField: { field: { "7": title } }
+            - field: { "8": added_at }
+              additionalField: { field: { "8": title } }
+            - field: { "9": added_at }
+              additionalField: { field: { "9": title } }
+            - field: { "10": added_at }
+              additionalField: { field: { "10": title } }
+            - field: { "11": added_at }
+              additionalField: { field: { "11": title } }
+            - field: { "12": added_at }
+              additionalField: { field: { "12": title } }
+            - field: { "13": added_at }
+              additionalField: { field: { "13": title } }
+            - field: { "14": added_at }
+              additionalField: { field: { "14": title } }
+            - field: { "15": added_at }
+              additionalField: { field: { "15": title } }
+            - field: { "16": added_at }
+              additionalField: { field: { "16": title } }
+            - field: { "17": added_at }
+              additionalField: { field: { "17": title } }
+
+# ============================================================================
+# EPL STANDINGS
+# ============================================================================
+- EPL:
+    - " ":
+        id: epl
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_EPL_STANDINGS_WIDGET_URL}}"
+          classes: epl
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: lazy
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+# ============================================================================
+# CORE APPLICATIONS - Networking & Security
+# ============================================================================
+- Applications:
+    - AdGuard Home:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/adguard-home.webp
+        href: "https://adguard.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: DNS Ad Blocking
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        siteMonitor: "https://adguard.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: adguard
+          url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
+          username: "{{HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}}"
+
+    - Audiobookshelf:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
+        href: "https://audiobookshelf.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Audiobook Server
+        siteMonitor: "https://audiobookshelf.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: audiobookshelf
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+          fields: [books, booksDuration]
+
+    - Backrest:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/backrest-light.webp
+        href: "https://backrest.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Backup Manager
+        siteMonitor: "https://backrest.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_BACKREST_STATS_API_URL}}"
+          display: grid
+          refreshInterval: 1800000
+          mappings:
+            - label: Date
+              field: last_operation_date
+              format: text
+            - label: Time
+              field: last_operation_time
+              format: text
+            - label: Status
+              field: last_operation_status
+              format: text
+            - label: Size
+              field: data_processed_gb
+              format: number
+              suffix: " GB"
+
+    - Bazarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
+        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Subtitle Manager
+        siteMonitor: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+
+    - Booklore:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/booklore.webp
+        href: "https://booklore.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Ebook Manager
+        siteMonitor: "https://booklore.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_BOOKLORE_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: libraries
+              label: Libraries
+            - field: shelves
+              label: Shelves
+            - field: total_books
+              label: Books
+
+    - Caddy:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
+        href: "https://{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Reverse Proxy
+        siteMonitor: "https://homepage.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: caddy
+          url: "{{HOMEPAGE_VAR_CADDY_URL}}"
+
+    - Crowdsec:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
+        href: "https://app.crowdsec.net/security-engines"
+        description: Security Engine
+        siteMonitor: "https://app.crowdsec.net/security-engines"
+        widget:
+          type: crowdsec
+          url: "{{HOMEPAGE_VAR_CROWDSEC_URL}}"
+          username: "{{HOMEPAGE_VAR_CROWDSEC_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_CROWDSEC_PASSWORD}}"
+          limit24h: true
+
+    - Dispatcharr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
+        href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: IPTV Proxy
+        siteMonitor: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_DISPATCHARR_STATS_URL}}"
+          refreshInterval: 60000
+          mappings:
+            - field: active_streams
+              label: Active
+              format: number
+            - field: total_streams
+              label: Channels
+              format: number
+            - field: vod_movies
+              label: Movies
+              format: number
+            - field: vod_series
+              label: Series
+              format: number
+
+    - FreshRSS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
+        href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: RSS Aggregator
+        siteMonitor: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: freshrss
+          url: "{{HOMEPAGE_VAR_FRESHRSS_URL}}"
+          username: "{{HOMEPAGE_VAR_FRESHRSS_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_FRESHRSS_PASSWORD}}"
+
+    - Gitea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}{{HOMEPAGE_VAR_GITEA_REPO_PATH}}"
+        description: Git Repository
+        siteMonitor: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: gitea
+          url: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_GITEA_API_KEY}}"
+          fields: [notifications, repositories]
+
+    - Gotify:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
+        href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Notifications
+        siteMonitor: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: gotify
+          url: "{{HOMEPAGE_VAR_GOTIFY_URL}}"
+          key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
+          fields: [apps, messages]
+
+    - Immich:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
+        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
+        description: Photo Management
+        siteMonitor: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
+        widget:
+          type: immich
+          url: "{{HOMEPAGE_VAR_IMMICH_URL}}"
+          key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"
+          version: 2
+
+    - Jellyseerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/jellyseerr.webp
+        href: "https://jellyseerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Media Requests
+        siteMonitor: "https://jellyseerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: jellyseerr
+          url: "https://jellyseerr.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+          fields: [pending, approved, available]
+
+    - Komodo:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komodo.webp
+        href: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Infrastructure Manager
+        siteMonitor: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: komodo
+          url: "{{HOMEPAGE_VAR_KOMODO_URL}}"
+          key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+          secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+          showSummary: true
+          showStacks: true
+
+    - Linkding:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+        href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Bookmark Manager
+        siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_LINKDING_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: total
+              label: Total
+            - field: active
+              label: Active
+            - field: archived
+              label: Archived
+            - field: tags
+              label: Tags
+
+    - Maintainerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
+        href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Media Maintenance
+        siteMonitor: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_MAINTAINERR_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: total_rules
+              label: Rules
+            - field: active_collections
+              label: Collections
+
+    - Mealie:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
+        href: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Recipe Manager
+        siteMonitor: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: mealie
+          url: "{{HOMEPAGE_VAR_MEALIE_URL}}"
+          key: "{{HOMEPAGE_VAR_MEALIE_API_KEY}}"
+          fields: [users, recipes, tags]
+          version: 2
+
+    - MeTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
+        href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: YouTube Downloader
+        siteMonitor: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_METUBE_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: active_downloads
+              label: Active
+              format: number
+            - field: completed_downloads
+              label: Completed
+              format: number
+            - field: pending_downloads
+              label: Pending
+              format: number
+            - field: total_downloads
+              label: Total
+              format: number
+
+    - Paperless-ngx:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
+        href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Document Manager
+        siteMonitor: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
+        widget:
+          type: paperlessngx
+          url: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
+          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
+
+    - Prowlarr:
+        icon: hhttps://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Indexer Manager
+        siteMonitor: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: prowlarr
+          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+          fields: [numberOfGrabs, numberOfQueries]
+
+    - Radarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
+        href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Movie Manager
+        siteMonitor: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: radarr
+          url: "{{HOMEPAGE_VAR_RADARR_URL}}"
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+
+    - RomM:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/romm.webp
+        href: "https://romm.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: ROM Manager
+        siteMonitor: "https://romm.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: romm
+          url: "{{HOMEPAGE_VAR_ROMM_URL}}"
+          username: "{{HOMEPAGE_VAR_ROMM_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_ROMM_PASSWORD}}"
+
+    - SABnzbd:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
+        href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Usenet Downloader
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        siteMonitor: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: sabnzbd
+          url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+          key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
+
+    - Scrutiny:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/scrutiny-light.webp
+        href: "https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Disk Monitor
+        server: "{{HOMEPAGE_VAR_SERVER}}"
+        siteMonitor: "https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: scrutiny
+          url: "{{HOMEPAGE_VAR_SCRUTINY_URL}}"
+          fields: [passed, failed]
+
+    - Sonarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
+        href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: TV Show Manager
+        siteMonitor: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: sonarr
+          url: "{{HOMEPAGE_VAR_SONARR_URL}}"
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+
+    - Steam:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/steam.webp
+        href: "{{HOMEPAGE_VAR_STEAM_PROFILE_URL}}"
+        description: Games Library
+        siteMonitor: "{{HOMEPAGE_VAR_STEAM_PROFILE_URL}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_STEAM_STATS_URL}}"
+          refreshInterval: 600000
+          mappings:
+            - field: games_owned
+              label: Games Owned
+              format: number
+            - field: total_playtime_hours
+              label: Total Playtime Hours
+              format: number
+            - field: most_played_game
+              label: Most Played Game
+              format: text
+
+    - Tautulli:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
+        href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Plex Analytics
+        siteMonitor: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+        widget:
+          type: plex
+          url: "{{HOMEPAGE_VAR_PLEX_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_PLEX_API_KEY}}"
+          fields: [tv, movies]
+
+    - TitleCardMaker:
+        icon: /images/icons/tcm.png
+        href: "https://tcm.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Title Card Creator
+        siteMonitor: "https://tcm.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_TCM_API_URL}}"
+          refreshInterval: 600000
+          mappings:
+            - field: { "1": value }
+              label: Series
+            - field: { "5": value }
+              label: Episodes
+            - field: { "0": value }
+              label: Cards
+            - field: { "6": value_text }
+              label: Size
+              suffix: GB
+
+    - Vaultwarden:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
+        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Password Manager
+        siteMonitor: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_VAULTWARDEN_STATS_URL}}"
+          refreshInterval: 600000
+          mappings:
+            - label: Active (30 Days)
+              field: active_users
+              format: number
+            - label: Total Users
+              field: total_users
+              format: number
+
+    - Wallos:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wallos.webp
+        href: "https://wallos.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Subscription Tracker
+        siteMonitor: "https://wallos.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WALLOS_STATS_API_URL}}"
+          display: grid
+          refreshInterval: 300000
+          mappings:
+            - label: Services
+              field: subscription_count
+              format: number
+            - label: Next Due
+              field: next_subscription
+              format: text
+            - label: Amount
+              field: next_price_formatted
+              format: text
+            - label: Total
+              field: total_monthly_formatted
+              format: text
+
+    - WatchYourLAN:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/watchyourlan.webp
+        href: "https://watchyourlan.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Network Devices
+        siteMonitor: "https://watchyourlan.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WATCHYOURLAN_STATS_URL}}"
+          refreshInterval: 60000
+          mappings:
+            - field: online
+              label: Online
+            - field: known
+              label: Known
+            - field: unknown
+              label: Unknown
+            - field: total
+              label: Total
+
+    - WG-Easy:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wireguard.webp
+        href: "https://wg-easy.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: WireGuard VPN
+        siteMonitor: "https://wg-easy.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: wgeasy
+          url: "{{HOMEPAGE_VAR_WGEASY_URL}}"
+          password: "{{HOMEPAGE_VAR_WIREGUARD_PASSWORD}}"
+
+    - Zigbee2MQTT:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/zigbee2mqtt.webp
+        href: "https://zigbee2mqtt.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Zigbee Network
+        siteMonitor: "https://zigbee2mqtt.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_ZIGBEE2MQTT_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: total_devices
+              label: Devices
+              format: number
+            - field: router_devices
+              label: Routers
+              format: number
+            - field: end_devices
+              label: End Devices
+              format: number
+            - field: battery_low
+              label: Battery Low
+              format: number
+
+    - Zipline:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/zipline.webp
+        href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: File Sharing
+        siteMonitor: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_ZIPLINE_STATS_API_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - label: Files
+              field: files
+              format: number
+            - label: Storage
+              field: storage_mb
+              format: number
+              suffix: " MB"
+
+# ============================================================================
+# SECONDARY APPLICATIONS - Utilities & Tools
+# ============================================================================
+- More Apps:
+    - Apprise:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/apprise.webp
+        href: "https://apprise.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Notification Service
+        siteMonitor: "https://apprise.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - Code-server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
+        href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Cloud IDE
+        siteMonitor: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - DAPS Dashboard:
+        icon: /images/icons/daps.png
+        href: "https://daps.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: DAPS Interface
+        siteMonitor: "https://daps.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - Dozzle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dozzle.webp
+        href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Docker Logs
+        siteMonitor: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - File Browser:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://filebrowser-proxmox.{{HOMEPAGE_VAR_DOMAIN}}/files/etc/komodo/stacks/"
+        description: File Manager
+        siteMonitor: "https://filebrowser-proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - Profilarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/profilarr-light.webp
+        href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Profile Manager
+        siteMonitor: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - Shelfmark:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/shelfmark.webp
+        href: "https://shelfmark.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Book Downloads
+        siteMonitor: "https://shelfmark.{{HOMEPAGE_VAR_DOMAIN}}"
+
+    - SilverBullet:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/silverbullet.webp
+        href: "https://notes.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Note Taking
+        container: silverbullet
+
+# ============================================================================
+# BOOKMARKS & EXTERNAL SERVICES
+# ============================================================================
+- Bookmarks:
+    - Claude:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/claude.webp
+        href: "https://claude.ai/new"
+        description: AI Assistant
+
+    - Github:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
+        href: "{{HOMEPAGE_VAR_GITHUB_REPO_URL}}"
+        description: Code Repository
+
+    - Gmail:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gmail.webp
+        href: "https://mail.google.com/mail/u/0/#inbox"
+        description: Email
+
+    - Mavis LMS:
+        icon: /images/icons/mavis.png
+        href: "{{HOMEPAGE_VAR_MAVIS_LMS_URL}}"
+        description: Learning Platform
+
+    - Proxmox Scripts:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox-helper-scripts.webp
+        href: "https://community-scripts.github.io/ProxmoxVE/"
+        description: Helper Scripts
+
+    - r/selfhosted:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/reddit.webp
+        href: "https://old.reddit.com/r/selfhosted"
+        description: Community
+
+    - selfh.st Icons:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: "https://selfh.st/icons/"
+        description: Icon Library
+
+    - SMLIGHT SLZB-06:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/smlight.webp
+        href: "http://SLZB-06M.local"
+        description: Zigbee Coordinator

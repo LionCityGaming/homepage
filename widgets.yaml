@@ -1,0 +1,39 @@
+- logo:
+    icon: /images/icons/logo.png
+    href: https://{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- greeting:
+    text_size: 3xl
+    text: THE LION'S DEN
+    href: https://gethomepage.dev/
+    target: _blank
+- datetime:
+    locale: en-sg
+    text_size: 3xl
+    format:
+      dateStyle: full
+      hour12: false
+      timeStyle: short
+    href: https://calendar.google.com/calendar/u/0/r
+    target: _blank
+- resources:
+- resources:
+    label: NAS
+    disk: /data
+    href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- resources:
+    label: Proxmox
+    disk: /
+    href: https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- resources:
+    label: Synology
+    disk: /docker
+    href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- resources:
+    label: Backups
+    disk: /usb
+    href: https://backrest.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank

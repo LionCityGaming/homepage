@@ -1,0 +1,548 @@
+/* ============================================================================
+   HOMEPAGE CUSTOM CSS - OPTIMIZED
+   ============================================================================ */
+
+:root {
+  /* Theme colors */
+  --dominant-color: #2f4f4f;
+  --accent-color: #8fbc8f;
+  --accent-color-dim: #8fbc8f80;
+  --bg-color: #18191a;
+  --bg-color-light: #1e2021;
+  --text-color: #ffffff;
+
+  /* Derived properties using dynamic colors */
+  --card-border: 3.5px solid var(--dominant-color);
+  --card-border-hover: var(--accent-color);
+  --card-border-focus: var(--accent-color);
+  --card-bg: var(--bg-color);
+  --card-bg-hover: var(--accent-color-dim);
+  --text-shadow: 0 0 10px var(--bg-color);
+  --transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  --focus-ring: 0 0 8px var(--accent-color-dim);
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --base-font-size: 14px;
+  --card-padding: 0;
+  --card-margin: 0;
+  --border-radius: 1.5rem;
+}
+
+/* ============================================================================
+   NAVIGATION TABS
+   ============================================================================ */
+#myTab {
+  display: flex;
+  gap: 100px;
+  margin: 0 300px 30px;
+  padding: 0;
+  font: 18px/2 var(--font-family-base);
+  background: none;
+  backdrop-filter: none;
+}
+
+#myTabContent,
+.tab-content,
+.dropdown-area,
+.tabcontent {
+  margin: 0;
+  padding: 0;
+}
+
+.tabcontent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  display: none;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.tabcontent.active {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  margin: 12px 0 15px;
+}
+
+[id$="-tab"] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  margin: 0;
+  border: var(--card-border);
+  border-radius: var(--border-radius);
+  background-color: #18191a;
+  text-align: center;
+  text-shadow: var(--text-shadow);
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  contain: layout style paint;
+  will-change: background-color, border-color;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+[id$="-tab"]::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  z-index: -1;
+}
+
+[id$="-tab"]:hover {
+  background-color: #1e2021;
+  border-color: var(--card-border-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+[id$="-tab"].tab-focused,
+[id$="-tab"].active {
+  background-color: #1e2021;
+  border-color: var(--card-border-focus);
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ============================================================================
+   SERVICE CARDS
+   ============================================================================ */
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: var(--card-border);
+  border-radius: var(--border-radius);
+  background-color: #18191a;
+  text-shadow: var(--text-shadow);
+  font-weight: 400;
+  white-space: nowrap;
+  transition: var(--transition);
+  contain: layout style paint;
+  will-change: background-color, border-color;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  z-index: -1;
+}
+
+.service-card:hover {
+  background-color: #1e2021;
+  border-color: var(--card-border-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.service-card > :is(div, span, h1, h2, h3, h4, h5, h6, p):first-child:not(.service-container),
+.bookmark,
+.widget-container {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.service-card > :first-child:not(.service-container),
+.service-card > .service-header,
+.service-card > .service-title {
+  margin-bottom: 1px;
+}
+
+.service-card > :nth-child(2):not(.service-header):not(.service-title),
+.service-card > .service-body,
+.service-card > .service-content {
+  margin-top: 1px;
+}
+
+.service-card:has(iframe) .service-container {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.service-card a:-moz-any-link {
+  background-color: transparent;
+}
+
+.service-card :is(a:focus, a:hover, div[onclick]:hover) {
+  background-color: transparent;
+  outline: none;
+}
+
+.service-icon img {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+}
+
+.service-block {
+  position: relative;
+  border: 2px solid darkslategrey;
+  border-radius: var(--border-radius);
+}
+
+.service-block:has(iframe) {
+  border: none;
+}
+
+.service-block:has(.epl),
+.service-block:has(.uptime),
+.service-block:has(.todo) {
+  border-color: #191c1d;
+}
+
+/* ============================================================================
+   INFORMATION WIDGETS
+   ============================================================================ */
+#information-widgets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#information-widgets-right {
+  margin-right: 10px;
+}
+
+.information-widget-greeting {
+  flex-grow: 1.5;
+}
+
+.information-widget-resources {
+  position: relative;
+}
+
+.information-widget-resource {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+#information-widgets > * {
+  position: relative;
+  border: none;
+  border-radius: var(--border-radius);
+  backdrop-filter: none;
+  text-shadow: var(--text-shadow);
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: var(--transition);
+  contain: layout;
+  will-change: transform;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+#information-widgets > *::before {
+  display: none;
+}
+
+#information-widgets > *:is(:hover, :focus) {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ============================================================================
+   IFRAME CONTAINERS
+   ============================================================================ */
+iframe {
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+}
+
+.home-assistant {
+  height: 960px;
+  margin: -20px -20px 0;
+}
+
+.todo {
+  height: 455px;
+  margin: -18px 0 0;
+}
+
+.ha-calendar {
+  height: 995px;
+  margin-top: -10px;
+}
+
+.epl-calendar {
+  height: 520px;
+  margin: -40px 0 0;
+  pointer-events: none;
+}
+
+.glance {
+  height: 905px;
+  margin: 0 0 -40px;
+}
+
+.epl {
+  height: 1014px;
+  margin: -30px -80px 0;
+}
+
+/* ============================================================================
+   CUSTOM LISTS - OPTIMIZED SELECTORS
+   ============================================================================ */
+#upcominggames .flex.flex-row.text-right,
+#tautulli_recent_movies .flex.flex-row.text-right,
+#tautulli_recent_shows .flex.flex-row.text-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  margin: -1.8px 0 -0.9px 10px;
+  border-radius: 0.5rem;
+  text-align: left;
+  font-weight: 400;
+}
+
+#upcominggames .flex.flex-row.text-right > div,
+#tautulli_recent_movies .flex.flex-row.text-right > div,
+#tautulli_recent_shows .flex.flex-row.text-right > div {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  padding-left: 0;
+  text-align: left;
+  font-weight: 400;
+}
+
+#upcominggames .flex.flex-row.text-right > div:first-child,
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child,
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child {
+  margin-right: 23px;
+}
+
+#upcominggames .flex.flex-row.text-right > div:last-child,
+#tautulli_recent_movies .flex.flex-row.text-right > div:last-child,
+#tautulli_recent_shows .flex.flex-row.text-right > div:last-child {
+  margin-left: -18px;
+}
+
+#upcomingtv span > span:first-child {
+  padding-left: 8px;
+}
+
+#upcominggames .flex.flex-row.text-right > div:first-child::after,
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after,
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
+  content: "";
+  position: absolute;
+  left: 50px;
+  top: 50%;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 0.5rem;
+  transform: translateY(-50%);
+}
+
+#upcominggames .flex.flex-row.text-right > div:first-child::after {
+  background-color: #0078d4;
+}
+
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after {
+  background-color: #00cbfe;
+}
+
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
+  background-color: #f59e0b;
+}
+
+#upcominggames .service-container > div > div,
+#tautulli_recent_movies .service-container > div > div,
+#tautulli_recent_shows .service-container > div > div {
+  display: block;
+  margin: 3px 3px 1px;
+  border-radius: 0.4rem;
+  text-align: left;
+  text-shadow: var(--text-shadow);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+#headlessui-disclosure-panel-\:r6\: > ul:first-child > li:first-child > div:first-child > div:first-child {
+  margin: -100px;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+@keyframes updatePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes loadingBar {
+  0% {
+    width: 0;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+
+.service-card.updating {
+  animation: updatePulse 0.5s ease-in-out;
+}
+
+.service-card.loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--card-border-hover);
+  animation: loadingBar 2s linear infinite;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+.container {
+  max-width: 90%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+@media (max-width: 768px) {
+  :root {
+    --card-padding: 10px;
+    --card-margin: 3px;
+  }
+
+  #myTab {
+    flex-direction: column;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+  }
+
+  [id$="-tab"] {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tabcontent {
+    margin: 0;
+    padding: 0;
+  }
+
+  .service-card,
+  [id$="-tab"] {
+    font-size: 14px;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #myTab {
+    gap: 3px;
+  }
+
+  .service-card,
+  [id$="-tab"] {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,69 @@
+title: THE LION'S DEN
+favicon: /images/icons/logo.png
+disableCollapse: false
+background:
+  image: /images/backgrounds/galaxy.jpeg
+cardBlur: 4xl
+theme: dark
+color: emerald
+headerStyle: underlined
+iconStyle: theme
+statusStyle: dot
+quicklaunch:
+  searchDescriptions: true
+hideVersion: true
+hideErrors: true
+fiveColumns: true
+useEqualHeights: true
+preloadAllWidgets: true
+target: _blank
+layout:
+  Home:
+    header: false
+    tab: Home
+    style: row
+    columns: 4
+  Home Assistant:
+    header: false
+    tab: Home
+    style: column
+  News:
+    header: false
+    tab: Home
+    style: columns
+  Calendars:
+    header: false
+    tab: Calendars
+    style: columns
+  To Do:
+    header: false
+    tab: Calendars
+    style: columns
+  EPL:
+    header: false
+    tab: Calendars
+    style: columns
+    useEqualHeights: false
+  Recently Downloaded:
+    header: false
+    tab: Calendars
+    style: columns
+  Upcoming:
+    header: false
+    tab: Calendars
+    style: columns
+  More Apps:
+    header: false
+    tab: Applications
+    style: row
+    columns: 8
+  Applications:
+    header: false
+    tab: Applications
+    style: row
+    columns: 5
+  Bookmarks:
+    header: false
+    tab: Applications
+    style: row
+    columns: 8
