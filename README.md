@@ -18,8 +18,14 @@
 
 ## Screenshots
 
+<details open>
+<summary><strong>Home</strong></summary>
+<br>
+<img src="home.png" alt="Home Tab" width="800">
+</details>
+
 <details>
-<summary><strong>Calendars & Media</strong></summary>
+<summary><strong>Calendars</strong></summary>
 <br>
 <img src="calendars.png" alt="Calendars Tab" width="800">
 </details>
