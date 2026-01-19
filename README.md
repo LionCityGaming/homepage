@@ -13,8 +13,6 @@
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"></a>
   <a href="#services"><img src="https://img.shields.io/badge/Services-45+-orange?style=flat-square" alt="Services"></a>
   <a href="https://github.com/LionCityGaming/homepage/commits/main"><img src="https://img.shields.io/github/last-commit/LionCityGaming/homepage?style=flat-square" alt="Last Commit"></a>
-  <a href="https://github.com/LionCityGaming/homepage"><img src="https://img.shields.io/github/repo-size/LionCityGaming/homepage?style=flat-square" alt="Repo Size"></a>
-  <a href="https://github.com/LionCityGaming/homepage/stargazers"><img src="https://img.shields.io/github/stars/LionCityGaming/homepage?style=flat-square" alt="Stars"></a>
 </p>
 
 ---
