@@ -23,7 +23,6 @@
 
 - [Screenshots](#screenshots)
 - [Features](#features)
-- [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Services](#services)
@@ -31,8 +30,6 @@
 - [File Structure](#file-structure)
 - [Environment Variables](#environment-variables)
 - [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [Changelog](#changelog)
 - [Credits](#credits)
 - [License](#license)
 
@@ -70,33 +67,6 @@
 | **Home Assistant** | Embedded dashboards and device status |
 | **Custom Widgets** | Currency exchange, upcoming games, media stats |
 | **Secure Config** | All secrets in environment variables |
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         NETWORK                                  │
-│                      (AdGuard DNS)                               │
-└─────────────────────────────┬───────────────────────────────────┘
-                              │
-              ┌───────────────┼───────────────┐
-              │               │               │
-              ▼               ▼               ▼
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│  SYNOLOGY NAS   │  │    PROXMOX      │  │    DOCKER       │
-│  192.168.1.69   │  │                 │  │   (on NAS)      │
-├─────────────────┤  ├─────────────────┤  ├─────────────────┤
-│ • AdGuard Home  │  │ • Home Assistant│  │ • Sonarr/Radarr │
-│ • SABnzbd       │  │   192.168.1.77  │  │ • Prowlarr      │
-│ • Scrutiny      │  │                 │  │ • Jellyseerr    │
-│ • File Storage  │  │ • Plex Server   │  │ • Tautulli      │
-│                 │  │   192.168.1.120 │  │ • Caddy         │
-│                 │  │                 │  │ • Homepage      │
-│                 │  │                 │  │ • 40+ more...   │
-└─────────────────┘  └─────────────────┘  └─────────────────┘
-```
 
 ---
 
@@ -252,9 +222,7 @@ This dashboard includes several custom API widgets that extend Homepage's functi
 ├── widgets.yaml       # Header widgets (logo, datetime, resources)
 ├── custom.css         # Custom styling and theme overrides
 ├── custom.js          # Custom JavaScript
-├── .env.example       # Template for environment variables
-├── CHANGELOG.md       # Version history and changes
-└── README.md          # This file
+└── .env.example       # Template for environment variables
 ```
 
 ---
@@ -322,31 +290,6 @@ See [.env.example](.env.example) for the complete list of required variables.
 - Some services may need specific health check endpoints
 
 </details>
-
----
-
-## Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Ideas for Contributions
-
-- Additional custom widgets
-- Theme variations
-- Documentation improvements
-- Bug fixes
-
----
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes.
 
 ---
 
