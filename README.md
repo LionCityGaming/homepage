@@ -21,11 +21,13 @@
 
 ## Table of Contents
 
-| | | | |
-|:---:|:---:|:---:|:---:|
-| [Screenshots](#screenshots) | [Features](#features) | [Prerequisites](#prerequisites) | [Quick Start](#quick-start) |
-| [Services](#services) | [Custom Widgets](#custom-widgets) | [File Structure](#file-structure) | [Environment Variables](#environment-variables) |
-| [Troubleshooting](#troubleshooting) | [Credits](#credits) | [License](#license) | |
+<p align="center">
+
+[Screenshots](#screenshots) · [Features](#features) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Services](#services)
+<br>
+[Custom Widgets](#custom-widgets) · [File Structure](#file-structure) · [Environment Variables](#environment-variables) · [Troubleshooting](#troubleshooting) · [Credits](#credits) · [License](#license)
+
+</p>
 
 ---
 
