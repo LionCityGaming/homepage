@@ -24,13 +24,13 @@
 <img src="home.png" alt="Home Tab" width="800">
 </details>
 
-<details>
+<details open>
 <summary><strong>Calendars</strong></summary>
 <br>
 <img src="calendars.png" alt="Calendars Tab" width="800">
 </details>
 
-<details>
+<details open>
 <summary><strong>Applications</strong></summary>
 <br>
 <img src="applications.png" alt="Applications Tab" width="800">
