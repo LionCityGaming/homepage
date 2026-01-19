@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="home.png" alt="The Lion's Den Dashboard" width="800">
+  <img src="logo.png" alt="The Lion's Den" width="200">
 </p>
 
 <h1 align="center">The Lion's Den</h1>
