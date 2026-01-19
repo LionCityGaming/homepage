@@ -55,75 +55,86 @@
 <details>
 <summary><strong>Media Management</strong></summary>
 
-- Plex / Tautulli (streaming & analytics)
-- Sonarr (TV shows)
-- Radarr (movies)
-- Bazarr (subtitles)
-- Prowlarr (indexers)
-- SABnzbd (downloads)
-- Jellyseerr (requests)
-- Audiobookshelf (audiobooks)
-- Dispatcharr (IPTV)
-- TitleCardMaker (title cards)
-- Maintainerr (media maintenance)
-- RomM (ROM management)
+| Service | Description |
+|---------|-------------|
+| Plex | Media server for streaming movies, TV shows, and music |
+| Tautulli | Plex monitoring and statistics dashboard |
+| Sonarr | Automated TV show downloading and management |
+| Radarr | Automated movie downloading and management |
+| Bazarr | Automatic subtitle downloading for Sonarr and Radarr |
+| Prowlarr | Indexer manager and proxy for the *arr stack |
+| SABnzbd | Usenet binary newsreader for automated downloads |
+| Jellyseerr | Media request and discovery platform for Plex |
+| Audiobookshelf | Self-hosted audiobook and podcast server |
+| Dispatcharr | IPTV proxy and stream management |
+| TitleCardMaker | Automated title card generation for TV shows |
+| Maintainerr | Automated media cleanup and library maintenance |
+| RomM | ROM management and organization for retro gaming |
 
 </details>
 
 <details>
 <summary><strong>Home & Monitoring</strong></summary>
 
-- Home Assistant (smart home)
-- Proxmox (virtualization)
-- Synology NAS (storage)
-- Scrutiny (disk health)
-- WatchYourLAN (network devices)
-- Zigbee2MQTT (Zigbee network)
+| Service | Description |
+|---------|-------------|
+| Home Assistant | Open-source home automation platform |
+| Proxmox | Enterprise virtualization platform for VMs and containers |
+| Synology NAS | Network attached storage with DSM operating system |
+| Scrutiny | Hard drive S.M.A.R.T. monitoring and alerting |
+| WatchYourLAN | Lightweight network device scanner and monitor |
+| Zigbee2MQTT | Zigbee to MQTT bridge for smart home devices |
 
 </details>
 
 <details>
 <summary><strong>Productivity</strong></summary>
 
-- Paperless-ngx (documents)
-- Mealie (recipes)
-- FreshRSS (news)
-- Linkding (bookmarks)
-- Booklore (ebooks)
-- Shelfmark (book downloads)
-- Wallos (subscriptions)
-- Immich (photos)
-- SilverBullet (notes)
+| Service | Description |
+|---------|-------------|
+| Paperless-ngx | Document management system with OCR and tagging |
+| Mealie | Recipe manager and meal planner with shopping lists |
+| FreshRSS | Self-hosted RSS feed aggregator |
+| Linkding | Bookmark manager with tagging and search |
+| Booklore | Ebook library manager and reader |
+| Shelfmark | Book download and metadata management |
+| Wallos | Subscription and recurring expense tracker |
+| Immich | Self-hosted photo and video backup solution |
+| SilverBullet | Markdown-based note-taking and knowledge base |
 
 </details>
 
 <details>
 <summary><strong>Infrastructure</strong></summary>
 
-- AdGuard Home (DNS)
-- Caddy (reverse proxy)
-- CrowdSec (security)
-- WireGuard / WG-Easy (VPN)
-- Komodo (containers)
-- Backrest (backups)
-- Dozzle (Docker logs)
-- File Browser (file management)
+| Service | Description |
+|---------|-------------|
+| AdGuard Home | Network-wide DNS ad blocking and privacy protection |
+| Caddy | Modern web server with automatic HTTPS |
+| CrowdSec | Collaborative security engine for threat detection |
+| WG-Easy | WireGuard VPN server with web-based management |
+| Komodo | Docker container deployment and management |
+| Backrest | Restic-based backup solution with web UI |
+| Dozzle | Real-time Docker container log viewer |
+| File Browser | Web-based file manager for remote access |
 
 </details>
 
 <details>
 <summary><strong>Utilities</strong></summary>
 
-- Gitea (Git repository)
-- Vaultwarden (passwords)
-- Gotify (notifications)
-- Apprise (notification service)
-- MeTube (YouTube downloader)
-- Zipline (file sharing)
-- Code-server (cloud IDE)
-- Profilarr (profile management)
-- Steam (games library)
-- DAPS Dashboard (DAPS interface)
+| Service | Description |
+|---------|-------------|
+| Gitea | Lightweight self-hosted Git service |
+| Vaultwarden | Bitwarden-compatible password manager |
+| Gotify | Self-hosted push notification server |
+| Apprise | Universal notification service supporting 80+ platforms |
+| MeTube | YouTube and other sites video downloader |
+| Zipline | ShareX-compatible file and image hosting |
+| Code-server | VS Code running in the browser |
+| Profilarr | Quality profile sync for Sonarr and Radarr |
+| Steam | Gaming library statistics and tracking |
+| DAPS Dashboard | Docker Auto Proxy Stack management interface |
 
 </details>
 
