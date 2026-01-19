@@ -149,8 +149,8 @@ cp custom.css custom.js /path/to/homepage/config/
 | [Mealie](https://mealie.io/) | Recipe manager and meal planner with shopping lists |
 | [FreshRSS](https://freshrss.org/) | Self-hosted RSS feed aggregator |
 | [Linkding](https://github.com/sissbruecker/linkding) | Bookmark manager with tagging and search |
-| [Booklore](https://github.com/Stuksi/booklore) | Ebook library manager and reader |
-| [Shelfmark](https://github.com/shelfmark/shelfmark) | Book download and metadata management |
+| [Booklore](https://github.com/booklore-app/booklore) | Ebook library manager and reader |
+| [Shelfmark](https://github.com/calibrain/shelfmark) | Book download and metadata management |
 | [Wallos](https://github.com/ellite/Wallos) | Subscription and recurring expense tracker |
 | [Immich](https://immich.app/) | Self-hosted photo and video backup solution |
 | [SilverBullet](https://silverbullet.md/) | Markdown-based note-taking and knowledge base |
@@ -184,7 +184,7 @@ cp custom.css custom.js /path/to/homepage/config/
 | [Apprise](https://github.com/caronc/apprise) | Universal notification service supporting 80+ platforms |
 | [MeTube](https://github.com/alexta69/metube) | YouTube and other sites video downloader |
 | [Zipline](https://zipline.diced.sh/) | ShareX-compatible file and image hosting |
-| [Code-server](https://coder.com/) | VS Code running in the browser |
+| [Code-server](https://github.com/coder/code-server) | VS Code running in the browser |
 | [Profilarr](https://github.com/Dictionarry-Hub/profilarr) | Quality profile sync for Sonarr and Radarr |
 
 </details>
