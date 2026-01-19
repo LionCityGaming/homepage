@@ -333,8 +333,3 @@ SOFTWARE.
 
 </details>
 
----
-
-<p align="center">
-  <strong>Built with ❤️ in Singapore</strong>
-</p>
