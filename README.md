@@ -60,8 +60,7 @@ A custom [Homepage](https://gethomepage.dev/) dashboard configuration for managi
 ├── widgets.yaml       # Header widgets (logo, datetime, resources)
 ├── custom.css         # Custom styling and theme overrides
 ├── custom.js          # Custom JavaScript (if any)
-├── .env.example       # Template for environment variables
-└── .env               # Your secrets (not committed)
+└── .env.example       # Template for environment variables
 ```
 
 ## Setup
