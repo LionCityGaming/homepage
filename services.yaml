@@ -391,16 +391,10 @@
         description: Ebook Manager
         siteMonitor: "https://booklore.{{HOMEPAGE_VAR_DOMAIN}}"
         widget:
-          type: customapi
-          url: "{{HOMEPAGE_VAR_BOOKLORE_STATS_URL}}"
-          refreshInterval: 300000
-          mappings:
-            - field: libraries
-              label: Libraries
-            - field: shelves
-              label: Shelves
-            - field: total_books
-              label: Books
+          type: booklore
+          url: "https://booklore.{{HOMEPAGE_VAR_DOMAIN}}"
+          username: "{{HOMEPAGE_VAR_BOOKLORE_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}"
 
     - Caddy:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
@@ -594,7 +588,7 @@
           key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
 
     - Prowlarr:
-        icon: hhttps://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
         href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Indexer Manager
         siteMonitor: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
