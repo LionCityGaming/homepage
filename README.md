@@ -296,6 +296,7 @@ See [.env.example](.env.example) for the complete list of required variables.
 ## Credits
 
 - [Homepage](https://gethomepage.dev/) — Dashboard framework
+- [Homepage Discord](https://discord.gg/ppNwk9Skux) — Community support
 - [selfh.st Icons](https://selfh.st/icons/) — Service icons
 - [Home Assistant](https://www.home-assistant.io/) — Smart home platform
 - [Shields.io](https://shields.io/) — README badges
