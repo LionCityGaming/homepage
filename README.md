@@ -21,23 +21,9 @@
 
 ## Screenshots
 
-<details open>
-<summary><strong>Home</strong></summary>
-<br>
-<img src="home.png" alt="Home Tab" width="800">
-</details>
-
-<details open>
-<summary><strong>Calendars</strong></summary>
-<br>
-<img src="calendars.png" alt="Calendars Tab" width="800">
-</details>
-
-<details open>
-<summary><strong>Applications</strong></summary>
-<br>
-<img src="applications.png" alt="Applications Tab" width="800">
-</details>
+| Home | Calendars | Applications |
+|:---:|:---:|:---:|
+| <img src="home.png" alt="Home" width="280"> | <img src="calendars.png" alt="Calendars" width="280"> | <img src="applications.png" alt="Applications" width="280"> |
 
 ---
 
