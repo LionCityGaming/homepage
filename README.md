@@ -1,37 +1,78 @@
-# The Lion's Den - Homepage Dashboard
+<p align="center">
+  <img src="home.png" alt="The Lion's Den Dashboard" width="800">
+</p>
 
-A custom [Homepage](https://gethomepage.dev/) dashboard configuration for managing self-hosted services across Synology NAS and Proxmox infrastructure.
+<h1 align="center">The Lion's Den</h1>
 
-![Home Tab](home.png)
-![Calendars Tab](calendars.png)
-![Applications Tab](applications.png)
+<p align="center">
+  <strong>A custom Homepage dashboard for self-hosted services</strong>
+</p>
+
+<p align="center">
+  <a href="https://gethomepage.dev/"><img src="https://img.shields.io/badge/Homepage-v0.10-blue?style=flat-square" alt="Homepage"></a>
+  <a href="#license"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"></a>
+  <a href="#services"><img src="https://img.shields.io/badge/Services-45+-orange?style=flat-square" alt="Services"></a>
+</p>
+
+---
+
+## Screenshots
+
+<details>
+<summary><strong>Calendars & Media</strong></summary>
+<br>
+<img src="calendars.png" alt="Calendars Tab" width="800">
+</details>
+
+<details>
+<summary><strong>Applications</strong></summary>
+<br>
+<img src="applications.png" alt="Applications Tab" width="800">
+</details>
+
+---
 
 ## Features
 
-- **3 Tab Layout**: Home, Calendars, and Applications
-- **45+ Service Integrations**: Media, networking, productivity, and monitoring tools
-- **Custom Theming**: Dark emerald theme with custom CSS styling
-- **Home Assistant Integration**: Embedded dashboards, calendars, and device status
-- **Environment Variable Security**: All sensitive data externalized to `.env`
+| Feature | Description |
+|---------|-------------|
+| **3 Tab Layout** | Home, Calendars, Applications |
+| **45+ Services** | Media, networking, productivity, monitoring |
+| **Custom Theme** | Dark emerald with custom CSS |
+| **Home Assistant** | Embedded dashboards and device status |
+| **Secure Config** | All secrets in environment variables |
+
+---
 
 ## Services
 
-### Home & Monitoring
-- Home Assistant (smart home control)
-- Plex / Tautulli (media streaming & analytics)
-- Proxmox (virtualization)
-- Synology NAS (storage)
+<details>
+<summary><strong>Media Management</strong></summary>
 
-### Media Management
+- Plex / Tautulli (streaming & analytics)
 - Sonarr, Radarr, Bazarr (TV, movies, subtitles)
 - Prowlarr (indexers)
 - SABnzbd (downloads)
 - Jellyseerr (requests)
-- Plex / Tautulli (streaming)
 - Audiobookshelf (audiobooks)
 - Dispatcharr (IPTV)
 
-### Productivity
+</details>
+
+<details>
+<summary><strong>Home & Monitoring</strong></summary>
+
+- Home Assistant (smart home)
+- Proxmox (virtualization)
+- Synology NAS (storage)
+- Scrutiny (disk health)
+- WatchYourLAN (network devices)
+
+</details>
+
+<details>
+<summary><strong>Productivity</strong></summary>
+
 - Paperless-ngx (documents)
 - Mealie (recipes)
 - FreshRSS (news)
@@ -40,80 +81,75 @@ A custom [Homepage](https://gethomepage.dev/) dashboard configuration for managi
 - Wallos (subscriptions)
 - Immich (photos)
 
-### Infrastructure
+</details>
+
+<details>
+<summary><strong>Infrastructure</strong></summary>
+
 - AdGuard Home (DNS)
 - Caddy (reverse proxy)
 - CrowdSec (security)
 - WireGuard (VPN)
-- Komodo (container management)
+- Komodo (containers)
 - Backrest (backups)
-- Scrutiny (disk health)
 
-### Utilities
+</details>
+
+<details>
+<summary><strong>Utilities</strong></summary>
+
 - Gitea, Vaultwarden, Gotify, MeTube, Zipline, and more
+
+</details>
+
+---
+
+## Quick Start
+
+```bash
+# Clone
+git clone https://github.com/LionCityGaming/homepage.git
+
+# Configure
+cp .env.example .env
+# Edit .env with your API keys, URLs, and passwords
+
+# Deploy to your Homepage instance
+```
+
+---
 
 ## File Structure
 
 ```
-├── services.yaml      # Service definitions with widgets
-├── settings.yaml      # Layout, theme, and display settings
-├── widgets.yaml       # Header widgets (logo, datetime, resources)
-├── custom.css         # Custom styling and theme overrides
-├── custom.js          # Custom JavaScript (if any)
-└── .env.example       # Template for environment variables
+services.yaml      # Service definitions with widgets
+settings.yaml      # Layout, theme, and display settings
+widgets.yaml       # Header widgets (logo, datetime, resources)
+custom.css         # Custom styling and theme overrides
+custom.js          # Custom JavaScript
+.env.example       # Template for environment variables
 ```
 
-## Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/LionCityGaming/homepage.git
-   ```
-
-2. **Create your environment file**
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Configure your variables** in `.env`:
-   - API keys for each service
-   - Your domain name
-   - Internal IP addresses
-   - Usernames and passwords
-
-4. **Deploy to Homepage**
-   - Copy files to your Homepage config directory
-   - Or mount as a volume in Docker
+---
 
 ## Environment Variables
-
-All sensitive data uses the `HOMEPAGE_VAR_` prefix pattern:
 
 | Pattern | Example |
 |---------|---------|
 | `HOMEPAGE_VAR_{SERVICE}_API_KEY` | `HOMEPAGE_VAR_SONARR_API_KEY` |
 | `HOMEPAGE_VAR_{SERVICE}_URL` | `HOMEPAGE_VAR_SONARR_URL` |
-| `HOMEPAGE_VAR_{SERVICE}_USERNAME` | `HOMEPAGE_VAR_SONARR_USERNAME` |
-| `HOMEPAGE_VAR_{SERVICE}_PASSWORD` | `HOMEPAGE_VAR_SONARR_PASSWORD` |
+| `HOMEPAGE_VAR_{SERVICE}_USERNAME` | `HOMEPAGE_VAR_SYNOLOGY_USERNAME` |
+| `HOMEPAGE_VAR_{SERVICE}_PASSWORD` | `HOMEPAGE_VAR_SYNOLOGY_PASSWORD` |
 
-## Icons
-
-Icons are sourced from the [selfh.st icon repository](https://selfh.st/icons/):
-```
-https://cdn.jsdelivr.net/gh/selfhst/icons/webp/{name}.webp
-```
-
-## Requirements
-
-- [Homepage](https://gethomepage.dev/) v0.8+
-- Docker (recommended)
-- Services configured with API access enabled
+---
 
 ## Credits
 
-- [Homepage](https://gethomepage.dev/) - The dashboard framework
-- [selfh.st Icons](https://selfh.st/icons/) - Service icons
-- [Home Assistant](https://www.home-assistant.io/) - Smart home platform
+- [Homepage](https://gethomepage.dev/) — Dashboard framework
+- [selfh.st Icons](https://selfh.st/icons/) — Service icons
+- [Home Assistant](https://www.home-assistant.io/) — Smart home platform
+
+---
 
 ## License
 
