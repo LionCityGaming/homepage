@@ -19,14 +19,18 @@
 
 ---
 
-## Table of Contents
-
 <p align="center">
-
-[Screenshots](#screenshots) · [Features](#features) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Services](#services)
-<br>
-[Custom Widgets](#custom-widgets) · [File Structure](#file-structure) · [Environment Variables](#environment-variables) · [Troubleshooting](#troubleshooting) · [Credits](#credits) · [License](#license)
-
+<a href="#screenshots">Screenshots</a> ·
+<a href="#features">Features</a> ·
+<a href="#prerequisites">Prerequisites</a> ·
+<a href="#quick-start">Quick Start</a> ·
+<a href="#services">Services</a> ·
+<a href="#custom-widgets">Custom Widgets</a> ·
+<a href="#file-structure">File Structure</a> ·
+<a href="#environment-variables">Environment Variables</a> ·
+<a href="#troubleshooting">Troubleshooting</a> ·
+<a href="#credits">Credits</a> ·
+<a href="#license">License</a>
 </p>
 
 ---
