@@ -1,6 +1,9 @@
 # Environment variables (contains secrets)
 .env
 
+# Scripts
+generate-docs.sh
+
 # Claude Code
 .claude/
 
