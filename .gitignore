@@ -1,0 +1,20 @@
+# Ignore everything
+*
+
+# Allow specific files
+!README.md
+!custom.css
+!custom.js
+!services.yaml
+!settings.yaml
+!widgets.yaml
+!.env.example
+!logo.png
+
+!screenshots/
+!screenshots/**
+!extras/
+!extras/**
+
+# Also allow the .gitignore itself
+!.gitignore

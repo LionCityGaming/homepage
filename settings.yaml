@@ -1,0 +1,142 @@
+title: The Lion's Den
+favicon: /images/icons/logo.ico
+disableIndexing: true
+background:
+  image: /images/backgrounds/mountain.jpg
+theme: dark
+color: neutral
+headerStyle: underlined
+iconStyle: theme
+statusStyle: dot
+quicklaunch:
+  searchDescriptions: true
+hideVersion: true
+hideErrors: true
+fiveColumns: true
+useEqualHeights: true
+fullWidth: true
+disableCollapse: true
+# preloadAllWidgets: true
+pwa:
+  icons:
+    - src: /images/icons/logo.ico
+      type: image/x-icon
+      sizes: any
+target: _blank
+layout:
+  Home:
+    header: false
+    tab: Home
+    style: row
+    columns: 4
+  Home Assistant:
+    header: false
+    tab: Home
+    style: column
+  News:
+    header: false
+    tab: Home
+    style: columns
+  Infrastructure:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 3
+  Networking & Security:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 5
+  Media Acquisition:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 7
+  Media Tools:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 8
+  Personal & Productivity:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 7
+  More Apps:
+    disableCollapse: true
+    header: true
+    tab: Applications
+    style: row
+    columns: 8
+  3D Printing:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Entertainment:
+    # disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Homelab:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Reference:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Shopping:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Social:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Tools:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Calendars:
+    header: false
+    tab: Calendars
+    style: columns
+  To Do:
+    header: false
+    tab: Calendars
+    style: columns
+  EPL:
+    header: false
+    tab: Calendars
+    style: columns
+    useEqualHeights: false
+  Recently Downloaded:
+    header: false
+    tab: Calendars
+    style: columns
+  Upcoming:
+    header: false
+    tab: Calendars
+    style: columns
+  Servers:            # mobile only; heading hidden
+    header: false
+    tab: Mobile
+    style: columns
+    columns: 2
+  Apps:               # mobile only
+    # initiallyCollapsed: true
+    header: true
+    tab: Mobile
+    style: columns
+    columns: 2

@@ -1,0 +1,36 @@
+/* Glass styling for Glance when it is shown inside Homepage (or anything with a dark
+   background behind it). Add this to the end of your Glance custom CSS file (theme:
+   custom-css-file) and add the Inter font import at the very top:
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap');
+*/
+/* ============================================================================
+   HUB GLASS THEME (05/10/2026) - Glance is shown inside a Homepage glass card,
+   so the page is see-through and uses the Nest Hub colours and font.
+   
+   ============================================================================ */
+:root { color-scheme: dark; }
+html, body, .page, .page-content {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif !important;
+  color: rgba(235, 235, 245, 0.88) !important;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+.color-highlight, .size-title-dynamic, .widget-header h2 { color: #ffffff !important; }
+.color-subdue, .color-base { color: rgba(235, 235, 245, 0.6) !important; }
+.color-primary, a:hover { color: #64d2ff !important; }
+.color-positive { color: #30d158 !important; }
+.color-negative { color: #ff453a !important; }
+hr { background-color: rgba(255, 255, 255, 0.08) !important; opacity: 1 !important; }
+
+/* cards: same glass as the Home Assistant cards next to it (05/10/2026) */
+.card {
+  background-color: rgba(28, 28, 30, 0.55) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+.card:hover { border-color: rgba(255, 255, 255, 0.22) !important; }

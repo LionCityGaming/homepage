@@ -1,0 +1,73 @@
+- logo:
+    icon: /images/icons/logo.png
+    href: https://{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- greeting:
+    text_size: 4xl
+    text: The Lion's Den
+    href: https://gethomepage.dev/
+    target: _blank
+- openmeteo:             # weather (Hub-style); also drives the background mood (custom.js)
+    label: Singapore
+    latitude: 1.35         # city-level, not the home location
+    longitude: 103.82
+    timezone: Asia/Singapore
+    units: metric
+    cache: 15
+- datetime:              # date capsule (Hub-style)
+    locale: en-sg
+    text_size: xl
+    format:
+      weekday: long
+      day: numeric
+      month: long
+    href: https://calendar.google.com/calendar/u/0/r
+    target: _blank
+- datetime:              # big time (Hub-style)
+    locale: en-sg
+    text_size: 4xl
+    format:
+      hour: 2-digit
+      minute: 2-digit
+      hour12: false
+    href: https://calendar.google.com/calendar/u/0/r
+    target: _blank
+- resources:
+    label: Docker VM
+    disk: /
+    href: https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- resources:
+    label: " "
+    # disk: /docker
+    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    # target: _blank
+- resources:
+    label: " "
+    # disk: /docker
+    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    # target: _blank
+- resources:
+    label: NAS Storage
+    disk: /data
+    href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+- resources:
+    label: " "
+    # disk: /docker
+    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    # target: _blank
+- resources:
+    label: " "
+    # disk: /docker
+    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    # target: _blank
+- resources:
+    label: USB Backup
+    disk: /usb
+    href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
+    target: _blank
+# - unifi_console:
+#     url: https://{{HOMEPAGE_VAR_GATEWAY_HOST}}
+#     username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
+#     password: CHANGE_ME

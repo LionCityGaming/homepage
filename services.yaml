@@ -1,0 +1,1131 @@
+---
+# ============================================================================
+# HOME - core servers
+# ============================================================================
+- Home:
+    - Plex Media Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/plex.webp
+        id: plex2
+        href: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+        widget:
+          type: tautulli
+          url: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+          key: "{{HOMEPAGE_VAR_TAUTULLI_API_KEY}}"
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: true
+          enableUser: true
+
+    - Proxmox Backup Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: proxmoxbackupserver
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_IP}}:8007"
+          username: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_PASSWORD}}"
+          datastore: Synology
+
+    - Proxmox Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+        widget:
+          type: proxmox
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+          username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
+
+    - Synology Server:
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/synology-dsm.png
+        href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+        widget:
+          type: diskstation
+          url: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+          username: "{{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}"
+          fields: [uptime, resources.cpu, resources.mem]
+
+# ============================================================================
+# NEWS - currency rates + Glance
+# ============================================================================
+- News:
+    - " ":
+        widgets:
+          - type: customapi
+            url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/sgd.json"
+            refreshInterval: 3600000
+            mappings:
+              - field: { sgd: myr }
+                label: Malaysian Ringgit
+                format: float
+                precision: 2
+              - field: { sgd: usd }
+                label: US Dollars
+                format: float
+                precision: 2
+              - field: { sgd: eur }
+                label: Euros
+                format: float
+                precision: 2
+              - field: { sgd: jpy }
+                label: Japanese Yen
+                format: float
+                precision: 2
+
+          - type: iframe
+            src: "{{HOMEPAGE_VAR_GLANCE_WIDGET_URL}}"
+            classes: glance
+            loadingStrategy: eager
+            referrerPolicy: same-origin
+            allowPolicy: fullscreen
+
+# ============================================================================
+# HOME ASSISTANT - full view
+# ============================================================================
+- Home Assistant:
+    - " ":
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_HOME_ASSISTANT_WIDGET_URL}}"
+          classes: home-assistant
+          loadingStrategy: eager
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+
+# ============================================================================
+# CALENDARS & TASKS
+# ============================================================================
+- Calendars:
+    - " ":
+        id: ha-calendar
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_CALENDAR_WIDGET_URL}}"
+          classes: ha-calendar
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: eager
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+- To Do:
+    - " ":
+        id: todo
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_TODO_WIDGET_URL}}"
+          classes: todo
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: eager
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+    - EPL Calendar:
+        id: epl-calendar
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_EPL_CALENDAR_WIDGET_URL}}"
+          classes: epl-calendar
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: eager
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+# ============================================================================
+# UPCOMING RELEASES
+# ============================================================================
+- Upcoming:
+    - Media Releases:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        id: upcomingtv
+        description: Coming Soon!
+        widget:
+          type: calendar
+          showTime: false
+          maxEvents: 41
+          view: agenda
+          integrations:
+            - type: sonarr
+              service_group: Media Acquisition
+              service_name: Sonarr
+              color: cyan
+            - type: radarr
+              service_group: Media Acquisition
+              service_name: Radarr
+              color: amber
+
+# ============================================================================
+# RECENTLY DOWNLOADED MEDIA
+# ============================================================================
+- Recently Downloaded:
+    - Movies:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
+        id: tautulli_recent_movies
+        description: Recently Downloaded
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_RECENT_MOVIES_API_URL}}"
+          display: list
+          refreshInterval: 300000
+          mappings:
+            - field: { "0": added_at }
+              additionalField: { field: { "0": title } }
+            - field: { "1": added_at }
+              additionalField: { field: { "1": title } }
+            - field: { "2": added_at }
+              additionalField: { field: { "2": title } }
+            - field: { "3": added_at }
+              additionalField: { field: { "3": title } }
+            - field: { "4": added_at }
+              additionalField: { field: { "4": title } }
+            - field: { "5": added_at }
+              additionalField: { field: { "5": title } }
+            - field: { "6": added_at }
+              additionalField: { field: { "6": title } }
+            - field: { "7": added_at }
+              additionalField: { field: { "7": title } }
+            - field: { "8": added_at }
+              additionalField: { field: { "8": title } }
+            - field: { "9": added_at }
+              additionalField: { field: { "9": title } }
+            - field: { "10": added_at }
+              additionalField: { field: { "10": title } }
+            - field: { "11": added_at }
+              additionalField: { field: { "11": title } }
+            - field: { "12": added_at }
+              additionalField: { field: { "12": title } }
+            - field: { "13": added_at }
+              additionalField: { field: { "13": title } }
+            - field: { "14": added_at }
+              additionalField: { field: { "14": title } }
+            - field: { "15": added_at }
+              additionalField: { field: { "15": title } }
+            - field: { "16": added_at }
+              additionalField: { field: { "16": title } }
+            - field: { "17": added_at }
+              additionalField: { field: { "17": title } }
+
+    - TV Episodes:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
+        id: tautulli_recent_shows
+        description: Recently Downloaded
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_RECENT_SHOWS_API_URL}}"
+          display: list
+          refreshInterval: 300000
+          mappings:
+            - field: { "0": added_at }
+              additionalField: { field: { "0": title } }
+            - field: { "1": added_at }
+              additionalField: { field: { "1": title } }
+            - field: { "2": added_at }
+              additionalField: { field: { "2": title } }
+            - field: { "3": added_at }
+              additionalField: { field: { "3": title } }
+            - field: { "4": added_at }
+              additionalField: { field: { "4": title } }
+            - field: { "5": added_at }
+              additionalField: { field: { "5": title } }
+            - field: { "6": added_at }
+              additionalField: { field: { "6": title } }
+            - field: { "7": added_at }
+              additionalField: { field: { "7": title } }
+            - field: { "8": added_at }
+              additionalField: { field: { "8": title } }
+            - field: { "9": added_at }
+              additionalField: { field: { "9": title } }
+            - field: { "10": added_at }
+              additionalField: { field: { "10": title } }
+            - field: { "11": added_at }
+              additionalField: { field: { "11": title } }
+            - field: { "12": added_at }
+              additionalField: { field: { "12": title } }
+            - field: { "13": added_at }
+              additionalField: { field: { "13": title } }
+            - field: { "14": added_at }
+              additionalField: { field: { "14": title } }
+            - field: { "15": added_at }
+              additionalField: { field: { "15": title } }
+            - field: { "16": added_at }
+              additionalField: { field: { "16": title } }
+            - field: { "17": added_at }
+              additionalField: { field: { "17": title } }
+
+# ============================================================================
+# EPL STANDINGS
+# ============================================================================
+- EPL:
+    - " ":
+        id: epl
+        widget:
+          type: iframe
+          src: "{{HOMEPAGE_VAR_EPL_STANDINGS_WIDGET_URL}}"
+          classes: epl
+          referrerPolicy: same-origin
+          allowPolicy: fullscreen
+          loadingStrategy: eager
+          allowScrolling: "no"
+          refreshInterval: 900000
+
+# ============================================================================
+# CORE APPLICATIONS - grouped by type
+# ============================================================================
+- Infrastructure:
+    - UniFi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
+        href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Networking Hardware Monitor
+        siteMonitor: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: unifi
+          url: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+          username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
+
+    - Komodo:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komodo.webp
+        href: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Infrastructure Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9120"
+        widget:
+          type: komodo
+          url: "{{HOMEPAGE_VAR_KOMODO_URL}}"
+          key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+          secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+          showSummary: true
+          showStacks: true
+
+    - Gotify:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
+        href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Notifications
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
+        widget:
+          type: gotify
+          url: "{{HOMEPAGE_VAR_GOTIFY_URL}}"
+          key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
+          fields: [apps, messages]
+
+- Networking & Security:
+    - Caddy:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
+        href: "https://{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Reverse Proxy
+        siteMonitor: "https://{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: caddy
+          url: "{{HOMEPAGE_VAR_CADDY_URL}}"
+
+    - CrowdSec:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
+        href: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Security Engine
+        siteMonitor: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: crowdsec
+          url: "{{HOMEPAGE_VAR_CROWDSEC_URL}}"
+          username: "{{HOMEPAGE_VAR_CROWDSEC_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_CROWDSEC_PASSWORD}}"
+          limit24h: true
+
+    - Authentik:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/authentik.webp
+        href: "https://authentik.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Identity & Access Management
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9000"
+        widget:
+          type: authentik
+          url: "https://authentik.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
+          version: 2
+          fields: [loginsLast24H, failedLoginsLast24H]
+
+    - Technitium (NS1):
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
+        href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: DNS Filtering Server
+        siteMonitor: "http://{{HOMEPAGE_VAR_TECHNITIUM_HOST}}:5380"
+        widget:
+          type: technitium
+          url: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_TECHNITIUM_API_KEY}}"
+          node: ns1.dns.home.arpa
+          range: LastDay
+
+    - Technitium (NS2):
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
+        href: "https://technitium-synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: DNS Filtering Server
+        siteMonitor: "http://{{HOMEPAGE_VAR_SYNOLOGY_HOST}}:5380"
+        widget:
+          type: technitium
+          url: "https://technitium-synology.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_TECHNITIUM_API_KEY}}"
+          node: ns2.dns.home.arpa
+          range: LastDay
+
+- Media Acquisition:
+    - Seerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
+        href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Media Requests
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5555"
+        widget:
+          type: jellyseerr
+          url: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+          fields: [pending, approved, available]
+
+    - Prowlarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Indexer Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9696"
+        widget:
+          type: prowlarr
+          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+          fields: [numberOfGrabs, numberOfQueries]
+
+    - Radarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
+        href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Movie Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7878"
+        widget:
+          type: radarr
+          url: "{{HOMEPAGE_VAR_RADARR_URL}}"
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+
+    - Sonarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
+        href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: TV Show Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8989"
+        widget:
+          type: sonarr
+          url: "{{HOMEPAGE_VAR_SONARR_URL}}"
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+
+    - Chaptarr:
+        icon: /images/icons/chaptarr.svg
+        href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Ebook/Audiobook Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
+        widget:
+          type: readarr
+          url: "{{HOMEPAGE_VAR_CHAPTARR_URL}}"
+          key: "{{HOMEPAGE_VAR_CHAPTARR_API_KEY}}"
+
+    - Bazarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
+        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Subtitle Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6767"
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+
+    - SABnzbd:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
+        href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Usenet Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8080"
+        widget:
+          type: sabnzbd
+          url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+          key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
+
+- Media Tools:
+    - Maintainerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
+        href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Media Maintenance
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+        widget:
+          type: maintainerr
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+          fields: [itemsHandled, reclaimable, totalCapacity]
+
+    - Tautulli:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
+        href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Plex Analytics
+        siteMonitor: "http://{{HOMEPAGE_VAR_TAUTULLI_HOST}}:8181"
+        widget:
+          type: plex
+          url: "{{HOMEPAGE_VAR_PLEX_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_PLEX_API_KEY}}"
+          fields: [tv, movies]
+
+    - TitleCardMaker:
+        id: titlecardmaker
+        icon: /images/icons/tcm.png
+        href: "https://tcm.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Title Card Creator
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4242"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_TCM_API_URL}}"
+          refreshInterval: 600000
+          mappings:
+            - field: { "1": value }
+              label: Series
+            - field: { "5": value }
+              label: Episodes
+            - field: { "0": value }
+              label: Cards
+            - field: { "6": value_text }
+              label: Size
+              suffix: GB
+
+    - Dispatcharr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
+        href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: IPTV Proxy
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+        widget:
+          type: dispatcharr
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+          username: "{{HOMEPAGE_VAR_DISPATCHARR_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
+          enableActiveStreams: true
+
+    - Audiobookshelf:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
+        href: "https://abs.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Audiobook Server
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:13378"
+        widget:
+          type: audiobookshelf
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+          fields: [podcasts, books]
+
+    - Grimmory:
+        icon: /images/icons/grimmory.png
+        href: "https://grimmory.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Ebook Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
+        widget:
+          type: booklore
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
+          username: "{{HOMEPAGE_VAR_BOOKLORE_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}"
+
+    - Komga:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komga.webp
+        href: "https://komga.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Comic Books Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:25600"
+        widget:
+          type: komga
+          url: "{{HOMEPAGE_VAR_KOMGA_URL}}"
+          username: "{{HOMEPAGE_VAR_KOMGA_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_KOMGA_PASSWORD}}"
+
+    - Suwayomi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
+        href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Manga Server
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
+        widget:
+          type: suwayomi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
+          username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
+          fields: [download, read, unread]
+
+- Personal & Productivity:
+    - Mealie:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
+        href: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Recipe Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9925"
+        widget:
+          type: mealie
+          url: "{{HOMEPAGE_VAR_MEALIE_URL}}"
+          key: "{{HOMEPAGE_VAR_MEALIE_API_KEY}}"
+          fields: [users, recipes, tags]
+          version: 2
+
+    - Wallos:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wallos.webp
+        href: "https://wallos.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Subscription Tracker
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8283"
+        widget:
+          type: wallos
+          url: "{{HOMEPAGE_VAR_WALLOS_URL}}"
+          key: "{{HOMEPAGE_VAR_WALLOS_API_KEY}}"
+
+    - Immich:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
+        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
+        description: Photo Management
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:2283"
+        widget:
+          type: immich
+          url: "{{HOMEPAGE_VAR_IMMICH_URL}}"
+          key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"
+          version: 2
+
+    - Palworld:
+        icon: /images/icons/palworld.png
+        href: "https://palworld.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Game Server
+        # the REST API answers unauthenticated checks with a malformed 401, so check by ping
+        ping: "{{HOMEPAGE_VAR_PALWORLD_HOST}}"
+        widget:
+          type: customapi
+          url: "http://palworld.{{HOMEPAGE_VAR_DOMAIN}}:8212/v1/api/metrics"
+          username: "{{HOMEPAGE_VAR_CUSTOMAPI_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PALWORLD_ADMIN_PASSWORD}}"
+          refreshInterval: 60000
+          mappings:
+            - field: currentplayernum
+              label: Online
+              format: number
+            - field: maxplayernum
+              label: Max Players
+              format: number
+            - field: days
+              label: In-Game Days
+              format: number
+            - field: uptime
+              label: Uptime
+              format: duration
+
+    - Paperless-ngx:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
+        href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Document Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8585"
+        widget:
+          type: paperlessngx
+          url: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
+          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
+
+    - Linkding:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+        href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Bookmark Manager
+        siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/health"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_LINKDING_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: total
+              label: Total
+            - field: active
+              label: Active
+            - field: archived
+              label: Archived
+            - field: tags
+              label: Tags
+
+    - FreshRSS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
+        href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: RSS Aggregator
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
+        widget:
+          type: freshrss
+          url: "{{HOMEPAGE_VAR_FRESHRSS_URL}}"
+          username: "{{HOMEPAGE_VAR_FRESHRSS_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_FRESHRSS_PASSWORD}}"
+
+# ============================================================================
+# SECONDARY APPLICATIONS - utilities & tools (alphabetical)
+# ============================================================================
+- More Apps:
+    - Bambuddy:
+        icon: /images/icons/bambuddy.png
+        href: "https://bambuddy.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: 3D Printing Management
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8010"
+
+    - BentoPDF:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
+        href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: PDF Toolbox
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
+
+    - BookStack:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
+        href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Documentation Platform
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6875/login"
+
+    - Code-server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
+        href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Cloud IDE
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
+
+    - Dozzle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
+        href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Docker Logs
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9999"
+
+    - DroppedNeedle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/droppedneedle.webp
+        href: "https://droppedneedle.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Music Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8688"
+
+    - FileBrowser Quantum:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
+        href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: File Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
+
+    - Gitea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Git Repository
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+
+    - Home Assistant:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
+        description: Home Automation
+        siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+
+    - Kapowarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/kapowarr.svg
+        href: "https://kapowarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Comics Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656"
+
+    - MeTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
+        href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: YouTube Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
+
+    - Paperless-GPT:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/paperless-ai.png
+        href: "https://paperless-gpt.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Document OCR & Processing
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8095"
+
+    - PosterFlow:
+        icon: /images/icons/posterflow.webp
+        href: "https://posterflow.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Movie Poster Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357"
+
+    - Profilarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
+        href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Profile Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6868"
+
+    - Vaultwarden:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
+        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Password Manager
+        siteMonitor: "https://{{HOMEPAGE_VAR_VAULTWARDEN_HOST}}:8000"
+
+    - Zipline:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zipline.png
+        href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: File Sharing
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321"
+
+# ============================================================================
+# BOOKMARKS & EXTERNAL SERVICES
+# ============================================================================
+- 3D Printing:
+    - MakerWorld:
+        icon: /images/icons/makerworld.webp
+        href: "https://makerworld.com"
+        description: Bambu Lab Models
+    - Printables:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/printables.webp
+        href: "https://www.printables.com"
+        description: 3D Print Files
+    - Thingiverse:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/thingiverse.webp
+        href: "https://www.thingiverse.com"
+        description: 3D Models
+
+- Entertainment:
+    - Radio Garden:
+        icon: /images/icons/radiogarden.png
+        href: "https://radio.garden"
+        description: Global Radio
+    - Twitch:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/twitch.webp
+        href: "https://www.twitch.tv"
+        description: Live Streaming
+    - YouTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/youtube.webp
+        href: "https://www.youtube.com"
+        description: Videos
+
+- Homelab:
+    - Cloudflare:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/cloudflare.webp
+        href: "https://dash.cloudflare.com"
+        description: DNS & CDN
+    - GitHub:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
+        href: "{{HOMEPAGE_VAR_GITHUB_REPO_URL}}"
+        description: Code Repository
+    - Proxmox Scripts:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox-helper-scripts.webp
+        href: "https://community-scripts.github.io/ProxmoxVE/"
+        description: Helper Scripts
+    - r/selfhosted:
+        icon: /images/icons/selfhosted.png
+        href: "https://old.reddit.com/r/selfhosted"
+        description: Community
+    - selfh.st Icons:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: "https://selfh.st/icons/"
+        description: Icon Library
+    - SLZB-06M:
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/smlight.webp
+        href: "https://slzb.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Zigbee Coordinator
+    - UniFi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
+        href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Network Devices Admin
+
+- Reference:
+    - Allrecipes:
+        icon: /images/icons/allrecipes.webp
+        href: "https://www.allrecipes.com/"
+        description: Recipes
+    - selfh.st Apps:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: "https://selfh.st/apps/"
+        description: Selfhosted Apps List
+    - Homepage Docs:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/homepage.webp
+        href: "https://gethomepage.dev"
+        description: Dashboard Docs
+    - TPDb:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/tpdb.webp
+        href: "https://theposterdb.com/"
+        description: Poster Database
+    - Wikipedia:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wikipedia-light.webp
+        href: "https://en.wikipedia.org"
+        description: Encyclopedia
+    - Z-Library:
+        icon: /images/icons/zlib.png
+        href: "https://z-lib.bz/"
+        description: Ebook Repository
+
+- Shopping:
+    - Amazon:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/amazon-light.webp
+        href: "https://amazon.com/"
+        description: Shopping
+    - Carousell:
+        icon: /images/icons/carousell.png
+        href: "https://www.carousell.sg"
+        description: Shopping
+    - Lazada:
+        icon: /images/icons/lazada.png
+        href: "https://www.lazada.sg"
+        description: Shopping
+    - Shopee:
+        icon: /images/icons/shopee.svg
+        href: "https://shopee.sg/"
+        description: Shopping
+
+- Social:
+    - Facebook:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/facebook.webp
+        href: "https://www.facebook.com"
+        description: Social Network
+    - Gmail:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gmail.webp
+        href: "https://mail.google.com/mail/u/0/#inbox"
+        description: Email
+    - LinkedIn:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkedin.webp
+        href: "https://www.linkedin.com"
+        description: Professional Network
+    - Reddit:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/reddit.webp
+        href: "https://old.reddit.com"
+        description: Forum
+    - WhatsApp:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/whatsapp.webp
+        href: "https://web.whatsapp.com"
+        description: Messaging
+
+- Tools:
+    - AI Text Remover:
+        icon: /images/icons/aitextremover.png
+        href: "https://snapedit.app/remove-text"
+        description: AI Text Removal
+    - Claude:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/claude.webp
+        href: "https://claude.ai/new"
+        description: AI Assistant
+    - Excalidraw:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/excalidraw.webp
+        href: "https://excalidraw.com"
+        description: Whiteboard
+    - Google Drive:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/google-drive.webp
+        href: "https://drive.google.com"
+        description: Cloud Storage
+    - Photopea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/photopea.webp
+        href: "https://www.photopea.com"
+        description: Photo Editor
+    - Remove.bg:
+        icon: si-removedotbg
+        href: "https://www.remove.bg"
+        description: Background Remover
+    - SpeedTest:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/speedtest-tracker.webp
+        href: "https://www.speedtest.net"
+        description: Internet Speed
+
+
+# ============================================================================
+# MOBILE VIEW - servers, then every app alphabetically (status dots, no widgets)
+# ============================================================================
+- Servers:
+    - Proxmox:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+        widget:
+          type: proxmox
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+          username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
+          fields: [resources.cpu, resources.mem]
+
+    - Synology:
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/synology-dsm.png
+        href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+        widget:
+          type: diskstation
+          url: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+          username: "{{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}"
+          fields: [resources.cpu, resources.mem]
+
+    - PBS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: proxmoxbackupserver
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_IP}}:8007"
+          username: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_PASSWORD}}"
+          datastore: Synology
+          fields: [datastore_usage, failed_tasks_24h]
+
+- Apps:
+    - Audiobookshelf:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
+        href: "https://abs.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:13378"
+    - Authentik:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/authentik.webp
+        href: "https://authentik.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9000"
+    - Bambuddy:
+        icon: /images/icons/bambuddy.png
+        href: "https://bambuddy.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8010"
+    - Bazarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
+        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6767"
+    - BentoPDF:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
+        href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
+    - BookStack:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
+        href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6875/login"
+    - Caddy:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
+        href: "https://{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_DOMAIN}}"
+    - Chaptarr:
+        icon: /images/icons/chaptarr.svg
+        href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
+    - Code-server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
+        href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
+    - CrowdSec:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
+        href: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
+    - Dispatcharr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
+        href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+    - Dozzle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
+        href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9999"
+    - DroppedNeedle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/droppedneedle.webp
+        href: "https://droppedneedle.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8688"
+    - FileBrowser:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
+        href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
+    - FreshRSS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
+        href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
+    - Gitea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+    - Gotify:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
+        href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
+    - Grimmory:
+        icon: /images/icons/grimmory.png
+        href: "https://grimmory.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
+    - Home Assistant:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+    - Immich:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
+        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:2283"
+    - Kapowarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/kapowarr.svg
+        href: "https://kapowarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656"
+    - Komga:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komga.webp
+        href: "https://komga.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:25600"
+    - Komodo:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komodo.webp
+        href: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9120"
+    - Linkding:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+        href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/health"
+    - Maintainerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
+        href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+    - Mealie:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
+        href: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9925"
+    - MeTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
+        href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
+    - Palworld:
+        icon: /images/icons/palworld.png
+        href: "https://palworld.{{HOMEPAGE_VAR_DOMAIN}}"
+        ping: "{{HOMEPAGE_VAR_PALWORLD_HOST}}"
+    - Paperless-GPT:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/paperless-ai.png
+        href: "https://paperless-gpt.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8095"
+    - Paperless-ngx:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
+        href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8585"
+    - Plex:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/plex.webp
+        id: plex2
+        href: "{{HOMEPAGE_VAR_PLEX_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_TAUTULLI_URL}}"
+    - PosterFlow:
+        icon: /images/icons/posterflow.webp
+        href: "https://posterflow.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357"
+    - Profilarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
+        href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6868"
+    - Prowlarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9696"
+    - Radarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
+        href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7878"
+    - SABnzbd:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
+        href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8080"
+    - Seerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
+        href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5555"
+    - Sonarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
+        href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8989"
+    - Suwayomi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
+        href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
+    - Tautulli:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
+        href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_TAUTULLI_HOST}}:8181"
+    - Technitium 1:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
+        href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_TECHNITIUM_HOST}}:5380"
+    - Technitium 2:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
+        href: "https://technitium-synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_SYNOLOGY_HOST}}:5380"
+    - TitleCardMaker:
+        icon: /images/icons/tcm.png
+        href: "https://tcm.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4242"
+    - UniFi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
+        href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+    - Vaultwarden:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
+        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_VAULTWARDEN_HOST}}:8000"
+    - Wallos:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wallos.webp
+        href: "https://wallos.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8283"
+    - Zipline:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zipline.png
+        href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321"
