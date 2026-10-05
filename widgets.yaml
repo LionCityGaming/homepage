@@ -38,36 +38,12 @@
     href: https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}
     target: _blank
 - resources:
-    label: " "
-    # disk: /docker
-    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
-    # target: _blank
-- resources:
-    label: " "
-    # disk: /docker
-    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
-    # target: _blank
-- resources:
     label: NAS Storage
     disk: /data
     href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
     target: _blank
 - resources:
-    label: " "
-    # disk: /docker
-    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
-    # target: _blank
-- resources:
-    label: " "
-    # disk: /docker
-    # href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
-    # target: _blank
-- resources:
     label: USB Backup
     disk: /usb
     href: https://synology.{{HOMEPAGE_VAR_DOMAIN}}
     target: _blank
-# - unifi_console:
-#     url: https://{{HOMEPAGE_VAR_GATEWAY_HOST}}
-#     username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
-#     password: CHANGE_ME

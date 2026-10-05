@@ -27,6 +27,7 @@
 - **A colour for every section.** Each group gets its own accent (shown as a glowing dot before its name, and as a glow when you hover a card).
 - **A clock that looks like a smart display.** The weather and date sit in glass capsules, with the time in large bold digits.
 - **Disk capsules.** Each disk in the top bar has its own icon and colour, turning amber at 75% and red at 90%, and they always sit in the middle of the bar.
+- **Glass search.** Start typing anywhere and the quick-launch search opens as a frosted sheet over a dimmed, blurred page.
 - **Quiet status dots.** Healthy services don't show a green dot until you hover them, so the ones that need attention stand out.
 - **Embedded panels that match.** Home Assistant dashboards and Glance are shown inside Homepage with the same glass look (see [Extras](#extras)).
 
@@ -65,8 +66,8 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `settings.yaml` | Layout, tabs and theme settings |
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
-| `custom.css` | The whole look (the original Nord theme at the top, the glass theme layered over it) |
-| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, mobile layout |
+| `custom.css` | The whole look: a Nord base for layout, with the glass theme layered over it |
+| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks sorting, and tidier dates in the Calendars lists |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |
 
@@ -78,7 +79,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 4. Set your own location in the `openmeteo` widget in `widgets.yaml` (it's set to Singapore).
 5. Service icons under `/images/icons/` are local files; swap them for [dashboard icons](https://github.com/homarr-labs/dashboard-icons) or your own.
 
-The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) and each section's colour are set at the top of the matching blocks in `custom.js`, so rename them there to match your own labels.
+The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) and each section's colour are set in the `DISKS` and `ACCENTS` lists in `custom.js`, so rename them there to match your own labels.
 
 ## Extras
 

@@ -5,7 +5,7 @@ background:
   image: /images/backgrounds/mountain.jpg
 theme: dark
 color: neutral
-headerStyle: underlined
+headerStyle: clean
 iconStyle: theme
 statusStyle: dot
 quicklaunch:
@@ -16,7 +16,6 @@ fiveColumns: true
 useEqualHeights: true
 fullWidth: true
 disableCollapse: true
-# preloadAllWidgets: true
 pwa:
   icons:
     - src: /images/icons/logo.ico
@@ -79,7 +78,6 @@ layout:
     tab: Bookmarks
     style: column
   Entertainment:
-    # disableCollapse: true
     header: true
     tab: Bookmarks
     style: column
@@ -135,7 +133,6 @@ layout:
     style: columns
     columns: 2
   Apps:               # mobile only
-    # initiallyCollapsed: true
     header: true
     tab: Mobile
     style: columns

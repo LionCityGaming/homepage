@@ -4,9 +4,8 @@
    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap');
 */
 /* ============================================================================
-   HUB GLASS THEME (05/10/2026) - Glance is shown inside a Homepage glass card,
-   so the page is see-through and uses the Nest Hub colours and font.
-   
+   HUB GLASS THEME: Glance is shown inside a Homepage glass card, so the page is
+   see-through and uses the same colours and font.
    ============================================================================ */
 :root { color-scheme: dark; }
 html, body, .page, .page-content {
