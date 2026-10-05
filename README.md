@@ -43,6 +43,10 @@
 | **Calendars** | Calendars, a to-do list, Premier League fixtures and table, recently downloaded films and episodes, and upcoming releases |
 | **Mobile** | A compact status view used automatically on phones (see [On phones](#on-phones)) |
 
+![The Applications tab](screenshots/applications.png)
+
+![The Bookmarks tab](screenshots/bookmarks.png)
+
 ![Calendars tab: league table and media lists](screenshots/tables.png)
 
 ## On phones
@@ -66,7 +70,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `settings.yaml` | Layout, tabs and theme settings |
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
-| `custom.css` | The whole look: a Nord base for layout, with the glass theme layered over it |
+| `custom.css` | The whole look, grouped by part of the page (page and background, cards, status dots, tabs, top bar, embedded panels, Calendars lists, search, motion), each part with its own phone rules |
 | `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks sorting, and tidier dates in the Calendars lists |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |

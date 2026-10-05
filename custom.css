@@ -1,22 +1,187 @@
-/* ============================================================================
-   NORD BASE (layout; its colours are re-mapped by the glass layer below)
-   ============================================================================ */
+/* Homepage custom.css: Hub glass theme, matching the Nest Hub and phone dashboards.
+   Deployed by Ansible (docker_host role) from the homelab-ansible repo; custom.js tags the page
+   (section accents, disk colours and icons, clock, time of day, weather, open tab). */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
 
+/* ================================================================================================
+   Design tokens. The --nord* names are kept because older rules below still read them; the values
+   are Apple dark mode.
+   ================================================================================================ */
 :root {
   --text-shadow: none;
   --transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-  --focus-ring: 0 0 8px var(--accent-color-dim);
   --hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --nord1: rgba(28, 28, 30, 0.55);
+  --nord2: rgba(58, 58, 60, 0.55);
+  --nord3: #636366;
+  --nord4: rgba(235, 235, 245, 0.88);
+  --nord8: #64d2ff;
+  --nord9: #0a84ff;
+  --nord11: #ff453a;
+  --nord12: #ff9f0a;
+  --nord13: #ffd60a;
+  --nord14: #30d158;
+  --accent-color: #0a84ff;
+  --accent-color-dim: rgba(10, 132, 255, 0.35);
+  --card-border: 0.5px solid rgba(255, 255, 255, 0.10);
+  --border-radius: 20px;
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: 10 132 255;
+  --color-accent: 100 210 255;
+  --glass: rgba(28, 28, 30, 0.55);
+  --glass-hi: rgba(44, 44, 46, 0.62);
+  --hairline: rgba(255, 255, 255, 0.10);
+  --acc: #0a84ff;
+  --acc-rgb: 10, 132, 255;
 }
 
+/* ================================================================================================
+   Page: font, background glow (time of day + weather) and the transparent wrappers above it
+   ================================================================================================ */
 * { font-family: var(--font-family) !important; }
 
-/* ============================================================================
-   SHARED CARD STYLES
-   ============================================================================ */
+@media (pointer: coarse), (max-width: 1024px) {
+  *:has(> li.service) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 4px !important;
+    padding: 2px !important;
+  }
+  body::-webkit-scrollbar,
+  html::-webkit-scrollbar,
+  #__next::-webkit-scrollbar,
+  main::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * { scroll-behavior: smooth; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body { letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+/* background: Hub-style dark tonal glow (blue top-left, purple bottom-right), painted on the page
+   itself and on #background, with the wrappers above it cleared */
+html, body {
+  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat fixed !important;
+}
+/* living background: the glow layer is a little larger than the screen and drifts slowly (transform
+   only, so the GPU moves it without repainting); time-of-day changes cross-fade over 20 s
+   (Chrome/Edge; Firefox still switches instantly). Off when reduced motion is asked for */
+#background {
+  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat !important;
+  filter: none !important;
+  opacity: 1 !important;
+  inset: -8% !important;
+  transition: background-image 20s ease;
+  will-change: transform;
+}
+#__next, #page_wrapper, #inner_wrapper { background: transparent !important; }
+/* color-scheme must match in the page and the embedded iframes, or browsers paint the iframe opaque */
+html { color-scheme: dark; }
+/* background follows the time of day (custom.js sets data-sky on <html>; day = the default above) */
+html[data-sky="night"], html[data-sky="night"] body, html[data-sky="night"] #background {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTUlIiBjeT0iMTAlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzFlM2E4YSIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMWUzYThhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI5MCUiIGN5PSI5NSUiIHI9IjY1JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzA1MDcwYSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48L3N2Zz4=") !important;
+}
+html[data-sky="dawn"], html[data-sky="dawn"] body, html[data-sky="dawn"] #background {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTAlIiBjeT0iOTUlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI4NSUiIGN5PSI5MCUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iMjAlIiBjeT0iNSUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuMTQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9IiMwODA5MGQiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cwKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzEpIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMikiLz48L3N2Zz4=") !important;
+}
+html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #background {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTIlIiBjeT0iOCUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAuMTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjlmMGEiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9IjkyJSIgY3k9Ijk2JSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4xOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iNzAlIiBjeT0iMTUlIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwLjA3Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMGEwODBjIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMCkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cxKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzIpIi8+PC9zdmc+") !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #background { animation: bgDrift 70s ease-in-out infinite alternate; }
+}
+
+html[data-weather="cloudy"] #background { filter: saturate(0.6) brightness(0.8) !important; }
+html[data-weather="rain"] #background, html[data-weather="storm"] #background {
+  filter: saturate(0.7) brightness(0.75) !important;
+}
+html::before {
+  content: "";
+  position: fixed;
+  inset: -20% 0 0 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  background-image: repeating-linear-gradient(105deg, transparent 0 22px, rgba(180, 210, 255, 0.10) 22px 23px, transparent 23px 61px), repeating-linear-gradient(105deg, transparent 0 37px, rgba(180, 210, 255, 0.07) 37px 38px, transparent 38px 97px);
+  background-size: 100% 240px, 100% 300px;
+  transition: opacity 3s ease;
+}
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(200, 220, 255, 0.35), transparent 70%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-weather="rain"]::before, html[data-weather="storm"]::before {
+    opacity: 1;
+    animation: rainFall 0.9s linear infinite;
+  }
+  html[data-weather="storm"]::after { animation: stormFlash 11s linear infinite; }
+}
+
+@media (pointer: fine) and (min-width: 1025px) {
+  /* Bookmarks: all 8 sections side by side as equal columns on desktop (settings.yaml's fiveColumns
+     caps every tab at 5; this widens only the Bookmarks tab). Homepage renders only the active
+     tab's groups, with no per-tab panel, so custom.js marks the open tab on <html> */
+  html[data-tab="bookmarks"] .services-group { flex: 0 0 12.5% !important; max-width: 12.5% !important; }
+}
+
+/* ================================================================================================
+   Utilities and Tailwind overrides
+   ================================================================================================ */
+/* Tailwind theme colour overrides */
+.border-theme-400\/50, .border-theme-500 { border-color: var(--nord8) !important; }
+.text-theme-400, .text-theme-500 { color: var(--nord8) !important; }
+/* Kill Tailwind's uppercase utility (widget stat labels, e.g. Sonarr WANTED/QUEUED/SERIES) */
+.uppercase { text-transform: none !important; }
+.container { max-width: 90%; }
+.flex-row { flex-direction: row; }
+.w-full { width: 100%; }
+.active { opacity: 1; visibility: visible; }
+/* Homepage's reload button */
+#revalidate { display: none !important; }
+
+@media (pointer: coarse), (max-width: 1024px) {
+  :is(ul, ol, div):has(> li.service) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    padding: 6px !important;
+  }
+  li.service {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  li.service img { width: 24px !important; height: 24px !important; margin: 0 !important; }
+}
+
+/* ================================================================================================
+   Cards: frosted glass, hairline edge, soft shadow; widget stat boxes as tinted pills
+   ================================================================================================ */
 .service-card, [id$="-tab"] {
   position: relative;
   border: var(--card-border);
@@ -31,14 +196,6 @@
   backface-visibility: hidden;
   transform: translateZ(0);
 }
-
-.service-card:has(iframe):hover {
-  background-color: var(--nord1) !important;
-  border-color: var(--accent-color);
-  box-shadow: var(--hover-shadow);
-  transform: none;
-}
-
 .service-card::before, [id$="-tab"]::before {
   content: "";
   position: absolute;
@@ -48,14 +205,237 @@
   z-index: -1;
   display: none !important;
 }
-
-.service-card:has(iframe)::before { display: none; }
-.service-card:has(iframe) iframe { position: relative; z-index: 1; }
 .service-card:hover, [id$="-tab"]:hover { background-color: var(--nord1); }
+.service-card {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+.service-card > :first-child:not(.service-container),
+.service-card > :is(.service-header, .service-title) {
+  margin-bottom: 1px;
+}
+.service-card > :nth-child(2):not(:is(.service-header, .service-title)),
+.service-card > :is(.service-body, .service-content) {
+  margin-top: 1px;
+}
+.service-card :is(a, div[onclick]):is(:focus, :hover), .service-card a:-moz-any-link {
+  background-color: transparent;
+  outline: none;
+}
+.service-icon img { width: 12px; height: 12px; vertical-align: middle; }
+/* widget stat boxes: tinted glass pills instead of bordered boxes */
+.service-block {
+  position: relative;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 12px !important;
+}
+/* Tab active/hover borders */
+.service-card:hover, [id$="-tab"]:hover, [id$="-tab"][aria-selected="true"] {
+  border-color: var(--nord8) !important;
+  box-shadow: 0 0 8px var(--accent-color-dim) !important;
+}
 
-/* ============================================================================
-   NAVIGATION TABS
-   ============================================================================ */
+@media (pointer: coarse), (max-width: 1024px) {
+  li.service .service-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: center !important;
+    padding: 12px 3px 5px 3px !important;
+    gap: 2px !important;
+    position: relative !important;
+    min-height: 0 !important;
+    height: auto !important;
+    border-radius: 14px !important;
+    border-width: 0.5px !important;
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+  }
+  li.service .service-card > a, li.service .service-card > div:first-child {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 1px !important;
+  }
+  li.service .service-card span[class*="bg-green"],
+  li.service .service-card span[class*="bg-red"],
+  li.service .service-card span[class*="bg-yellow"],
+  li.service .service-card span[class*="bg-orange"],
+  li.service .service-card .rounded-full:not(img) {
+    width: 8px !important;
+    height: 8px !important;
+    position: absolute !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+}
+
+.service-card, #myTab [id$="-tab"] {
+  background-color: var(--glass) !important;
+  border: 0.5px solid var(--hairline) !important;
+  border-radius: 20px !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: rgba(235, 235, 245, 0.92);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+/* app name + description */
+.service-name { font-weight: 600; color: #ffffff; }
+.service-description { color: rgba(235, 235, 245, 0.55) !important; font-weight: 400; }
+.service-block-value { color: #ffffff; font-weight: 600; font-variant-numeric: tabular-nums; }
+.service-block-label { color: rgba(235, 235, 245, 0.55); font-weight: 500; }
+
+@media (pointer: coarse), (max-width: 1024px) {
+  .service-card:hover { transform: none; }
+  /* phones: PBS's "Failed Tasks 24h" label is too long for a third of the width; show "Failed".
+     (The Servers section has no heading to match, so it is found by its PBS card.) */
+  li.service[data-name="PBS"] .service-block:nth-child(2) .service-block-label {
+    visibility: hidden;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  li.service[data-name="PBS"] .service-block:nth-child(2) .service-block-label::after {
+    content: "Failed";
+    visibility: visible;
+    position: absolute;
+    inset: 0;
+    text-align: center;
+  }
+}
+
+/* ================================================================================================
+   Status dots and badge colours: healthy dots stay hidden until hover, problems always show
+   ================================================================================================ */
+/* Online / healthy */
+.rounded-full.bg-green-500,
+.rounded-full.bg-emerald-500,
+.animate-ping.bg-green-500,
+.animate-ping.bg-emerald-500 {
+  background-color: var(--nord14) !important;
+}
+/* Error / offline */
+.rounded-full.bg-red-500, .animate-ping.bg-red-500 { background-color: var(--nord11) !important; }
+/* Warning */
+.rounded-full.bg-yellow-500, .animate-ping.bg-yellow-500 { background-color: var(--nord13) !important; }
+/* Orange */
+.rounded-full.bg-orange-500, .animate-ping.bg-orange-500 { background-color: var(--nord12) !important; }
+/* Info / blue */
+.rounded-full.bg-blue-500, .animate-ping.bg-blue-500 { background-color: var(--nord9) !important; }
+/* Unknown / gray */
+.rounded-full.bg-gray-500 { background-color: var(--nord3) !important; }
+/* Media Releases — Sonarr */
+.bg-cyan-500 { background-color: var(--nord8) !important; }
+/* Media Releases — Radarr */
+.bg-amber-500, [class*="bg-amber"] { background-color: var(--nord13) !important; }
+
+@media (pointer: coarse), (max-width: 1024px) {
+  li.service .service-card span:not([class*="bg-"]):not(.rounded-full),
+  li.service .service-card a span {
+    font-size: 6px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    word-break: break-word !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Card rule kept here: it must come after the status-dot rules it overrides */
+.service-card:hover {
+  background-color: var(--glass-hi) !important;
+  border-color: rgba(var(--acc-rgb), 0.55) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 0.5px rgba(var(--acc-rgb), 0.35), 0 0 18px rgba(var(--acc-rgb), 0.22) !important;
+}
+/* status dots: healthy (green) dots stay hidden until you hover the card; problems always show.
+   They stay clickable (clicking a container's dot opens its stats) */
+.service-card .service-tag:has(.bg-green-500, .bg-emerald-500):not(:has(.bg-red-500, .bg-orange-500, .bg-yellow-500)) {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+/* hovering a card shows all its dots (!important: the rule that hides healthy dots is more
+   specific) */
+.service-card:hover .service-tag { opacity: 1 !important; }
+
+@media (pointer: coarse), (max-width: 1024px) {
+  /* phones: keep every status dot visible - the Mobile tab is a quick status overview */
+  .service-card .service-tag { opacity: 1 !important; }
+}
+
+/* ================================================================================================
+   Section headers: a glowing accent dot (colour set by custom.js), then the name
+   ================================================================================================ */
+.service-group-name::before, .bookmark-group-name::before {
+  content: "";
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  margin-right: 12px;
+  border-radius: 50%;
+  background: var(--acc);
+  box-shadow: 0 0 10px rgba(var(--acc-rgb), 0.9);
+  align-self: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .services-group, .bookmark-group { animation: glassIn 0.45s ease backwards; }
+  .services-group:nth-child(2), .bookmark-group:nth-child(2) { animation-delay: 0.05s; }
+  .services-group:nth-child(3), .bookmark-group:nth-child(3) { animation-delay: 0.10s; }
+  .services-group:nth-child(4), .bookmark-group:nth-child(4) { animation-delay: 0.15s; }
+  .services-group:nth-child(5), .bookmark-group:nth-child(5) { animation-delay: 0.20s; }
+  .services-group:nth-child(n+6), .bookmark-group:nth-child(n+6) { animation-delay: 0.25s; }
+}
+
+@media (pointer: coarse), (max-width: 1024px) {
+  /* phones: the Apps list as three columns of compact tiles (icon, short name, status dot); the
+     server cards above stay two across */
+  .services-group[data-acc="apps"] .services-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .services-group[data-acc="apps"] li.service .service-card {
+    padding: 10px 4px 8px 4px !important;
+    border-radius: 14px !important;
+  }
+  .services-group[data-acc="apps"] li.service img { width: 28px !important; height: 28px !important; }
+  .services-group[data-acc="apps"] li.service .service-name {
+    font-size: 12px !important;
+    padding: 4px 2px 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* phones: Servers (Proxmox, Synology, PBS) as three columns with each card's two figures stacked */
+  .services-group:has(li.service[data-name="PBS"]) .services-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .services-group:has(li.service[data-name="PBS"]) li.service .service-card {
+    padding: 10px 6px 8px !important;
+    border-radius: 14px !important;
+  }
+  .services-group:has(li.service[data-name="PBS"]) .service-container {
+    flex-direction: column !important;
+    gap: 4px;
+  }
+  .services-group:has(li.service[data-name="PBS"]) .service-block {
+    margin: 0 !important;
+    padding: 4px 2px !important;
+  }
+  .services-group:has(li.service[data-name="PBS"]) li.service .service-name { font-size: 12px !important; }
+}
+
+/* ================================================================================================
+   Tabs: Apple segmented pills; the Mobile tab is never shown on desktop
+   ================================================================================================ */
 #myTab {
   display: flex;
   margin: 0 auto 30px auto;
@@ -65,7 +445,6 @@
   backdrop-filter: none;
   justify-content: center;
 }
-
 /* Hide Mobile tab from desktop tab bar completely */
 #myTab > :has([id*="Mobile"]) {
   display: none !important;
@@ -78,7 +457,6 @@
   position: absolute !important;
   visibility: hidden !important;
 }
-
 [id$="-tab"] {
   display: flex;
   align-items: center;
@@ -92,45 +470,66 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-
 [id$="-tab"][aria-selected="true"] { background-color: var(--nord2); outline: none; }
-
-/* ============================================================================
-   SERVICE CARDS
-   ============================================================================ */
-.service-card {
-  display: flex;
-  flex-direction: column;
-  font-weight: 400;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 200px;
-}
-
+/* Card rule kept here: it must come after the tab rules it overrides */
 .service-card > :is(div, span, h1, h2, h3, h4, h5, h6, p):first-child:not(.service-container),
 .bookmark,
 .widget-container {
   font-weight: 600;
   text-transform: none;
 }
-.service-card > :first-child:not(.service-container),
-.service-card > :is(.service-header, .service-title) {
-  margin-bottom: 1px;
+/* Utility rule kept here: it must come after the tab rules it overrides */
+.text-right { text-align: right; }
+/* Utility rule kept here: it must come after the tab rules it overrides */
+.text-left { text-align: left; }
+/* Utility rule kept here: it must come after the tab rules it overrides */
+.text-center { text-align: center; }
+/* desktop: the Mobile tab's content stays hidden; the Mobile tab's content panel ends in "-tab"
+   too: no card around the whole page */
+#Mobile-tab {
+  display: none !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
-.service-card > :nth-child(2):not(:is(.service-header, .service-title)),
-.service-card > :is(.service-body, .service-content) {
-  margin-top: 1px;
-}
-.service-card:has(iframe) .service-container { margin-top: 0; padding-top: 0; }
-.service-card :is(a, div[onclick]):is(:focus, :hover), .service-card a:-moz-any-link {
-  background-color: transparent;
-  outline: none;
-}
-.service-icon img { width: 12px; height: 12px; vertical-align: middle; }
-.service-block { position: relative; }
 
-/* ============================================================================
-   INFORMATION WIDGETS
-   ============================================================================ */
+@media (pointer: coarse), (max-width: 1024px) {
+  /* phones: the tab bar is hidden and only the Mobile tab's content shows */
+  #myTab { display: none !important; }
+  #Mobile-tab { display: block !important; visibility: visible !important; opacity: 1 !important; }
+  #Mobile-tab > *:first-child {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 10px !important;
+  }
+}
+
+/* Section-header rule kept here: it must come after the tab rules it overrides */
+.service-group-name, .bookmark-group-name {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem !important;
+  letter-spacing: -0.02em;
+  align-items: center;
+}
+#myTab [id$="-tab"]:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+#myTab [id$="-tab"][aria-selected="true"] {
+  background-color: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ================================================================================================
+   Top bar: crest + Cinzel title, disks with their own icons and colours, weather, date and clock
+   ================================================================================================ */
 #information-widgets {
   display: flex;
   flex-direction: column;
@@ -138,12 +537,10 @@
   justify-content: center;
   margin-bottom: 12px;
 }
-
 #information-widgets-right { margin-right: 0px; }
 .information-widget-datetime { margin-left: 100px; }
 .information-widget-greeting { flex-grow: 1.5; }
 .information-widget-resources { position: relative; }
-
 .information-widget-resource {
   display: flex;
   align-items: center;
@@ -154,10 +551,8 @@
   text-transform: none;
   font-weight: 600;
 }
-
 /* Bigger logo in the desktop info bar */
 .information-widget-logo img { width: 64px !important; height: 64px !important; }
-
 #information-widgets > * {
   position: relative;
   border: none;
@@ -175,170 +570,19 @@
   backface-visibility: hidden;
   transform: translateZ(0);
 }
-
 #information-widgets > *::before { display: none; }
-
 #information-widgets > *:is(:hover, :focus) {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
 }
-
-/* ============================================================================
-   IFRAME CONTAINERS
-   ============================================================================ */
-iframe { width: 100%; border: 0; background-color: transparent; }
-.home-assistant { height: 925px; margin: -25px -20px 0; }
-.glance { height: 850px; margin: -5px 0 -20px; }
-.todo { height: 529px; margin: -28px 0 0; }
-.ha-calendar { height: 1054px; margin-top: -28px; pointer-events: none; }
-.epl-calendar { height: 514px; margin: 0; pointer-events: none; }
-.epl { height: 1056px; margin: -28px -80px 0; }
-
-/* ============================================================================
-   CUSTOM LISTS
-   ============================================================================ */
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0;
-  margin: -1.8px 0 -0.9px 10px;
-  border-radius: 0.5rem;
-  text-align: left;
-  font-weight: 400;
-}
-
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  padding-left: 0;
-  text-align: left;
-  font-weight: 400;
-}
-
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:first-child {
-  margin-right: 23px;
-}
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:last-child {
-  margin-left: -18px;
-}
-#upcomingtv span > span:first-child { padding-left: 8px; }
-
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:first-child::after {
-  content: "";
-  position: absolute;
-  left: 50px;
-  top: 50%;
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 0.5rem;
-  transform: translateY(-50%);
-}
-
-/* Nord Aurora colours for status dots */
-#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after { background-color: var(--nord8); }
-#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
-  background-color: var(--nord13);
-}
-
-:is(#tautulli_recent_movies, #tautulli_recent_shows) .service-container > div > div {
-  display: block;
-  margin: 3px 3px 1px;
-  border-radius: 0.4rem;
-  text-align: left;
-  text-shadow: var(--text-shadow);
-  font-size: 12px;
-  font-weight: 400;
-}
-
-#headlessui-disclosure-panel-\:r6\: > ul:first-child > li:first-child > div:first-child > div:first-child {
-  margin: -100px;
-}
-
-/* ============================================================================
-   HOMEPAGE THEME OVERRIDES
-   ============================================================================ */
-/* Tab active/hover borders */
-.service-card:hover, [id$="-tab"]:hover, [id$="-tab"][aria-selected="true"] {
-  border-color: var(--nord8) !important;
-  box-shadow: 0 0 8px var(--accent-color-dim) !important;
-}
-
-/* Tailwind theme colour overrides */
-.border-theme-400\/50, .border-theme-500 { border-color: var(--nord8) !important; }
-.text-theme-400, .text-theme-500 { color: var(--nord8) !important; }
-
-/* Kill Tailwind's uppercase utility (widget stat labels, e.g. Sonarr WANTED/QUEUED/SERIES) */
-.uppercase { text-transform: none !important; }
-
-/* ============================================================================
-   STATUS INDICATOR DOTS
-   ============================================================================ */
-/* Online / healthy */
-.rounded-full.bg-green-500,
-.rounded-full.bg-emerald-500,
-.animate-ping.bg-green-500,
-.animate-ping.bg-emerald-500 {
-  background-color: var(--nord14) !important;
-}
-
-/* Error / offline */
-.rounded-full.bg-red-500, .animate-ping.bg-red-500 { background-color: var(--nord11) !important; }
-
-/* Warning */
-.rounded-full.bg-yellow-500, .animate-ping.bg-yellow-500 { background-color: var(--nord13) !important; }
-
-/* Orange */
-.rounded-full.bg-orange-500, .animate-ping.bg-orange-500 { background-color: var(--nord12) !important; }
-
-/* Info / blue */
-.rounded-full.bg-blue-500, .animate-ping.bg-blue-500 { background-color: var(--nord9) !important; }
-
-/* Unknown / gray */
-.rounded-full.bg-gray-500 { background-color: var(--nord3) !important; }
-
-/* Media Releases — Sonarr */
-.bg-cyan-500 { background-color: var(--nord8) !important; }
-
-/* Media Releases — Radarr */
-.bg-amber-500, [class*="bg-amber"] { background-color: var(--nord13) !important; }
-
-/* ============================================================================
-   UTILITY CLASSES
-   ============================================================================ */
-.container { max-width: 90%; }
+/* Utility rule kept here: it must come after the top-bar rules it overrides */
 .flex { display: flex; }
-.flex-row { flex-direction: row; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-.text-center { text-align: center; }
-.w-full { width: 100%; }
+/* Utility rule kept here: it must come after the top-bar rules it overrides */
 .relative { position: relative; }
-.active { opacity: 1; visibility: visible; }
-#revalidate { display: none !important; }  /* Homepage's reload button */
-
-/* ============================================================================
-   RESPONSIVE DESIGN
-   ============================================================================ */
-/* DESKTOP: Hide Mobile tab content */
-#Mobile-tab { display: none !important; }
 
 @media (pointer: coarse), (max-width: 1024px) {
-  /* MOBILE: Show only Mobile tab */
-  #myTab { display: none !important; }
-  #Mobile-tab { display: block !important; visibility: visible !important; opacity: 1 !important; }
-
-  #Mobile-tab > *:first-child {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 10px !important;
-  }
-
   #information-widgets { transform-origin: top center !important; }
   #information-widgets [class*="date"],
   #information-widgets time,
@@ -355,7 +599,6 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     display: flex !important;
     box-sizing: border-box !important;
   }
-
   #information-widgets {
     flex-direction: column !important;
     align-items: center !important;
@@ -369,13 +612,11 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     position: relative !important;
     text-align: center !important;
   }
-
   #information-widgets > * {
     width: 100% !important;
     justify-content: center !important;
     flex-wrap: wrap !important;
   }
-
   #information-widgets > .information-widget-logo, .information-widget-logo {
     order: -2 !important;
     display: flex !important;
@@ -387,13 +628,11 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     transform: translateX(5px) !important;
     text-align: center !important;
   }
-
   .information-widget-logo img {
     width: 128px !important;
     height: 128px !important;
     margin: 0 auto !important;
   }
-
   #information-widgets > .information-widget-greeting, .information-widget-greeting {
     order: -1 !important;
     font-size: 14px !important;
@@ -407,7 +646,6 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     margin: 4px auto 0 auto !important;
     transform: translateX(5px) !important;
   }
-
   #information-widgets > #information-widgets-right, #information-widgets-right {
     order: 10 !important;
     display: flex !important;
@@ -421,7 +659,6 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     text-align: center !important;
     transform: translateX(5px) !important;
   }
-
   .information-widget-resources {
     order: 10 !important;
     display: flex !important;
@@ -434,7 +671,6 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     margin: 0 auto !important;
     transform: translateX(5px) !important;
   }
-
   .information-widget-resource {
     flex-direction: row !important;
     align-items: center !important;
@@ -443,21 +679,7 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     white-space: nowrap !important;
     margin: 0 6px !important;
   }
-
-  :is(ul, ol, div):has(> li.service) {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 6px !important;
-    padding: 6px !important;
-  }
-
-  *:has(> li.service) {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 4px !important;
-    padding: 2px !important;
-  }
-
+  /* Page rule kept here: it must come after the top-bar rules it overrides */
   body,
   main,
   #page,
@@ -473,179 +695,16 @@ iframe { width: 100%; border: 0; background-color: transparent; }
     margin: 0 !important;
     max-width: 100% !important;
   }
+  /* Page rule kept here: it must come after the top-bar rules it overrides */
   body, html, #__next, main, .container {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
   }
-  body::-webkit-scrollbar,
-  html::-webkit-scrollbar,
-  #__next::-webkit-scrollbar,
-  main::-webkit-scrollbar,
-  *::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-
-  li.service {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  li.service .service-card {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    text-align: center !important;
-    padding: 12px 3px 5px 3px !important;
-    gap: 2px !important;
-    position: relative !important;
-    min-height: 0 !important;
-    height: auto !important;
-  }
-
-  li.service .service-card > a, li.service .service-card > div:first-child {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
-    gap: 1px !important;
-  }
-
-  li.service img { width: 24px !important; height: 24px !important; margin: 0 !important; }
-
-  li.service .service-card span[class*="bg-green"],
-  li.service .service-card span[class*="bg-red"],
-  li.service .service-card span[class*="bg-yellow"],
-  li.service .service-card span[class*="bg-orange"],
-  li.service .service-card .rounded-full:not(img) {
-    width: 8px !important;
-    height: 8px !important;
-    position: absolute !important;
-    top: 5px !important;
-    right: 5px !important;
-  }
-
-  li.service .service-card span:not([class*="bg-"]):not(.rounded-full),
-  li.service .service-card a span {
-    font-size: 6px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    word-break: break-word !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  * { scroll-behavior: smooth; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ============================================================================
-   HUB GLASS THEME: matches the Nest Hub / phone dashboards. Everything above is the
-   old Nord base; this layer re-maps its colours and restyles on top.
-   ============================================================================ */
-:root {
-  --nord1: rgba(28, 28, 30, 0.55);
-  --nord2: rgba(58, 58, 60, 0.55);
-  --nord3: #636366;
-  --nord4: rgba(235, 235, 245, 0.88);
-  --nord8: #64d2ff;
-  --nord9: #0a84ff;
-  --nord11: #ff453a;
-  --nord12: #ff9f0a;
-  --nord13: #ffd60a;
-  --nord14: #30d158;
-  --dominant-color: rgba(255, 255, 255, 0.10);
-  --accent-color: #0a84ff;
-  --accent-color-dim: rgba(10, 132, 255, 0.35);
-  --card-border: 0.5px solid rgba(255, 255, 255, 0.10);
-  --border-radius: 20px;
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
-  --color-primary: 10 132 255;
-  --color-accent: 100 210 255;
-  --glass: rgba(28, 28, 30, 0.55);
-  --glass-hi: rgba(44, 44, 46, 0.62);
-  --hairline: rgba(255, 255, 255, 0.10);
-  --acc: #0a84ff;
-  --acc-rgb: 10, 132, 255;
-}
-
-body { letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
-
-/* ---------- cards: frosted glass, hairline edge, soft shadow ---------- */
-.service-card, #myTab [id$="-tab"] {
-  background-color: var(--glass) !important;
-  border: 0.5px solid var(--hairline) !important;
-  border-radius: 20px !important;
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  backdrop-filter: blur(24px) saturate(170%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-  color: rgba(235, 235, 245, 0.92);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
-}
-
-.service-card:hover {
-  background-color: var(--glass-hi) !important;
-  border-color: rgba(var(--acc-rgb), 0.55) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 0.5px rgba(var(--acc-rgb), 0.35), 0 0 18px rgba(var(--acc-rgb), 0.22) !important;
-}
-
-/* app name + description */
-.service-name { font-weight: 600; color: #ffffff; }
-.service-description { color: rgba(235, 235, 245, 0.55) !important; font-weight: 400; }
-
-/* widget stat boxes: tinted glass pills instead of bordered boxes */
-.service-block {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
-  border-radius: 12px !important;
-}
-.service-block-value { color: #ffffff; font-weight: 600; font-variant-numeric: tabular-nums; }
-.service-block-label { color: rgba(235, 235, 245, 0.55); font-weight: 500; }
-.service-block:has(:is(.epl, .uptime, .todo)), .service-block:has(iframe) {
-  background: transparent !important;
-  border: none !important;
-}
-
-/* ---------- section headers: glowing accent dot, then the name ---------- */
-.service-group-name, .bookmark-group-name {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  font-size: 1.15rem !important;
-  letter-spacing: -0.02em;
-  align-items: center;
-}
-
-.service-group-name::before, .bookmark-group-name::before {
-  content: "";
-  flex-shrink: 0;
-  width: 9px;
-  height: 9px;
-  margin-right: 12px;
-  border-radius: 50%;
-  background: var(--acc);
-  box-shadow: 0 0 10px rgba(var(--acc-rgb), 0.9);
-  align-self: center;
-}
-
-/* ---------- tabs: Apple segmented pills ---------- */
+/* Tab rule kept here: it must come after the top-bar rules it overrides */
 #myTab { gap: 12px !important; margin-bottom: 26px !important; }
-
+/* Tab rule kept here: it must come after the top-bar rules it overrides */
 #myTab [id$="-tab"] {
   min-height: 44px !important;
   padding: 0 30px !important;
@@ -654,172 +713,9 @@ body { letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
   font-weight: 600;
   color: rgba(235, 235, 245, 0.75);
 }
-
-#myTab [id$="-tab"]:hover {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.22) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-}
-
-#myTab [id$="-tab"][aria-selected="true"] {
-  background-color: rgba(255, 255, 255, 0.16) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-}
-
-/* the Mobile tab's content panel ends in "-tab" too: no card around the whole page */
-#Mobile-tab {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
-/* ---------- bookmarks: glass rows ---------- */
-.bookmark-icon { background: rgba(var(--acc-rgb), 0.18) !important; color: #ffffff !important; }
-.bookmark-text {
-  background: var(--glass) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  backdrop-filter: blur(24px) saturate(170%);
-}
-.bookmark-name { color: #ffffff; font-weight: 600; }
-.bookmark-description { color: rgba(235, 235, 245, 0.55) !important; }
-
-li.bookmark > a, li.bookmark > div {
-  border-radius: 14px;
-  overflow: hidden;
-  border: 0.5px solid var(--hairline);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-li.bookmark > a:hover {
-  transform: translateY(-1px);
-  border-color: rgba(var(--acc-rgb), 0.55);
-  box-shadow: 0 0 20px rgba(var(--acc-rgb), 0.25);
-}
-
-/* ---------- embedded panels (Home Assistant, Glance, calendars) ---------- */
-.home-assistant, .glance { background-color: transparent !important; }
-
-/* ---------- top bar ---------- */
-.information-widget-greeting, .information-widget-datetime { color: #ffffff; }
-
-/* ---------- gentle entrance, like the Hub ---------- */
-@keyframes glassIn { from { opacity: 0; transform: translateY(8px) scale(0.985); } }
-
-@media (prefers-reduced-motion: no-preference) {
-  .services-group, .bookmark-group { animation: glassIn 0.45s ease backwards; }
-  .services-group:nth-child(2), .bookmark-group:nth-child(2) { animation-delay: 0.05s; }
-  .services-group:nth-child(3), .bookmark-group:nth-child(3) { animation-delay: 0.10s; }
-  .services-group:nth-child(4), .bookmark-group:nth-child(4) { animation-delay: 0.15s; }
-  .services-group:nth-child(5), .bookmark-group:nth-child(5) { animation-delay: 0.20s; }
-  .services-group:nth-child(n+6), .bookmark-group:nth-child(n+6) { animation-delay: 0.25s; }
-}
-
-@media (pointer: coarse), (max-width: 1024px) {
-  /* ---------- phones: lighter blur, smaller radius ---------- */
-  li.service .service-card {
-    border-radius: 14px !important;
-    border-width: 0.5px !important;
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    backdrop-filter: blur(14px) saturate(160%);
-  }
-
-  .service-card:hover { transform: none; }
-}
-
-/* background: Hub-style dark tonal glow (blue top-left, purple bottom-right),
-   painted on the page itself and on #background, with the wrappers above it cleared */
-html, body {
-  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat fixed !important;
-}
-#background {
-  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-#__next, #page_wrapper, #inner_wrapper { background: transparent !important; }
-
-/* embedded panels (05/10/2026): HA dashboards bring their own glass cards, so their Homepage
-   frame is invisible (no double layer); Glance keeps the Homepage glass card around it.
-   color-scheme must match in parent and iframes or browsers paint the iframe opaque. */
-html { color-scheme: dark; }
-
-.service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)) {
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
-.service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)):hover {
-  transform: none;
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar, .glance) {
-  background-color: transparent !important;
-  color-scheme: dark;
-}
-
-/* News column (Glance + currency rates): no outer frame, like the HA panels; the currency
-   boxes get the same glass as the HA and Glance cards (05/10/2026) */
-.service-card:has(.glance) {
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
-.service-card:has(.glance):hover {
-  transform: none;
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.service-card:has(.glance) .service-block:not(:has(iframe)) {
-  background: rgba(28, 28, 30, 0.55) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.10) !important;
-  border-radius: 16px !important;
-}
-
-/* EPL Calendar: its Homepage label used to sit hidden under the opaque iframe; now that the
-   frame is see-through it overlapped the dates, so hide it (05/10/2026) */
-.service-card:has(.epl-calendar) .service-title { display: none; }
-
-/* with the label gone the frame needs no negative margin (which got it clipped); move the card instead */
-.service-card:has(.epl-calendar) { margin-top: -14px; }
-
-/* HA panel frames: don't clip the iframe at the (invisible) Homepage card edge; the EPL Calendar
-   frame sits higher than its card and lost its rounded top edge and padding (05/10/2026) */
-.service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)) {
-  overflow: visible !important;
-}
-
-/* Calendars tab: TV Episodes ended 6px above Media Releases; extend it so the column bottoms line up (05/10/2026) */
-#tautulli_recent_shows .service-card { padding-bottom: 10px !important; }
-
-/* ============================================================================
-   ROUND 8 (05/10/2026): quiet status dots, Hub-style top bar, time-of-day background
-   ============================================================================ */
-/* status dots: healthy (green) dots stay hidden until you hover the card; problems always show.
-   They stay clickable (clicking a container's dot opens its stats). */
-.service-card .service-tag:has(.bg-green-500, .bg-emerald-500):not(:has(.bg-red-500, .bg-orange-500, .bg-yellow-500)) {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-.service-card:hover .service-tag { opacity: 1 !important; }
-
-/* !important: the hide rule above is more specific */
 /* top bar: Hub-clock lettering, slim coloured disk bars (colour set per disk by custom.js) */
 .information-widget-greeting, .information-widget-datetime {
+  color: #ffffff;
   font-weight: 700 !important;
   letter-spacing: -0.04em !important;
   font-variant-numeric: tabular-nums;
@@ -836,35 +732,10 @@ html { color-scheme: dark; }
   box-shadow: 0 0 10px rgba(var(--bar-rgb), 0.55);
 }
 .information-widget-resource .resource-icon { color: rgb(var(--bar-rgb)) !important; }
-
-/* background follows the time of day (custom.js sets data-sky on <html>; day = the default above) */
-html[data-sky="night"], html[data-sky="night"] body, html[data-sky="night"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTUlIiBjeT0iMTAlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzFlM2E4YSIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMWUzYThhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI5MCUiIGN5PSI5NSUiIHI9IjY1JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzA1MDcwYSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48L3N2Zz4=") !important;
-}
-html[data-sky="dawn"], html[data-sky="dawn"] body, html[data-sky="dawn"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTAlIiBjeT0iOTUlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI4NSUiIGN5PSI5MCUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iMjAlIiBjeT0iNSUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuMTQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9IiMwODA5MGQiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cwKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzEpIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMikiLz48L3N2Zz4=") !important;
-}
-html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTIlIiBjeT0iOCUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAuMTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjlmMGEiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9IjkyJSIgY3k9Ijk2JSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4xOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iNzAlIiBjeT0iMTUlIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwLjA3Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMGEwODBjIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMCkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cxKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzIpIi8+PC9zdmc+") !important;
-}
-
-/* hover glow was cropped at the top of each section: sections only clipped overflow so they could
-   collapse, and collapsing is off (settings.yaml disableCollapse), so let the glow show (05/10/2026) */
-.services-group [id^="headlessui-disclosure-panel"],
-.bookmark-group [id^="headlessui-disclosure-panel"] {
-  overflow: visible !important;
-}
-
 /* top bar title: white-to-silver finish with a faint blue glow (headerStyle clean: no divider line) */
 #information-widgets { border-bottom: none !important; position: relative; }
-
-.information-widget-greeting, .information-widget-greeting * {
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-}
-
 /* disk widgets in the top bar: small glass capsules like the currency boxes; the blank spacer
-   widgets (no disk) get none (05/10/2026) */
+   widgets (no disk) get none */
 .widget-container:has(.resource-usage) {
   background: rgba(28, 28, 30, 0.55);
   border: 0.5px solid rgba(255, 255, 255, 0.10);
@@ -886,7 +757,7 @@ html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #backgr
   }
 }
 
-/* Hub-style clock (05/10/2026): date in a glass capsule, then the big time (custom.js tags them) */
+/* Hub-style clock: date in a glass capsule, then the big time (custom.js tags them) */
 .information-widget-datetime[data-clock="date"] {
   margin-left: 0 !important;
   align-self: center;
@@ -900,18 +771,15 @@ html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #backgr
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
 }
-
 .information-widget-datetime[data-clock="time"] {
   margin-left: 18px !important;
   font-weight: 700 !important;
   letter-spacing: -0.05em !important;
   color: #ffffff !important;
 }
-
-/* disk icons (05/10/2026): each disk gets its own Material Design icon in its colour instead of
-   Homepage's generic drive (custom.js tags data-disk; icons embedded, from @mdi/svg 7.4.47) */
+/* disk icons: each disk gets its own Material Design icon in its colour instead of Homepage's
+   generic drive (custom.js tags data-disk; icons embedded, from @mdi/svg 7.4.47) */
 .widget-container[data-disk] .resource-icon { display: none !important; }
-
 .widget-container[data-disk] .information-widget-resource::before {
   content: "";
   flex-shrink: 0;
@@ -922,7 +790,6 @@ html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #backgr
   mask: var(--disk-icon) center / contain no-repeat;
   filter: drop-shadow(0 0 6px rgba(var(--bar-rgb), 0.5));
 }
-
 .widget-container[data-disk="docker"] {
   --disk-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktZG9ja2VyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0yMS44MSAxMC4yNUMyMS43NSAxMC4yMSAyMS4yNSA5LjgyIDIwLjE3IDkuODJDMTkuODkgOS44MiAxOS42MSA5Ljg1IDE5LjMzIDkuOUMxOS4xMiA4LjUgMTcuOTUgNy43OSAxNy45IDcuNzZMMTcuNjEgNy41OUwxNy40MyA3Ljg2QzE3LjE5IDguMjIgMTcgOC42MyAxNi45MiA5LjA1QzE2LjcyIDkuODUgMTYuODQgMTAuNjEgMTcuMjUgMTEuMjZDMTYuNzYgMTEuNTQgMTUuOTYgMTEuNjEgMTUuNzkgMTEuNjFIMi42MkMyLjI4IDExLjYxIDIgMTEuODkgMiAxMi4yNEMyIDEzLjM5IDIuMTggMTQuNTQgMi41OCAxNS42MkMzLjAzIDE2LjgxIDMuNzEgMTcuNjkgNC41OCAxOC4yM0M1LjU2IDE4LjgzIDcuMTcgMTkuMTcgOSAxOS4xN0M5Ljc5IDE5LjE3IDEwLjYxIDE5LjEgMTEuNDIgMTguOTVDMTIuNTQgMTguNzUgMTMuNjIgMTguMzYgMTQuNjEgMTcuNzlDMTUuNDMgMTcuMzIgMTYuMTYgMTYuNzIgMTYuNzggMTZDMTcuODMgMTQuODMgMTguNDUgMTMuNSAxOC45IDEyLjM1SDE5LjA5QzIwLjIzIDEyLjM1IDIwLjk0IDExLjg5IDIxLjMzIDExLjVDMjEuNTkgMTEuMjYgMjEuNzggMTAuOTcgMjEuOTIgMTAuNjNMMjIgMTAuMzlMMjEuODEgMTAuMjVNMy44NSAxMS4yNEg1LjYxQzUuNjkgMTEuMjQgNS43NyAxMS4xNyA1Ljc3IDExLjA4VjkuNUM1Ljc3IDkuNDIgNS43IDkuMzQgNS42MSA5LjM0SDMuODVDMy43NiA5LjM0IDMuNjkgOS40MSAzLjY5IDkuNVYxMS4wOEMzLjcgMTEuMTcgMy43NiAxMS4yNCAzLjg1IDExLjI0TTYuMjggMTEuMjRIOC4wNEM4LjEyIDExLjI0IDguMiAxMS4xNyA4LjIgMTEuMDhWOS41QzguMiA5LjQyIDguMTMgOS4zNCA4LjA0IDkuMzRINi4yOEM2LjE5IDkuMzQgNi4xMiA5LjQxIDYuMTIgOS41VjExLjA4QzYuMTMgMTEuMTcgNi4xOSAxMS4yNCA2LjI4IDExLjI0TTguNzUgMTEuMjRIMTAuNUMxMC42IDExLjI0IDEwLjY3IDExLjE3IDEwLjY3IDExLjA4VjkuNUMxMC42NyA5LjQyIDEwLjYxIDkuMzQgMTAuNSA5LjM0SDguNzVDOC42NyA5LjM0IDguNiA5LjQxIDguNiA5LjVWMTEuMDhDOC42IDExLjE3IDguNjYgMTEuMjQgOC43NSAxMS4yNE0xMS4xOSAxMS4yNEgxMi45NkMxMy4wNCAxMS4yNCAxMy4xMSAxMS4xNyAxMy4xMSAxMS4wOFY5LjVDMTMuMTEgOS40MiAxMy4wNSA5LjM0IDEyLjk2IDkuMzRIMTEuMTlDMTEuMTEgOS4zNCAxMS4wNCA5LjQxIDExLjA0IDkuNVYxMS4wOEMxMS4wNCAxMS4xNyAxMS4xMSAxMS4yNCAxMS4xOSAxMS4yNE02LjI4IDlIOC4wNEM4LjEyIDkgOC4yIDguOTEgOC4yIDguODJWNy4yNUM4LjIgNy4xNiA4LjEzIDcuMDkgOC4wNCA3LjA5SDYuMjhDNi4xOSA3LjA5IDYuMTIgNy4xNSA2LjEyIDcuMjVWOC44MkM2LjEzIDguOTEgNi4xOSA5IDYuMjggOU04Ljc1IDlIMTAuNUMxMC42IDkgMTAuNjcgOC45MSAxMC42NyA4LjgyVjcuMjVDMTAuNjcgNy4xNiAxMC42MSA3LjA5IDEwLjUgNy4wOUg4Ljc1QzguNjcgNy4wOSA4LjYgNy4xNSA4LjYgNy4yNVY4LjgyQzguNiA4LjkxIDguNjYgOSA4Ljc1IDlNMTEuMTkgOUgxMi45NkMxMy4wNCA5IDEzLjExIDguOTEgMTMuMTEgOC44MlY3LjI1QzEzLjExIDcuMTYgMTMuMDQgNy4wOSAxMi45NiA3LjA5SDExLjE5QzExLjExIDcuMDkgMTEuMDQgNy4xNSAxMS4wNCA3LjI1VjguODJDMTEuMDQgOC45MSAxMS4xMSA5IDExLjE5IDlNMTEuMTkgNi43MkgxMi45NkMxMy4wNCA2LjcyIDEzLjExIDYuNjUgMTMuMTEgNi41NlY1QzEzLjExIDQuOSAxMy4wNCA0LjgzIDEyLjk2IDQuODNIMTEuMTlDMTEuMTEgNC44MyAxMS4wNCA0Ljg5IDExLjA0IDVWNi41NkMxMS4wNCA2LjY0IDExLjExIDYuNzIgMTEuMTkgNi43Mk0xMy42NSAxMS4yNEgxNS40MUMxNS41IDExLjI0IDE1LjU3IDExLjE3IDE1LjU3IDExLjA4VjkuNUMxNS41NyA5LjQyIDE1LjUgOS4zNCAxNS40MSA5LjM0SDEzLjY1QzEzLjU3IDkuMzQgMTMuNSA5LjQxIDEzLjUgOS41VjExLjA4QzEzLjUgMTEuMTcgMTMuNTcgMTEuMjQgMTMuNjUgMTEuMjQiIC8+PC9zdmc+");
 }
@@ -932,16 +799,14 @@ html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #backgr
 .widget-container[data-disk="usb"] {
   --disk-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktdXNiLWZsYXNoLWRyaXZlIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik04IDE1QzguNTUgMTUgOSAxNS40NSA5IDE2QzkgMTYuNTUgOC41NSAxNyA4IDE3QzcuNDUgMTcgNyAxNi41NSA3IDE2QzcgMTUuNDUgNy40NSAxNSA4IDE1TTE1LjA3IDQuNjlMMTYuNSA2LjFMMTUuMDcgNy41TDEzLjY2IDYuMUwxNS4wNyA0LjY5TTE3LjkgNy41TDE5LjMxIDguOTNMMTcuOSAxMC4zNEwxNi41IDguOTNMMTcuOSA3LjVNOCAxM0M2LjM0IDEzIDUgMTQuMzQgNSAxNkM1IDE3LjY2IDYuMzQgMTkgOCAxOUM5LjY2IDE5IDExIDE3LjY2IDExIDE2QzExIDE0LjM0IDkuNjYgMTMgOCAxM005Ljc3IDQuMzNMMTAuNSA1LjA4TDE0LjI5IDEuMjlDMTQuNDcgMS4xMSAxNC43MiAxIDE1IDFDMTUuMjggMSAxNS41MyAxLjExIDE1LjcxIDEuMjlMMjIuNzggOC4zNkwyMi43OCA4LjM3QzIyLjkyIDguNTQgMjMgOC43NiAyMyA5QzIzIDkuMyAyMi44NyA5LjU3IDIyLjY2IDkuNzZMMjIuNjYgOS43NkwxOC45MyAxMy41TDE5LjY3IDE0LjIzTDEyLjk1IDIwLjk1QzExLjY4IDIyLjIyIDkuOTMgMjMgOCAyM0M0LjEzIDIzIDEgMTkuODcgMSAxNkMxIDE0LjA3IDEuNzggMTIuMzIgMy4wNSAxMS4wNUw5Ljc3IDQuMzNNMjAuNTkgOUwxNSAzLjQxTDExLjkzIDYuNUwxNy41IDEyLjA4TDIwLjU5IDlaIiAvPjwvc3ZnPg==");
 }
-
-/* title (05/10/2026): Cinzel (Roman capitals, like a crest's lettering), white with a hint of
-   champagne and a faint gold glow - the full gold was too much */
+/* title: Cinzel (Roman capitals, like a crest's lettering), white with a hint of champagne and a
+   faint gold glow - the full gold was too much */
 .information-widget-greeting {
   background: linear-gradient(180deg, #ffffff 35%, #efe2bd 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   filter: drop-shadow(0 0 12px rgba(255, 214, 10, 0.14)) !important;
 }
-
 .information-widget-greeting span {
   font-family: "Cinzel", "Trajan Pro", Georgia, serif !important;
   font-weight: 700 !important;
@@ -949,86 +814,17 @@ html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #backgr
   font-size: 2rem !important;
 }
 
-/* living background (05/10/2026): the glow layer is a little larger than the screen and drifts
-   slowly (transform only, so the GPU moves it without repainting); time-of-day changes cross-fade
-   over 20 s (Chrome/Edge; Firefox still switches instantly). Off when reduced motion is asked for. */
-#background { inset: -8% !important; transition: background-image 20s ease; will-change: transform; }
-
-@keyframes bgDrift {
-  0%   { transform: translate3d(-3%, -2%, 0) scale(1.00); }
-  50%  { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
-  100% { transform: translate3d(3%, -1%, 0) scale(1.02); }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  #background { animation: bgDrift 70s ease-in-out infinite alternate; }
-}
-
-/* weather (05/10/2026): Open-Meteo widget as a glass capsule like the date; background moods from
-   its condition (custom.js sets data-weather): cloudy = dimmer glow, rain = faint falling streaks,
-   storm = rain + an occasional soft flash. Streaks and flash are off when reduced motion is asked for. */
-.information-widget-openmeteo, .hp-weather {
-  align-self: center;
-  padding: 4px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.10);
-  border: 0.5px solid rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  backdrop-filter: blur(24px) saturate(170%);
-  margin-right: 10px;
-}
-
-html[data-weather="cloudy"] #background { filter: saturate(0.6) brightness(0.8) !important; }
-html[data-weather="rain"] #background, html[data-weather="storm"] #background {
-  filter: saturate(0.7) brightness(0.75) !important;
-}
-
-html::before {
-  content: "";
-  position: fixed;
-  inset: -20% 0 0 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  background-image: repeating-linear-gradient(105deg, transparent 0 22px, rgba(180, 210, 255, 0.10) 22px 23px, transparent 23px 61px), repeating-linear-gradient(105deg, transparent 0 37px, rgba(180, 210, 255, 0.07) 37px 38px, transparent 38px 97px);
-  background-size: 100% 240px, 100% 300px;
-  transition: opacity 3s ease;
-}
-
-html::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  background: radial-gradient(120% 80% at 50% 0%, rgba(200, 220, 255, 0.35), transparent 70%);
-}
-
-@keyframes rainFall { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-40px, 240px, 0); } }
-
-@keyframes stormFlash { 0%, 91%, 100% { opacity: 0; } 92% { opacity: 0.9; } 93% { opacity: 0.2; } 94.5% { opacity: 0.7; } 96% { opacity: 0; } }
-
-@media (prefers-reduced-motion: no-preference) {
-  html[data-weather="rain"]::before, html[data-weather="storm"]::before {
-    opacity: 1;
-    animation: rainFall 0.9s linear infinite;
-  }
-  html[data-weather="storm"]::after { animation: stormFlash 11s linear infinite; }
-}
-
 @media (pointer: fine) and (min-width: 1025px) {
-  /* top bar: disks always dead centre (05/10/2026). The title zone and the weather/date/time zone
-   each take exactly half of the leftover width, so the disks between them sit in the middle
-   whatever the title or clock width; the crest sits in fixed padding beside the title; the blank
-   spacer widgets are hidden and the disks get even gaps. Desktop only. */
+  /* top bar: disks always dead centre. The title zone and the weather/date/time zone each take
+     exactly half of the leftover width, so the disks between them sit in the middle whatever the
+     title or clock width; the crest sits in fixed padding beside the title; the blank spacer
+     widgets are hidden and the disks get even gaps. Desktop only */
   #widgets-wrap {
     position: relative;
     flex-wrap: nowrap !important;
     justify-content: flex-start !important;
     align-items: center;
   }
-
   #widgets-wrap > .information-widget-logo {
     position: absolute !important;
     left: 0;
@@ -1036,7 +832,6 @@ html::after {
     transform: translateY(-50%) !important;
     margin: 0 !important;
   }
-
   #widgets-wrap > .information-widget-greeting { flex: 1 1 0 !important; min-width: 0; padding-left: 80px; }
   #widgets-wrap > .widget-container:not(:has(.information-widget-resource)):not(.information-widget-greeting):not(.information-widget-logo) {
     display: none !important;
@@ -1045,7 +840,6 @@ html::after {
     flex: none !important;
     margin: 0 14px !important;
   }
-
   #widgets-wrap > #information-widgets-right {
     flex: 1 1 0 !important;
     min-width: 0;
@@ -1058,24 +852,10 @@ html::after {
 }
 
 @media (pointer: coarse), (max-width: 1024px) {
-  /* phones: keep every status dot visible - the Mobile tab is a quick status overview (05/10/2026) */
-  .service-card .service-tag { opacity: 1 !important; }
-}
-
-@media (pointer: fine) and (min-width: 1025px) {
-  /* Bookmarks: all 8 sections side by side as equal columns on desktop (settings.yaml's
-   fiveColumns caps every tab at 5; this widens only the Bookmarks tab). Homepage renders only
-   the active tab's groups, with no per-tab panel, so custom.js marks the open tab on <html>. */
-  html[data-tab="bookmarks"] .services-group { flex: 0 0 12.5% !important; max-width: 12.5% !important; }
-}
-
-@media (pointer: coarse), (max-width: 1024px) {
-  /* phones: a little breathing room between the disks and the weather capsule (05/10/2026) */
-  .information-widget-openmeteo, .hp-weather { margin-top: 10px !important; }
-
-  /* phones: the weather text ran into the capsule edge; size the capsule to its text with room
-   on both sides (05/10/2026) */
+  /* phones: a little breathing room between the disks and the weather capsule; phones: the weather
+     text ran into the capsule edge; size the capsule to its text with room on both sides */
   .information-widget-openmeteo, .hp-weather {
+    margin-top: 10px !important;
     width: auto !important;
     max-width: none !important;
     flex: none !important;
@@ -1083,11 +863,9 @@ html::after {
     align-self: center !important;
     display: none !important;
   }
-
-  /* phones: crest beside the title on one line instead of a big badge above it (saves ~130px).
-   The logo widget is hidden and the crest is drawn in front of the title (05/10/2026) */
+  /* phones: crest beside the title on one line instead of a big badge above it (saves ~130px). The
+     logo widget is hidden and the crest is drawn in front of the title */
   #information-widgets .information-widget-logo { display: none !important; }
-
   .information-widget-greeting {
     width: 100% !important;
     flex-direction: row !important;
@@ -1097,18 +875,18 @@ html::after {
     margin: 6px auto 4px auto !important;
     transform: none !important;
   }
-
+  /* phones: clear space between crest and title; weather capsule hidden (the phone shows weather
+     already; it still drives the background mood) */
   .information-widget-greeting::before {
     content: "";
     flex: none;
     width: 44px;
     height: 44px;
     background: url("/images/icons/logo.png") center / contain no-repeat;
+    margin-right: 14px;
   }
-
   .information-widget-greeting span { font-size: 1.45rem !important; margin: 0 !important; }
-
-  /* phones: the three disks share one row, a third each (05/10/2026) */
+  /* phones: the three disks share one row, a third each */
   #widgets-wrap {
     flex-direction: row !important;
     flex-wrap: wrap !important;
@@ -1117,14 +895,12 @@ html::after {
   #widgets-wrap > .widget-container:not(:has(.information-widget-resource)):not(.information-widget-greeting):not(.information-widget-logo) {
     display: none !important;
   }
-
   #widgets-wrap > .widget-container:has(.information-widget-resource) {
     flex: 1 1 0 !important;
     width: auto !important;
     min-width: 0 !important;
     margin: 4px 3px 0 !important;
   }
-
   #widgets-wrap > .information-widget-greeting, #widgets-wrap > #information-widgets-right {
     flex: 0 0 100% !important;
   }
@@ -1136,78 +912,200 @@ html::after {
   .widget-container[data-disk] .information-widget-resource::before { width: 16px; height: 16px; }
   .information-widget-resource > div { min-width: 0 !important; margin-left: 6px !important; flex: 1 1 auto; }
   .widget-container[data-disk] .text-xs { font-size: 10px !important; }
-
-  /* phones: clear space between crest and title; weather capsule hidden (the phone shows weather
-   already; it still drives the background mood) (05/10/2026) */
-  .information-widget-greeting::before { margin-right: 14px; }
-
-  /* phones: the Apps list as three columns of compact tiles (icon, short name, status dot);
-   the server cards above stay two across (05/10/2026) */
-  .services-group[data-acc="apps"] .services-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .services-group[data-acc="apps"] li.service .service-card {
-    padding: 10px 4px 8px 4px !important;
-    border-radius: 14px !important;
-  }
-  .services-group[data-acc="apps"] li.service img { width: 28px !important; height: 28px !important; }
-
-  .services-group[data-acc="apps"] li.service .service-name {
-    font-size: 12px !important;
-    padding: 4px 2px 0 !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* phones: Servers (Proxmox, Synology, PBS) as three columns with each card's two figures
-   stacked (05/10/2026) */
-  .services-group:has(li.service[data-name="PBS"]) .services-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .services-group:has(li.service[data-name="PBS"]) li.service .service-card {
-    padding: 10px 6px 8px !important;
-    border-radius: 14px !important;
-  }
-  .services-group:has(li.service[data-name="PBS"]) .service-container {
-    flex-direction: column !important;
-    gap: 4px;
-  }
-  .services-group:has(li.service[data-name="PBS"]) .service-block {
-    margin: 0 !important;
-    padding: 4px 2px !important;
-  }
-  .services-group:has(li.service[data-name="PBS"]) li.service .service-name { font-size: 12px !important; }
-
-  /* phones: PBS's "Failed Tasks 24h" label is too long for a third of the width; show "Failed".
-   (The Servers section has no heading to match, so it is found by its PBS card.) (05/10/2026) */
-  li.service[data-name="PBS"] .service-block:nth-child(2) .service-block-label {
-    visibility: hidden;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  li.service[data-name="PBS"] .service-block:nth-child(2) .service-block-label::after {
-    content: "Failed";
-    visibility: visible;
-    position: absolute;
-    inset: 0;
-    text-align: center;
-  }
 }
 
+/* ================================================================================================
+   Bookmarks
+   ================================================================================================ */
+.bookmark-icon { background: rgba(var(--acc-rgb), 0.18) !important; color: #ffffff !important; }
+.bookmark-text {
+  background: var(--glass) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+}
+.bookmark-name { color: #ffffff; font-weight: 600; }
+.bookmark-description { color: rgba(235, 235, 245, 0.55) !important; }
+li.bookmark > a, li.bookmark > div {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 0.5px solid var(--hairline);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+li.bookmark > a:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--acc-rgb), 0.55);
+  box-shadow: 0 0 20px rgba(var(--acc-rgb), 0.25);
+}
+/* Top-bar rule kept here: it must come after the bookmark rules it overrides */
+.information-widget-greeting, .information-widget-greeting * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+/* weather: Open-Meteo widget as a glass capsule like the date; background moods from its condition
+   (custom.js sets data-weather): cloudy = dimmer glow, rain = faint falling streaks, storm = rain +
+   an occasional soft flash. Streaks and flash are off when reduced motion is asked for; Top-bar
+   rule kept here: it must come after the bookmark rules it overrides */
+.information-widget-openmeteo, .hp-weather {
+  align-self: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  margin-right: 10px;
+}
+
+/* ================================================================================================
+   Embedded panels: Home Assistant dashboards bring their own glass cards, so their Homepage frame
+   is invisible; frame heights are measured to line the columns up
+   ================================================================================================ */
+.service-card:has(iframe):hover {
+  background-color: var(--nord1) !important;
+  border-color: var(--accent-color);
+  box-shadow: var(--hover-shadow);
+  transform: none;
+}
+.service-card:has(iframe)::before { display: none; }
+.service-card:has(iframe) iframe { position: relative; z-index: 1; }
+.service-card:has(iframe) .service-container { margin-top: 0; padding-top: 0; }
+iframe { width: 100%; border: 0; background-color: transparent; }
+.home-assistant { height: 925px; margin: -25px -20px 0; }
+.glance { height: 850px; margin: -5px 0 -20px; }
+.todo { height: 529px; margin: -28px 0 0; }
+.ha-calendar { height: 1054px; margin-top: -28px; pointer-events: none; }
+.epl-calendar { height: 514px; margin: 0; pointer-events: none; }
+.epl { height: 1056px; margin: -28px -80px 0; }
+.service-block:has(:is(.epl, .uptime, .todo)), .service-block:has(iframe) {
+  background: transparent !important;
+  border: none !important;
+}
+.home-assistant, .glance { background-color: transparent !important; }
+/* HA panel frames: don't clip the iframe at the (invisible) Homepage card edge; the EPL Calendar
+   frame sits higher than its card and lost its rounded top edge and padding */
+.service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+.service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)):hover {
+  transform: none;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar, .glance) {
+  background-color: transparent !important;
+  color-scheme: dark;
+}
+/* News column (Glance + currency rates): no outer frame, like the HA panels; the currency boxes get
+   the same glass as the HA and Glance cards */
+.service-card:has(.glance) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.service-card:has(.glance):hover {
+  transform: none;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.service-card:has(.glance) .service-block:not(:has(iframe)) {
+  background: rgba(28, 28, 30, 0.55) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 16px !important;
+}
+/* EPL Calendar: its Homepage label used to sit hidden under the opaque iframe; now that the frame
+   is see-through it overlapped the dates, so hide it */
+.service-card:has(.epl-calendar) .service-title { display: none; }
+/* with the label gone the frame needs no negative margin (which got it clipped); move the card
+   instead */
+.service-card:has(.epl-calendar) { margin-top: -14px; }
+/* hover glow was cropped at the top of each section: sections only clipped overflow so they could
+   collapse, and collapsing is off (settings.yaml disableCollapse), so let the glow show;
+   Section-header rule kept here: it must come after the embed rules it overrides */
+.services-group [id^="headlessui-disclosure-panel"],
+.bookmark-group [id^="headlessui-disclosure-panel"] {
+  overflow: visible !important;
+}
+
+/* ================================================================================================
+   Calendars tab lists (upcoming games, recent movies and episodes)
+   ================================================================================================ */
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  margin: -1.8px 0 -0.9px 10px;
+  border-radius: 0.5rem;
+  text-align: left;
+  font-weight: 400;
+}
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  padding-left: 0;
+  text-align: left;
+  font-weight: 400;
+}
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:first-child {
+  margin-right: 23px;
+}
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:last-child {
+  margin-left: -18px;
+}
+#upcomingtv span > span:first-child { padding-left: 8px; }
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:first-child::after {
+  content: "";
+  position: absolute;
+  left: 50px;
+  top: 50%;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 0.5rem;
+  transform: translateY(-50%);
+}
+/* Calendars lists: a coloured marker beside each date, one colour per list */
+#tautulli_recent_shows .flex.flex-row.text-right > div:first-child::after { background-color: var(--nord8); }
+#tautulli_recent_movies .flex.flex-row.text-right > div:first-child::after {
+  background-color: var(--nord13);
+}
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .service-container > div > div {
+  display: block;
+  margin: 3px 3px 1px;
+  border-radius: 0.4rem;
+  text-align: left;
+  text-shadow: var(--text-shadow);
+  font-size: 12px;
+  font-weight: 400;
+}
+#headlessui-disclosure-panel-\:r6\: > ul:first-child > li:first-child > div:first-child > div:first-child {
+  margin: -100px;
+}
+/* Calendars tab: TV Episodes ended 6px above Media Releases; extend it so the column bottoms line
+   up */
+#tautulli_recent_shows .service-card { padding-bottom: 10px !important; }
+
+/* ================================================================================================
+   Quick-launch search (start typing anywhere): a glass sheet over a dimmed, blurred page
+   ================================================================================================ */
 /* quick-launch search (start typing anywhere): a frosted glass sheet over a dimmed, blurred page,
-   matching the cards; the highlighted result gets the blue accent tint (05/10/2026) */
+   matching the cards; the highlighted result gets the blue accent tint */
 [role="dialog"]:has(input[placeholder="Search"]) > .bg-gray-500 {
   background: rgba(0, 0, 0, 0.45) !important;
   opacity: 1 !important;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
-
 dialog:has(> input[placeholder="Search"]) {
   background: rgba(28, 28, 30, 0.72) !important;
   border: 0.5px solid rgba(255, 255, 255, 0.14) !important;
@@ -1218,7 +1116,6 @@ dialog:has(> input[placeholder="Search"]) {
   overflow: hidden;
   color: rgba(235, 235, 245, 0.92) !important;
 }
-
 dialog > input[placeholder="Search"] {
   background: transparent !important;
   border: none !important;
@@ -1229,7 +1126,6 @@ dialog > input[placeholder="Search"] {
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-
 dialog > input[placeholder="Search"]::placeholder { color: rgba(235, 235, 245, 0.40); }
 dialog:has(> input[placeholder="Search"]) ul { margin: 8px !important; }
 dialog:has(> input[placeholder="Search"]) ul button {
@@ -1244,3 +1140,15 @@ dialog:has(> input[placeholder="Search"]) ul button[class*="bg-theme-300/50"] {
 }
 dialog:has(> input[placeholder="Search"]) .text-theme-600 { color: rgba(235, 235, 245, 0.45) !important; }
 dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !important; }
+
+/* ================================================================================================
+   Motion: entrance, background drift, rain and storm; all off when reduced motion is asked for
+   ================================================================================================ */
+@keyframes glassIn { from { opacity: 0; transform: translateY(8px) scale(0.985); } }
+@keyframes bgDrift {
+  0%   { transform: translate3d(-3%, -2%, 0) scale(1.00); }
+  50%  { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+  100% { transform: translate3d(3%, -1%, 0) scale(1.02); }
+}
+@keyframes rainFall { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-40px, 240px, 0); } }
+@keyframes stormFlash { 0%, 91%, 100% { opacity: 0; } 92% { opacity: 0.9; } 93% { opacity: 0.2; } 94.5% { opacity: 0.7; } 96% { opacity: 0; } }
