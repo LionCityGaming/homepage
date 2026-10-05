@@ -671,6 +671,12 @@
         description: VS Code in the Browser
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
 
+    - degoog:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/degoog.webp
+        href: "https://degoog.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Private Web Search
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4445"
+
     - Dozzle:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
         href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -980,6 +986,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
         href: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
+    - degoog:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/degoog.webp
+        href: "https://degoog.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4445"
     - Dispatcharr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
         href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
