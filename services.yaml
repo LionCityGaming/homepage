@@ -280,7 +280,7 @@
     - UniFi:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
         href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Networking Hardware Monitor
+        description: Network Controller
         siteMonitor: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
         widget:
           type: unifi
@@ -291,7 +291,7 @@
     - Komodo:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komodo.webp
         href: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Infrastructure Manager
+        description: Docker Stack Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9120"
         widget:
           type: komodo
@@ -304,7 +304,7 @@
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
         href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Notifications
+        description: Push Notifications
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
         widget:
           type: gotify
@@ -316,7 +316,7 @@
     - Caddy:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
         href: "https://{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Reverse Proxy
+        description: Reverse Proxy & HTTPS
         siteMonitor: "https://{{HOMEPAGE_VAR_DOMAIN}}"
         widget:
           type: caddy
@@ -325,7 +325,7 @@
     - CrowdSec:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/crowdsec.webp
         href: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Security Engine
+        description: Attack Blocking
         siteMonitor: "https://crowdsec.{{HOMEPAGE_VAR_DOMAIN}}"
         widget:
           type: crowdsec
@@ -337,7 +337,7 @@
     - Authentik:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/authentik.webp
         href: "https://authentik.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Identity & Access Management
+        description: Single Sign-On
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9000"
         widget:
           type: authentik
@@ -349,7 +349,7 @@
     - Technitium (NS1):
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
         href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: DNS Filtering Server
+        description: Primary DNS & Filtering
         siteMonitor: "http://{{HOMEPAGE_VAR_TECHNITIUM_HOST}}:5380"
         widget:
           type: technitium
@@ -361,7 +361,7 @@
     - Technitium (NS2):
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
         href: "https://technitium-synology.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: DNS Filtering Server
+        description: Backup DNS & Filtering
         siteMonitor: "http://{{HOMEPAGE_VAR_SYNOLOGY_HOST}}:5380"
         widget:
           type: technitium
@@ -374,7 +374,7 @@
     - Seerr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
         href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Media Requests
+        description: Movie & TV Requests
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5555"
         widget:
           type: jellyseerr
@@ -396,7 +396,7 @@
     - Radarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
         href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Movie Manager
+        description: Movie Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7878"
         widget:
           type: radarr
@@ -406,7 +406,7 @@
     - Sonarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
         href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: TV Show Manager
+        description: TV Show Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8989"
         widget:
           type: sonarr
@@ -416,7 +416,7 @@
     - Chaptarr:
         icon: /images/icons/chaptarr.svg
         href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Ebook/Audiobook Downloader
+        description: Book & Audiobook Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
         widget:
           type: readarr
@@ -426,7 +426,7 @@
     - Bazarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
         href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Subtitle Manager
+        description: Subtitle Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6767"
         widget:
           type: bazarr
@@ -436,7 +436,7 @@
     - SABnzbd:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
         href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Usenet Downloader
+        description: Usenet Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8080"
         widget:
           type: sabnzbd
@@ -447,7 +447,7 @@
     - Maintainerr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
         href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Media Maintenance
+        description: Library Cleanup
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
         widget:
           type: maintainerr
@@ -457,7 +457,7 @@
     - Tautulli:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
         href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Plex Analytics
+        description: Plex Watch Stats
         siteMonitor: "http://{{HOMEPAGE_VAR_TAUTULLI_HOST}}:8181"
         widget:
           type: plex
@@ -469,7 +469,7 @@
         id: titlecardmaker
         icon: /images/icons/tcm.png
         href: "https://tcm.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Title Card Creator
+        description: Episode Title Cards
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4242"
         widget:
           type: customapi
@@ -489,7 +489,7 @@
     - Dispatcharr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
         href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: IPTV Proxy
+        description: IPTV Channel Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
         widget:
           type: dispatcharr
@@ -501,7 +501,7 @@
     - Audiobookshelf:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
         href: "https://abs.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Audiobook Server
+        description: Audiobook Library
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:13378"
         widget:
           type: audiobookshelf
@@ -512,7 +512,7 @@
     - Grimmory:
         icon: /images/icons/grimmory.png
         href: "https://grimmory.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Ebook Manager
+        description: Ebook Library
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
         widget:
           type: booklore
@@ -523,7 +523,7 @@
     - Komga:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komga.webp
         href: "https://komga.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Comic Books Manager
+        description: Comic Library
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:25600"
         widget:
           type: komga
@@ -534,7 +534,7 @@
     - Suwayomi:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
         href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Manga Server
+        description: Manga Library
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
         widget:
           type: suwayomi
@@ -547,7 +547,7 @@
     - Mealie:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
         href: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Recipe Manager
+        description: Recipes & Meal Plans
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9925"
         widget:
           type: mealie
@@ -569,7 +569,7 @@
     - Immich:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
         href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
-        description: Photo Management
+        description: Photo & Video Backup
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:2283"
         widget:
           type: immich
@@ -580,7 +580,7 @@
     - Palworld:
         icon: /images/icons/palworld.png
         href: "https://palworld.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Game Server
+        description: Palworld Game Server
         # the REST API answers unauthenticated checks with a malformed 401, so check by ping
         ping: "{{HOMEPAGE_VAR_PALWORLD_HOST}}"
         widget:
@@ -606,7 +606,7 @@
     - Paperless-ngx:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
         href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Document Manager
+        description: Document Archive
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8585"
         widget:
           type: paperlessngx
@@ -616,7 +616,7 @@
     - Linkding:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
         href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Bookmark Manager
+        description: Saved Links
         siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/health"
         widget:
           type: customapi
@@ -635,7 +635,7 @@
     - FreshRSS:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
         href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: RSS Aggregator
+        description: News Feed Reader
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
         widget:
           type: freshrss
@@ -650,97 +650,97 @@
     - Bambuddy:
         icon: /images/icons/bambuddy.png
         href: "https://bambuddy.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: 3D Printing Management
+        description: Bambu Printer Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8010"
 
     - BentoPDF:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
         href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: PDF Toolbox
+        description: PDF Toolkit
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
 
     - BookStack:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
         href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Documentation Platform
+        description: Homelab Wiki
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6875/login"
 
     - Code-server:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
         href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Cloud IDE
+        description: VS Code in the Browser
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
 
     - Dozzle:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
         href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Docker Logs
+        description: Live Container Logs
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9999"
 
     - DroppedNeedle:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/droppedneedle.webp
         href: "https://droppedneedle.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Music Downloader
+        description: Music Requests & Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8688"
 
     - FileBrowser Quantum:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
         href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: File Manager
+        description: Web File Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
 
     - Gitea:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
         href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Git Repository
+        description: Self-Hosted Git
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
 
     - Home Assistant:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
         href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
-        description: Home Automation
+        description: Smart Home Hub
         siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
 
     - Kapowarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/kapowarr.svg
         href: "https://kapowarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Comics Downloader
+        description: Comic Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656"
 
     - MeTube:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
         href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: YouTube Downloader
+        description: Video Downloads
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
 
     - Paperless-GPT:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/paperless-ai.png
         href: "https://paperless-gpt.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Document OCR & Processing
+        description: AI OCR & Tagging
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8095"
 
     - PosterFlow:
         icon: /images/icons/posterflow.webp
         href: "https://posterflow.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Movie Poster Manager
+        description: Movie & TV Poster Sync
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357"
 
     - Profilarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
         href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Profile Manager
+        description: Quality Profile Sync
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6868"
 
     - Vaultwarden:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
         href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Password Manager
+        description: Password Vault
         siteMonitor: "https://{{HOMEPAGE_VAR_VAULTWARDEN_HOST}}:8000"
 
     - Zipline:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zipline.png
         href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: File Sharing
+        description: Uploads & Short Links
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321"
 
 # ============================================================
@@ -754,21 +754,21 @@
     - Printables:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/printables.webp
         href: "https://www.printables.com"
-        description: 3D Print Files
+        description: Prusa Models
     - Thingiverse:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/thingiverse.webp
         href: "https://www.thingiverse.com"
-        description: 3D Models
+        description: Classic Model Library
 
 - Entertainment:
     - Radio Garden:
         icon: /images/icons/radiogarden.png
         href: "https://radio.garden"
-        description: Global Radio
+        description: World Radio Map
     - Twitch:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/twitch.webp
         href: "https://www.twitch.tv"
-        description: Live Streaming
+        description: Live Streams
     - YouTube:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/youtube.webp
         href: "https://www.youtube.com"
@@ -778,23 +778,23 @@
     - Cloudflare:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/cloudflare.webp
         href: "https://dash.cloudflare.com"
-        description: DNS & CDN
+        description: Domain & DNS
     - GitHub:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
         href: "{{HOMEPAGE_VAR_GITHUB_REPO_URL}}"
-        description: Code Repository
+        description: Code Repositories
     - Proxmox Scripts:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox-helper-scripts.webp
         href: "https://community-scripts.github.io/ProxmoxVE/"
-        description: Helper Scripts
+        description: Community Helper Scripts
     - r/selfhosted:
         icon: /images/icons/selfhosted.png
         href: "https://old.reddit.com/r/selfhosted"
-        description: Community
+        description: Self-Hosting Forum
     - selfh.st Icons:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
         href: "https://selfh.st/icons/"
-        description: Icon Library
+        description: Dashboard Icons
     - SLZB-06M:
         icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/smlight.webp
         href: "https://slzb.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -802,17 +802,17 @@
     - UniFi:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
         href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Network Devices Admin
+        description: Network Admin
 
 - Reference:
     - Allrecipes:
         icon: /images/icons/allrecipes.webp
         href: "https://www.allrecipes.com/"
-        description: Recipes
+        description: Recipe Search
     - selfh.st Apps:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
         href: "https://selfh.st/apps/"
-        description: Selfhosted Apps List
+        description: Self-Hosted App Directory
     - Homepage Docs:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/homepage.webp
         href: "https://gethomepage.dev"
@@ -828,25 +828,25 @@
     - Z-Library:
         icon: /images/icons/zlib.png
         href: "https://z-lib.bz/"
-        description: Ebook Repository
+        description: Ebook Library
 
 - Shopping:
     - Amazon:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/amazon-light.webp
         href: "https://amazon.com/"
-        description: Shopping
+        description: Global Online Store
     - Carousell:
         icon: /images/icons/carousell.png
         href: "https://www.carousell.sg"
-        description: Shopping
+        description: Secondhand Marketplace
     - Lazada:
         icon: /images/icons/lazada.png
         href: "https://www.lazada.sg"
-        description: Shopping
+        description: Online Mall
     - Shopee:
         icon: /images/icons/shopee.svg
         href: "https://shopee.sg/"
-        description: Shopping
+        description: Online Marketplace
 
 - Social:
     - Facebook:
@@ -864,7 +864,7 @@
     - Reddit:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/reddit.webp
         href: "https://old.reddit.com"
-        description: Forum
+        description: Communities & Forums
     - WhatsApp:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/whatsapp.webp
         href: "https://web.whatsapp.com"
@@ -874,7 +874,7 @@
     - AI Text Remover:
         icon: /images/icons/aitextremover.png
         href: "https://snapedit.app/remove-text"
-        description: AI Text Removal
+        description: Remove Text from Images
     - Claude:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/claude.webp
         href: "https://claude.ai/new"
@@ -882,7 +882,7 @@
     - Excalidraw:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/excalidraw.webp
         href: "https://excalidraw.com"
-        description: Whiteboard
+        description: Sketch Whiteboard
     - Google Drive:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/google-drive.webp
         href: "https://drive.google.com"
@@ -890,7 +890,7 @@
     - Photopea:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/photopea.webp
         href: "https://www.photopea.com"
-        description: Photo Editor
+        description: Online Photo Editor
     - Remove.bg:
         icon: si-removedotbg
         href: "https://www.remove.bg"
@@ -898,7 +898,7 @@
     - SpeedTest:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/speedtest-tracker.webp
         href: "https://www.speedtest.net"
-        description: Internet Speed
+        description: Internet Speed Test
 
 
 # ============================================================
