@@ -49,7 +49,7 @@ The tab bar works like an iOS segmented control: one glass track, with the open 
 
 ![The Bookmarks tab](screenshots/bookmarks.png)
 
-![Calendars tab: league table and media lists](screenshots/tables.png)
+![Calendars tab: Premier League fixtures and table, media lists](screenshots/tables.png)
 
 ## On phones
 
