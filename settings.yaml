@@ -77,11 +77,12 @@ layout:
     header: true
     tab: Bookmarks
     style: column
-  Entertainment:
+  Homelab:
+    disableCollapse: true
     header: true
     tab: Bookmarks
     style: column
-  Homelab:
+  Homelab Help:
     disableCollapse: true
     header: true
     tab: Bookmarks
@@ -96,12 +97,17 @@ layout:
     header: true
     tab: Bookmarks
     style: column
-  Social:
+  Social & Media:
     disableCollapse: true
     header: true
     tab: Bookmarks
     style: column
   Tools:
+    disableCollapse: true
+    header: true
+    tab: Bookmarks
+    style: column
+  Work & Admin:
     disableCollapse: true
     header: true
     tab: Bookmarks

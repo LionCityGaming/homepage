@@ -147,7 +147,7 @@
         widget:
           type: calendar
           showTime: false
-          maxEvents: 41
+          maxEvents: 60  # custom.js shows 42 (the frame's height) after collapsing same-day episodes
           view: agenda
           integrations:
             - type: sonarr
@@ -695,11 +695,23 @@
         description: Web File Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
 
+    - Free Games Claimer:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/free-games-claimer.webp
+        href: "https://freegames.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Epic, GOG & Steam Freebies
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7080"
+
     - Gitea:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
         href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Self-Hosted Git
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+
+    - Glance:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/glance.webp
+        href: "https://glance.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: News & Feeds Dashboard
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4444"
 
     - Home Assistant:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
@@ -756,81 +768,81 @@
     - MakerWorld:
         icon: /images/icons/makerworld.webp
         href: "https://makerworld.com"
-        description: Bambu Lab Models
+        description: Bambu Lab Print Models
     - Printables:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/printables.webp
         href: "https://www.printables.com"
-        description: Prusa Models
+        description: Prusa Community Models
     - Thingiverse:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/thingiverse.webp
         href: "https://www.thingiverse.com"
         description: Classic Model Library
 
-- Entertainment:
-    - Radio Garden:
-        icon: /images/icons/radiogarden.png
-        href: "https://radio.garden"
-        description: World Radio Map
-    - Twitch:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/twitch.webp
-        href: "https://www.twitch.tv"
-        description: Live Streams
-    - YouTube:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/youtube.webp
-        href: "https://www.youtube.com"
-        description: Videos
-
 - Homelab:
+    - Backblaze B2:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/backblaze.webp
+        href: "https://secure.backblaze.com/b2_buckets.htm"
+        description: Offsite Backup Buckets
     - Cloudflare:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/cloudflare.webp
         href: "https://dash.cloudflare.com"
-        description: Domain & DNS
+        description: Domain & DNS Settings
     - GitHub:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
         href: "{{HOMEPAGE_VAR_GITHUB_REPO_URL}}"
-        description: Code Repositories
-    - Proxmox Scripts:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox-helper-scripts.webp
-        href: "https://community-scripts.github.io/ProxmoxVE/"
-        description: Community Helper Scripts
-    - r/selfhosted:
-        icon: /images/icons/selfhosted.png
-        href: "https://old.reddit.com/r/selfhosted"
-        description: Self-Hosting Forum
-    - selfh.st Icons:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
-        href: "https://selfh.st/icons/"
-        description: Dashboard Icons
+        description: Homelab Code Repos
+    - Have I Been Pwned:
+        icon: https://haveibeenpwned.com/apple-touch-icon-180x180.png
+        href: "https://haveibeenpwned.com"
+        description: Check for Leaked Accounts
     - SLZB-06M:
         icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/smlight.webp
         href: "https://slzb.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Zigbee Coordinator
+        description: Zigbee Coordinator Admin
     - UniFi:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/ubiquiti-unifi.webp
         href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Network Admin
+        description: Network & Wi-Fi Admin
 
-- Reference:
-    - Allrecipes:
-        icon: /images/icons/allrecipes.webp
-        href: "https://www.allrecipes.com/"
-        description: Recipe Search
-    - selfh.st Apps:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
-        href: "https://selfh.st/apps/"
-        description: Self-Hosted App Directory
+- Homelab Help:
+    - HA Community:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        href: "https://community.home-assistant.io"
+        description: Home Assistant Help Forum
     - Homepage Docs:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/homepage.webp
         href: "https://gethomepage.dev"
-        description: Dashboard Docs
+        description: Dashboard Config Docs
+    - Proxmox Scripts:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox-helper-scripts.webp
+        href: "https://community-scripts.github.io/ProxmoxVE/"
+        description: One-Line LXC Installers
+    - r/selfhosted:
+        icon: /images/icons/selfhosted.png
+        href: "https://old.reddit.com/r/selfhosted"
+        description: Self-Hosting Community
+    - selfh.st Apps:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: "https://selfh.st/apps/"
+        description: Find New Apps to Host
+    - selfh.st Icons:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/selfh-st.webp
+        href: "https://selfh.st/icons/"
+        description: Icons for Tiles
+
+- Reference:
+    - Allrecipes:
+        icon: https://www.allrecipes.com/apple-touch-icon.png
+        href: "https://www.allrecipes.com/"
+        description: Recipe Ideas
     - TPDb:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/tpdb.webp
         href: "https://theposterdb.com/"
-        description: Poster Database
+        description: Movie & TV Posters
     - Wikipedia:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/wikipedia-light.webp
         href: "https://en.wikipedia.org"
-        description: Encyclopedia
+        description: Free Encyclopedia
     - Z-Library:
         icon: /images/icons/zlib.png
         href: "https://z-lib.bz/"
@@ -840,47 +852,51 @@
     - Amazon:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/amazon-light.webp
         href: "https://amazon.com/"
-        description: Global Online Store
+        description: International Orders
     - Carousell:
         icon: /images/icons/carousell.png
         href: "https://www.carousell.sg"
-        description: Secondhand Marketplace
+        description: Buy & Sell Secondhand
     - Lazada:
         icon: /images/icons/lazada.png
         href: "https://www.lazada.sg"
-        description: Online Mall
+        description: Brand-Name Online Mall
     - Shopee:
         icon: /images/icons/shopee.svg
         href: "https://shopee.sg/"
-        description: Online Marketplace
+        description: Everyday Online Deals
 
-- Social:
+- Social & Media:
     - Facebook:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/facebook.webp
         href: "https://www.facebook.com"
-        description: Social Network
-    - Gmail:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gmail.webp
-        href: "https://mail.google.com/mail/u/0/#inbox"
-        description: Email
-    - LinkedIn:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkedin.webp
-        href: "https://www.linkedin.com"
-        description: Professional Network
+        description: Friends & Groups
+    - Radio Garden:
+        icon: /images/icons/radiogarden.png
+        href: "https://radio.garden"
+        description: Live Radio Worldwide
     - Reddit:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/reddit.webp
         href: "https://old.reddit.com"
-        description: Communities & Forums
+        description: Communities & Discussions
+    - Twitch:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/twitch.webp
+        href: "https://www.twitch.tv"
+        description: Live Game Streams
     - WhatsApp:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/whatsapp.webp
         href: "https://web.whatsapp.com"
-        description: Messaging
+        description: Chats in the Browser
+    - YouTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/youtube.webp
+        href: "https://www.youtube.com"
+        description: Videos & Music
 
 - Tools:
     - AI Text Remover:
         icon: /images/icons/aitextremover.png
         href: "https://snapedit.app/remove-text"
-        description: Remove Text from Images
+        description: Erase Text from Images
     - Claude:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/claude.webp
         href: "https://claude.ai/new"
@@ -888,28 +904,54 @@
     - Excalidraw:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/excalidraw.webp
         href: "https://excalidraw.com"
-        description: Sketch Whiteboard
+        description: Hand-Drawn Diagrams
     - Google Drive:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/google-drive.webp
         href: "https://drive.google.com"
-        description: Cloud Storage
+        description: Cloud Files & Docs
     - Photopea:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/photopea.webp
         href: "https://www.photopea.com"
-        description: Online Photo Editor
+        description: Photoshop in the Browser
     - Remove.bg:
         icon: si-removedotbg
         href: "https://www.remove.bg"
-        description: Background Remover
+        description: Cut Out Backgrounds
     - SpeedTest:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/speedtest-tracker.webp
         href: "https://www.speedtest.net"
         description: Internet Speed Test
 
+- Work & Admin:
+    - CPF:
+        icon: https://www.cpf.gov.sg/content/dam/web/seo/favicon/android-icon-192x192.png
+        href: "https://www.cpf.gov.sg/member"
+        description: Retirement & MediSave
+    - Gmail:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gmail.webp
+        href: "https://mail.google.com/mail/u/0/#inbox"
+        description: Personal Email
+    - HealthHub:
+        icon: https://www.healthhub.sg/-/media/project/synapxe/healthhub/favicon/hh-favicon.ico
+        href: "https://www.healthhub.sg"
+        description: Medical Records & Appointments
+    - IRAS myTax:
+        icon: https://www.iras.gov.sg/favicon.ico
+        href: "https://mytax.iras.gov.sg"
+        description: Income Tax Filing
+    - LinkedIn:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkedin.webp
+        href: "https://www.linkedin.com"
+        description: Profile & Job Search
+    - Singpass:
+        icon: https://www.singpass.gov.sg/main/icons/favicon/16x16.svg
+        href: "https://www.singpass.gov.sg"
+        description: Government Login
 
 # ============================================================
 # MOBILE VIEW - servers, then every app alphabetically (status dots, no widgets)
 # ============================================================
+
 - Servers:
     - Proxmox:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
@@ -1006,6 +1048,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
         href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
+    - Free Games:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/free-games-claimer.webp
+        href: "https://freegames.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7080"
     - FreshRSS:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
         href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1014,6 +1060,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
         href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+    - Glance:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/glance.webp
+        href: "https://glance.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4444"
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
         href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"

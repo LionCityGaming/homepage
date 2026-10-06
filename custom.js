@@ -26,8 +26,9 @@
   const ACCENTS = [
     ["infrastructure", "100, 210, 255"], ["networking", "48, 209, 88"], ["acquisition", "255, 159, 10"],
     ["media tools", "255, 55, 95"], ["productivity", "191, 90, 242"], ["more apps", "94, 92, 230"],
-    ["3d printing", "255, 159, 10"], ["entertainment", "255, 55, 95"], ["homelab", "100, 210, 255"],
-    ["reference", "255, 214, 10"], ["shopping", "48, 209, 88"], ["social", "10, 132, 255"],
+    ["3d printing", "255, 159, 10"],
+    ["homelab help", "94, 92, 230"], ["homelab", "100, 210, 255"],  // "homelab help" first, so it gets its own colour
+    ["reference", "255, 214, 10"], ["shopping", "48, 209, 88"], ["social", "255, 55, 95"],  // Social & Media took over Entertainment's pink (blue sat beside Homelab's two blues)
     ["tools", "172, 142, 104"], ["work", "191, 90, 242"], ["servers", "10, 132, 255"],
     ["apps", "48, 209, 88"],  // after "more apps", so that one keeps its own colour
   ];
@@ -80,7 +81,7 @@
   }
 
   function weather() {
-    let w = document.querySelector(".information-widget-openmeteo");
+    let w = document.querySelector(".information-widget-openweathermap, .information-widget-openmeteo");
     if (!w) {  // fallback in case Homepage drops the widget class (it does for the resources widget)
       w = [...document.querySelectorAll("#information-widgets .widget-container")].find((c) => c.textContent.includes("°"));
     }
@@ -89,7 +90,7 @@
     let mood = "clear";
     if (/thunder/.test(t)) mood = "storm";
     else if (/rain|drizzle|shower/.test(t)) mood = "rain";
-    else if (/overcast|fog|mist/.test(t) || (/cloud/.test(t) && !/partly|mainly|few/.test(t))) mood = "cloudy";  // partly cloudy stays clear
+    else if (/overcast|fog|mist|haze|smoke/.test(t) || (/cloud/.test(t) && !/partly|mainly|few/.test(t))) mood = "cloudy";  // partly cloudy stays clear
     setData(root, "weather", mood);
   }
 
@@ -130,6 +131,124 @@
     });
   }
 
+  /* ---------- Media Releases: a show with several episodes on one day becomes one row ("· 7 episodes") ---------- */
+  const RELEASE_ROWS = 42;  // rows that line Media Releases up with the column beside it (41 left it a row short); services.yaml fetches more so collapsed rows get refilled
+
+  // the event Homepage drew a row from ({ title, date, additional: "S2 E3", color }), read from the row's React
+  // props; the row's text is no use for this, as the title cell shows "S2 E3" while the mouse is over it
+  function rowEvent(row) {
+    const fiberKey = Object.keys(row).find((k) => k.startsWith("__reactFiber$"));
+    for (let f = fiberKey && row[fiberKey], i = 0; f && i < 6; f = f.return, i++) {
+      const ev = f.memoizedProps && f.memoizedProps.event;
+      if (ev) return ev;
+    }
+    return null;
+  }
+
+  function collapseReleases() {
+    const list = document.querySelector("#upcomingtv");
+    if (!list) return;
+    const rows = [...list.querySelectorAll(".flex.flex-row")].filter((r) => r.querySelector(".truncate > .absolute"));
+    const groups = new Map();
+    let day = "";
+    rows.forEach((row) => {
+      const title = row.querySelector(".truncate > .absolute");
+      const ev = rowEvent(row);
+      day = row.firstElementChild.textContent.trim() || day;  // Homepage writes the date on a day's first row only
+      const key = ev && ev.title && ev.date && ev.date.toISODate
+        ? ev.date.toISODate() + "|" + ev.title
+        : day + "|" + title.textContent.trim();  // fallback if Homepage's internals change
+      const group = groups.get(key);
+      if (group) { group.rows.push(row); setData(row, "dup", "1"); } else { groups.set(key, { title, rows: [row] }); setData(row, "dup", ""); }
+    });
+    // the kept row says how many episodes it stands for; hovering it lists them all (Homepage's own hover shows the first)
+    groups.forEach(({ title, rows: group }) => {
+      const n = group.length;
+      setData(title, "more", n > 1 ? ` · ${n} episodes` : "");
+      const tip = n > 1 ? group.map((r) => (rowEvent(r) || {}).additional).filter(Boolean).join("\n") : "";
+      if ((group[0].getAttribute("title") || "") !== tip) {
+        if (tip) group[0].setAttribute("title", tip); else group[0].removeAttribute("title");
+      }
+    });
+    // one dot per colour per day (TV cyan, films amber), like the Recently Downloaded lists' one dot per day
+    let shown = 0, dotDay = "", dots = new Set();
+    rows.forEach((row) => {
+      const display = row.dataset.dup === "1" || ++shown > RELEASE_ROWS ? "none" : "";
+      if (row.style.display !== display) row.style.display = display;
+      const dot = row.children[1];
+      if (!dot || display) return;
+      const date = row.firstElementChild.textContent.trim();
+      if (date && date !== dotDay) { dotDay = date; dots = new Set(); }
+      const colour = (dot.innerHTML.match(/bg-[a-z]+-\d+/) || [""])[0];
+      const vis = dots.has(colour) ? "hidden" : "";
+      dots.add(colour);
+      if (dot.style.visibility !== vis) dot.style.visibility = vis;
+    });
+  }
+
+  /* ---------- widget labels that don't match the rest: PBS "Memory" (Proxmox and Synology say "MEM"),
+     Caddy's sentence-case "Current requests" / "Failed requests" (every other label is Title Case) ---------- */
+  const LABELS = [
+    ["Proxmox Backup", { "Memory": "MEM" }],
+    ["Caddy", { "Current requests": "Current Requests", "Failed requests": "Failed Requests" }],
+  ];
+
+  function widgetLabels() {
+    document.querySelectorAll("li.service").forEach((li) => {
+      const name = li.querySelector(".service-name");
+      const hit = name && LABELS.find(([service]) => name.textContent.includes(service));
+      if (!hit) return;
+      li.querySelectorAll(".service-block div, .service-block span").forEach((el) => {
+        const to = !el.children.length && hit[1][el.textContent.trim()];
+        if (to) el.textContent = to;
+      });
+    });
+  }
+
+  /* ---------- phones: an app tile's name shrinks until it fits its tile (12px down to 9px), so long
+     names ("Audiobookshelf", "Free Games Claimer") show whole instead of ending in "..." ---------- */
+  function fitNames() {
+    document.querySelectorAll('.services-group[data-acc="apps"] li.service .service-name').forEach((name) => {
+      if (!PHONE.matches) { if (name.style.fontSize) name.style.removeProperty("font-size"); return; }
+      const room = String(name.clientWidth);
+      if (!name.clientWidth || (name.dataset.fitText === name.textContent && name.dataset.fitRoom === room)) return;  // hidden, or already fitted
+      name.style.removeProperty("font-size");  // the phone CSS sets 12px !important, so the fitted size is !important too
+      for (let px = 12; px > 9 && name.scrollWidth > name.clientWidth; px -= 0.5) name.style.setProperty("font-size", (px - 0.5) + "px", "important");
+      name.dataset.fitText = name.textContent;
+      name.dataset.fitRoom = room;
+    });
+  }
+
+  /* ---------- desktop: a card whose figure boxes don't fit (Technitium, Wallos, Maintainerr ... on screens
+     below ~2560px) first gets tighter boxes, then smaller figures (down to 88%), then two rows of figures;
+     cards that fit are left alone ---------- */
+  const FIT_MIN = 0.88;  // below this the figures read as too small next to the cards that fit
+
+  function fitBlocks() {
+    document.querySelectorAll("li.service .service-container").forEach((cont) => {
+      const blocks = [...cont.children].filter((b) => b.classList.contains("service-block"));
+      const texts = blocks.flatMap((b) => [...b.children]);
+      const reset = () => {
+        cont.classList.remove("fit-tight", "fit-wrap");
+        texts.forEach((t) => t.style.removeProperty("font-size"));
+      };
+      if (PHONE.matches || !blocks.length) { if (cont.dataset.fitKey) { reset(); delete cont.dataset.fitKey; } return; }
+      const key = cont.clientWidth + "|" + cont.textContent;
+      if (!cont.clientWidth || cont.dataset.fitKey === key) return;  // hidden tab, or already fitted
+      reset();
+      const over = () => cont.scrollWidth > cont.clientWidth + 1;
+      if (over()) {
+        cont.classList.add("fit-tight");
+        const base = texts.map((t) => parseFloat(getComputedStyle(t).fontSize));
+        for (let f = 0.98; f >= FIT_MIN && over(); f -= 0.02) {
+          texts.forEach((t, i) => t.style.setProperty("font-size", (base[i] * f).toFixed(1) + "px", "important"));
+        }
+        if (over()) { texts.forEach((t) => t.style.removeProperty("font-size")); cont.classList.add("fit-wrap"); }
+      }
+      cont.dataset.fitKey = key;
+    });
+  }
+
   /* ---------- TitleCardMaker: thousands separators ("12345" -> "12,345") ---------- */
   function tcmNumbers() {
     const widget = document.querySelector('#titlecardmaker, [data-name="TitleCardMaker"]');
@@ -149,7 +268,11 @@
     disks();
     clock();
     weather();
+    collapseReleases();
     dateLists();
+    widgetLabels();
+    fitNames();
+    fitBlocks();
     tcmNumbers();
   }
 

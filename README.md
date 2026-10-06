@@ -39,9 +39,11 @@
 |---|---|
 | **Home** | Server stats (Proxmox, PBS, Synology, Plex), a Home Assistant panel, exchange rates and a Glance news feed |
 | **Applications** | Every self-hosted app, grouped: Infrastructure, Networking & Security, Media Acquisition, Media Tools, Personal & Productivity, More Apps |
-| **Bookmarks** | Everyday links: 3D Printing, Entertainment, Homelab, Reference, Shopping, Social, Tools |
+| **Bookmarks** | Everyday links: 3D Printing, Homelab, Homelab Help, Reference, Shopping, Social & Media, Tools, Work & Admin |
 | **Calendars** | Calendars, a to-do list, Premier League fixtures and table, recently downloaded films and episodes, and upcoming releases |
 | **Mobile** | A compact status view used automatically on phones (see [On phones](#on-phones)) |
+
+The tab bar works like an iOS segmented control: one glass track, with the open tab as a white pill.
 
 ![The Applications tab](screenshots/applications.png)
 
@@ -71,7 +73,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
 | `custom.css` | The whole look, grouped by part of the page (page and background, cards, status dots, tabs, top bar, embedded panels, Calendars lists, search, motion), each part with its own phone rules |
-| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks sorting, and tidier dates in the Calendars lists |
+| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks sorting, tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, and phone app names that shrink to fit their tile |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |
 
@@ -80,7 +82,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 1. Copy the files into your Homepage `config` folder.
 2. Copy `.env.example` to `.env`, fill in what you use, and pass it to the Homepage container (`env_file: .env` in compose). Homepage swaps every `{{HOMEPAGE_VAR_...}}` in the YAML for the matching variable.
 3. Delete the services you don't run from `services.yaml`, and their groups from the `layout` in `settings.yaml`.
-4. Set your own location in the `openmeteo` widget in `widgets.yaml` (it's set to Singapore).
+4. Set your own location in the `openweathermap` widget in `widgets.yaml` (it's set to Singapore) and add a free [OpenWeatherMap](https://openweathermap.org/) API key as `HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY`. No key? Swap it for Homepage's `openmeteo` widget, which needs none.
 5. Service icons under `/images/icons/` are local files; swap them for [dashboard icons](https://github.com/homarr-labs/dashboard-icons) or your own.
 
 The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) and each section's colour are set in the `DISKS` and `ACCENTS` lists in `custom.js`, so rename them there to match your own labels.
@@ -95,7 +97,7 @@ The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `
 - [Homepage](https://github.com/gethomepage/homepage) by the gethomepage team
 - Fonts: [Inter](https://rsms.me/inter/) and [Cinzel](https://fonts.google.com/specimen/Cinzel) from Google Fonts
 - Icons: [Material Design Icons](https://pictogrammers.com/library/mdi/) (embedded) and [dashboard icons](https://github.com/homarr-labs/dashboard-icons)
-- Weather: [Open-Meteo](https://open-meteo.com/) (free, no API key)
+- Weather: [OpenWeatherMap](https://openweathermap.org/) (free API key), the same source as the Home Assistant weather card
 
 ## License
 

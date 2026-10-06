@@ -394,6 +394,14 @@ html::after {
   .services-group:nth-child(n+6), .bookmark-group:nth-child(n+6) { animation-delay: 0.25s; }
 }
 
+/* wide screens: More Apps ten across (19 tiles: 10 + 9; 8 left a row of 3). Homepage's own `columns`
+   stops at 8 (a higher number falls back to one column), so settings.yaml stays at 8. Below 2200px ten
+   tiles cut names short ("Free Games Claime" at 1680px), so narrower screens keep Homepage's 8 */
+@media (pointer: fine) and (min-width: 2200px) {
+  .services-group[data-acc="more apps"] .services-list {
+    grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  }
+}
 @media (pointer: coarse), (max-width: 1024px) {
   /* phones: the Apps list as three columns of compact tiles (icon, short name, status dot); the
      server cards above stay two across */
@@ -713,6 +721,41 @@ html::after {
   font-weight: 600;
   color: rgba(235, 235, 245, 0.75);
 }
+/* Tabs as an iOS segmented control (07/10/2026): one glass track, the open tab a white pill.
+   Revert: delete this block (the separate glass pills above come back). */
+#myTab {
+  gap: 4px !important;
+  padding: 4px !important;
+  background: var(--glass) !important;
+  border: 0.5px solid var(--hairline);
+  border-radius: 999px !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+#myTab > li { height: auto !important; }
+#myTab [id$="-tab"] {
+  min-height: 40px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* hover: brighter text only; a hover fill read as a second, grey selected tab */
+#myTab [id$="-tab"]:hover {
+  color: #ffffff;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+#myTab [id$="-tab"][aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #1c1c1e !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+}
 /* top bar: Hub-clock lettering, slim coloured disk bars (colour set per disk by custom.js) */
 .information-widget-greeting, .information-widget-datetime {
   color: #ffffff;
@@ -854,7 +897,7 @@ html::after {
 @media (pointer: coarse), (max-width: 1024px) {
   /* phones: a little breathing room between the disks and the weather capsule; phones: the weather
      text ran into the capsule edge; size the capsule to its text with room on both sides */
-  .information-widget-openmeteo, .hp-weather {
+  .information-widget-openweathermap, .information-widget-openmeteo, .hp-weather {
     margin-top: 10px !important;
     width: auto !important;
     max-width: none !important;
@@ -945,7 +988,7 @@ li.bookmark > a:hover {
    (custom.js sets data-weather): cloudy = dimmer glow, rain = faint falling streaks, storm = rain +
    an occasional soft flash. Streaks and flash are off when reduced motion is asked for; Top-bar
    rule kept here: it must come after the bookmark rules it overrides */
-.information-widget-openmeteo, .hp-weather {
+.information-widget-openweathermap, .information-widget-openmeteo, .hp-weather {
   align-self: center;
   padding: 4px 14px;
   border-radius: 999px;
@@ -971,10 +1014,10 @@ li.bookmark > a:hover {
 .service-card:has(iframe) .service-container { margin-top: 0; padding-top: 0; }
 iframe { width: 100%; border: 0; background-color: transparent; }
 .home-assistant { height: 925px; margin: -25px -20px 0; }
-.glance { height: 850px; margin: -5px 0 -20px; }
-.todo { height: 529px; margin: -28px 0 0; }
+.glance { height: 820px; margin: -5px 0 -20px; }   /* 850 → 820 on 06/10/2026: Glance rows were tightened by ~30px */
+.todo { height: 249px; margin: -28px 0 0; }   /* 529 → 249 on 06/10/2026: an empty list left ~430px blank */
 .ha-calendar { height: 1054px; margin-top: -28px; pointer-events: none; }
-.epl-calendar { height: 514px; margin: 0; pointer-events: none; }
+.epl-calendar { height: 794px; margin: 0; pointer-events: none; }   /* 514 → 794: gets the 280px To-Do gave up, so the column still lines up */
 .epl { height: 1056px; margin: -28px -80px 0; }
 .service-block:has(:is(.epl, .uptime, .todo)), .service-block:has(iframe) {
   background: transparent !important;
@@ -1063,6 +1106,7 @@ iframe { width: 100%; border: 0; background-color: transparent; }
   margin-left: -18px;
 }
 #upcomingtv span > span:first-child { padding-left: 8px; }
+#upcomingtv [data-more]:not([data-more=""])::after { content: attr(data-more); opacity: 0.6; }  /* "· 7 episodes" (custom.js) */
 :is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > div:first-child::after {
   content: "";
   position: absolute;
@@ -1152,3 +1196,21 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
 }
 @keyframes rainFall { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-40px, 240px, 0); } }
 @keyframes stormFlash { 0%, 91%, 100% { opacity: 0; } 92% { opacity: 0.9; } 93% { opacity: 0.2; } 94.5% { opacity: 0.7; } 96% { opacity: 0; } }
+
+/* phones: the disk row spans exactly the card grid below it, 26px from each edge (layout-groups 16px +
+   group 4px + list 6px; each disk keeps its own 3px side margin, so the row is padded 23px), first disk
+   flush left, last flush right, middle centred; before, the three disks split the full width, so they
+   only lined up with the cards at one screen width (07/10/2026) */
+@media (pointer: coarse), (max-width: 1024px) {
+  #widgets-wrap { padding: 0 23px !important; box-sizing: border-box !important; }
+  #widgets-wrap > .widget-container[data-disk] { flex: 1 1 0 !important; min-width: 0 !important; }
+  #widgets-wrap > .widget-container[data-disk] .information-widget-resource { margin: 0 !important; }
+  #widgets-wrap > .widget-container[data-disk="docker"] > div { align-self: flex-start !important; }
+  #widgets-wrap > .widget-container[data-disk="usb"] > div { align-self: flex-end !important; }
+}
+
+/* desktop: cards whose figure boxes don't fit (custom.js fitBlocks): tighter boxes first, then (if smaller
+   figures still don't fit) two rows of figures, each box half the card wide (07/10/2026) */
+.service-container.fit-tight > .service-block { margin: 4px 2px !important; padding: 4px 2px !important; }
+.service-container.fit-wrap { flex-wrap: wrap !important; }
+.service-container.fit-wrap > .service-block { flex: 1 1 40% !important; }

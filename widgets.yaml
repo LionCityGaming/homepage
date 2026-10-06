@@ -7,13 +7,16 @@
     text: The Lion's Den
     href: https://gethomepage.dev/
     target: _blank
-- openmeteo:             # weather (Hub-style); also drives the background mood (custom.js)
+- openweathermap:        # weather (Hub-style); also drives the background mood (custom.js)
     label: Singapore
     latitude: 1.35         # city-level, not the home location
     longitude: 103.82
-    timezone: Asia/Singapore
     units: metric
+    provider: openweathermap
+    apiKey: "{{HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY}}"
     cache: 15
+    format:
+      maximumFractionDigits: 0   # whole degrees, rounded (28.5 -> 29)
 - datetime:              # date capsule (Hub-style)
     locale: en-sg
     text_size: xl
