@@ -50,7 +50,7 @@ The tab bar works like a macOS segmented control: one grey track, with the open 
 
 ![The Bookmarks tab](screenshots/bookmarks.png)
 
-![Calendars tab: Premier League fixtures and table, media lists](screenshots/tables.png)
+![The Calendars tab: family calendar and to-do list (blurred), Premier League fixtures and table, media lists](screenshots/tables.png)
 
 ## On phones
 
