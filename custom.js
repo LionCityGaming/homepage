@@ -48,11 +48,20 @@
     });
   }
 
-  /* ---------- Bookmarks: sections ordered from most to fewest links (ties keep settings.yaml order) ---------- */
+  /* ---------- Bookmarks: sections in a peak, the most links in the middle stepping down to the fewest at
+     both ends (3 4 6 7 7 6 6 4; the page is centred, so its empty space falls away at the corners):
+     sorted fewest first (ties keep settings.yaml order), then dealt out alternately to the left and right
+     ends, so the biggest land in the middle ---------- */
   function sortBookmarks() {
     const on = root.dataset.tab === "bookmarks";
-    document.querySelectorAll(".services-group").forEach((g, i) => {
-      const order = on ? String((100 - g.querySelectorAll("li.service").length) * 100 + i) : "";
+    const groups = [...document.querySelectorAll(".services-group")];
+    const ranked = (on ? groups.filter((g) => g.offsetParent !== null) : [])
+      .map((g, i) => ({ g, n: g.querySelectorAll("li.service").length, i }))
+      .sort((a, b) => a.n - b.n || a.i - b.i);
+    const pos = new Map();
+    ranked.forEach((r, k) => pos.set(r.g, k % 2 === 0 ? k / 2 : ranked.length - 1 - (k - 1) / 2));
+    groups.forEach((g) => {
+      const order = pos.has(g) ? String(pos.get(g)) : "";
       if (g.style.order !== order) g.style.order = order;
     });
   }

@@ -73,7 +73,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
 | `custom.css` | The whole look, grouped by part of the page (page and background, cards, status dots, tabs, top bar, embedded panels, Calendars lists, search, motion), each part with its own phone rules |
-| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks sorting, tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, and phone app names that shrink to fit their tile |
+| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks columns arranged as a peak (most links in the middle), tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, and phone app names that shrink to fit their tile |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |
 
