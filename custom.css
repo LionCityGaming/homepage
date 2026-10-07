@@ -1444,3 +1444,47 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
   }
   #__next li.service .service-card { border-radius: 18px !important; }
 }
+
+/* ================================================================================================
+   disk tiles: iOS Settings style (08/10/2026). The colours stay Apple's system palette; what changed
+   is the finish: white glyph on a colour tile (like an iOS Settings row), no neon glow on the icon
+   or bar, a flat bar on Apple's grey fill, and "Free" in secondary grey. The disk name stays the white
+   title line. The bar colour still turns amber above 75 % and red above 90 % (custom.js)
+   ================================================================================================ */
+.widget-container[data-disk="docker"] { --disk-glyph: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktZG9ja2VyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0yMS44MSAxMC4yNUMyMS43NSAxMC4yMSAyMS4yNSA5LjgyIDIwLjE3IDkuODJDMTkuODkgOS44MiAxOS42MSA5Ljg1IDE5LjMzIDkuOUMxOS4xMiA4LjUgMTcuOTUgNy43OSAxNy45IDcuNzZMMTcuNjEgNy41OUwxNy40MyA3Ljg2QzE3LjE5IDguMjIgMTcgOC42MyAxNi45MiA5LjA1QzE2LjcyIDkuODUgMTYuODQgMTAuNjEgMTcuMjUgMTEuMjZDMTYuNzYgMTEuNTQgMTUuOTYgMTEuNjEgMTUuNzkgMTEuNjFIMi42MkMyLjI4IDExLjYxIDIgMTEuODkgMiAxMi4yNEMyIDEzLjM5IDIuMTggMTQuNTQgMi41OCAxNS42MkMzLjAzIDE2LjgxIDMuNzEgMTcuNjkgNC41OCAxOC4yM0M1LjU2IDE4LjgzIDcuMTcgMTkuMTcgOSAxOS4xN0M5Ljc5IDE5LjE3IDEwLjYxIDE5LjEgMTEuNDIgMTguOTVDMTIuNTQgMTguNzUgMTMuNjIgMTguMzYgMTQuNjEgMTcuNzlDMTUuNDMgMTcuMzIgMTYuMTYgMTYuNzIgMTYuNzggMTZDMTcuODMgMTQuODMgMTguNDUgMTMuNSAxOC45IDEyLjM1SDE5LjA5QzIwLjIzIDEyLjM1IDIwLjk0IDExLjg5IDIxLjMzIDExLjVDMjEuNTkgMTEuMjYgMjEuNzggMTAuOTcgMjEuOTIgMTAuNjNMMjIgMTAuMzlMMjEuODEgMTAuMjVNMy44NSAxMS4yNEg1LjYxQzUuNjkgMTEuMjQgNS43NyAxMS4xNyA1Ljc3IDExLjA4VjkuNUM1Ljc3IDkuNDIgNS43IDkuMzQgNS42MSA5LjM0SDMuODVDMy43NiA5LjM0IDMuNjkgOS40MSAzLjY5IDkuNVYxMS4wOEMzLjcgMTEuMTcgMy43NiAxMS4yNCAzLjg1IDExLjI0TTYuMjggMTEuMjRIOC4wNEM4LjEyIDExLjI0IDguMiAxMS4xNyA4LjIgMTEuMDhWOS41QzguMiA5LjQyIDguMTMgOS4zNCA4LjA0IDkuMzRINi4yOEM2LjE5IDkuMzQgNi4xMiA5LjQxIDYuMTIgOS41VjExLjA4QzYuMTMgMTEuMTcgNi4xOSAxMS4yNCA2LjI4IDExLjI0TTguNzUgMTEuMjRIMTAuNUMxMC42IDExLjI0IDEwLjY3IDExLjE3IDEwLjY3IDExLjA4VjkuNUMxMC42NyA5LjQyIDEwLjYxIDkuMzQgMTAuNSA5LjM0SDguNzVDOC42NyA5LjM0IDguNiA5LjQxIDguNiA5LjVWMTEuMDhDOC42IDExLjE3IDguNjYgMTEuMjQgOC43NSAxMS4yNE0xMS4xOSAxMS4yNEgxMi45NkMxMy4wNCAxMS4yNCAxMy4xMSAxMS4xNyAxMy4xMSAxMS4wOFY5LjVDMTMuMTEgOS40MiAxMy4wNSA5LjM0IDEyLjk2IDkuMzRIMTEuMTlDMTEuMTEgOS4zNCAxMS4wNCA5LjQxIDExLjA0IDkuNVYxMS4wOEMxMS4wNCAxMS4xNyAxMS4xMSAxMS4yNCAxMS4xOSAxMS4yNE02LjI4IDlIOC4wNEM4LjEyIDkgOC4yIDguOTEgOC4yIDguODJWNy4yNUM4LjIgNy4xNiA4LjEzIDcuMDkgOC4wNCA3LjA5SDYuMjhDNi4xOSA3LjA5IDYuMTIgNy4xNSA2LjEyIDcuMjVWOC44MkM2LjEzIDguOTEgNi4xOSA5IDYuMjggOU04Ljc1IDlIMTAuNUMxMC42IDkgMTAuNjcgOC45MSAxMC42NyA4LjgyVjcuMjVDMTAuNjcgNy4xNiAxMC42MSA3LjA5IDEwLjUgNy4wOUg4Ljc1QzguNjcgNy4wOSA4LjYgNy4xNSA4LjYgNy4yNVY4LjgyQzguNiA4LjkxIDguNjYgOSA4Ljc1IDlNMTEuMTkgOUgxMi45NkMxMy4wNCA5IDEzLjExIDguOTEgMTMuMTEgOC44MlY3LjI1QzEzLjExIDcuMTYgMTMuMDQgNy4wOSAxMi45NiA3LjA5SDExLjE5QzExLjExIDcuMDkgMTEuMDQgNy4xNSAxMS4wNCA3LjI1VjguODJDMTEuMDQgOC45MSAxMS4xMSA5IDExLjE5IDlNMTEuMTkgNi43MkgxMi45NkMxMy4wNCA2LjcyIDEzLjExIDYuNjUgMTMuMTEgNi41NlY1QzEzLjExIDQuOSAxMy4wNCA0LjgzIDEyLjk2IDQuODNIMTEuMTlDMTEuMTEgNC44MyAxMS4wNCA0Ljg5IDExLjA0IDVWNi41NkMxMS4wNCA2LjY0IDExLjExIDYuNzIgMTEuMTkgNi43Mk0xMy42NSAxMS4yNEgxNS40MUMxNS41IDExLjI0IDE1LjU3IDExLjE3IDE1LjU3IDExLjA4VjkuNUMxNS41NyA5LjQyIDE1LjUgOS4zNCAxNS40MSA5LjM0SDEzLjY1QzEzLjU3IDkuMzQgMTMuNSA5LjQxIDEzLjUgOS41VjExLjA4QzEzLjUgMTEuMTcgMTMuNTcgMTEuMjQgMTMuNjUgMTEuMjQiIC8+PC9zdmc+"); }
+.widget-container[data-disk="nas"] { --disk-glyph: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktbmFzIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik00LDVDMi44OSw1IDIsNS44OSAyLDdWMTdDMiwxOC4xMSAyLjg5LDE5IDQsMTlIMjBDMjEuMTEsMTkgMjIsMTguMTEgMjIsMTdWN0MyMiw1Ljg5IDIxLjExLDUgMjAsNUg0TTQuNSw3QTEsMSAwIDAsMSA1LjUsOEExLDEgMCAwLDEgNC41LDlBMSwxIDAgMCwxIDMuNSw4QTEsMSAwIDAsMSA0LjUsN003LDdIMjBWMTdIN1Y3TTgsOFYxNkgxMVY4SDhNMTIsOFYxNkgxNVY4SDEyTTE2LDhWMTZIMTlWOEgxNk05LDlIMTBWMTBIOVY5TTEzLDlIMTRWMTBIMTNWOU0xNyw5SDE4VjEwSDE3VjlaIiAvPjwvc3ZnPg=="); }
+.widget-container[data-disk="usb"] { --disk-glyph: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktdXNiLWZsYXNoLWRyaXZlIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik04IDE1QzguNTUgMTUgOSAxNS40NSA5IDE2QzkgMTYuNTUgOC41NSAxNyA4IDE3QzcuNDUgMTcgNyAxNi41NSA3IDE2QzcgMTUuNDUgNy40NSAxNSA4IDE1TTE1LjA3IDQuNjlMMTYuNSA2LjFMMTUuMDcgNy41TDEzLjY2IDYuMUwxNS4wNyA0LjY5TTE3LjkgNy41TDE5LjMxIDguOTNMMTcuOSAxMC4zNEwxNi41IDguOTNMMTcuOSA3LjVNOCAxM0M2LjM0IDEzIDUgMTQuMzQgNSAxNkM1IDE3LjY2IDYuMzQgMTkgOCAxOUM5LjY2IDE5IDExIDE3LjY2IDExIDE2QzExIDE0LjM0IDkuNjYgMTMgOCAxM005Ljc3IDQuMzNMMTAuNSA1LjA4TDE0LjI5IDEuMjlDMTQuNDcgMS4xMSAxNC43MiAxIDE1IDFDMTUuMjggMSAxNS41MyAxLjExIDE1LjcxIDEuMjlMMjIuNzggOC4zNkwyMi43OCA4LjM3QzIyLjkyIDguNTQgMjMgOC43NiAyMyA5QzIzIDkuMyAyMi44NyA5LjU3IDIyLjY2IDkuNzZMMjIuNjYgOS43NkwxOC45MyAxMy41TDE5LjY3IDE0LjIzTDEyLjk1IDIwLjk1QzExLjY4IDIyLjIyIDkuOTMgMjMgOCAyM0M0LjEzIDIzIDEgMTkuODcgMSAxNkMxIDE0LjA3IDEuNzggMTIuMzIgMy4wNSAxMS4wNUw5Ljc3IDQuMzNNMjAuNTkgOUwxNSAzLjQxTDExLjkzIDYuNUwxNy41IDEyLjA4TDIwLjU5IDlaIiAvPjwvc3ZnPg=="); }
+.widget-container[data-disk] .information-widget-resource::before {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  -webkit-mask: none;
+  mask: none;
+  background: var(--disk-glyph) center / 16px 16px no-repeat,
+              linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%),
+              rgb(var(--bar-rgb));
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.30), 0 1px 2px rgba(0, 0, 0, 0.25);
+  filter: none;
+}
+.widget-container:has(.information-widget-resource) .resource-usage {
+  height: 4px !important;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: rgba(120, 120, 128, 0.32) !important;
+}
+.widget-container:has(.information-widget-resource) .resource-usage > div {
+  height: 4px !important;
+  border-radius: 999px;
+  box-shadow: none;
+}
+.information-widget-resource .resource-value {
+  color: #ffffff !important;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+}
+.information-widget-resource .text-xs > .pr-1 {
+  color: rgba(235, 235, 245, 0.6) !important;
+  font-weight: 500;
+  text-shadow: none;
+}
