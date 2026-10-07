@@ -4,8 +4,9 @@
    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap');
 */
 /* ============================================================================
-   HUB GLASS THEME: Glance is shown inside a Homepage glass card, so the page is
-   see-through and uses the same colours and font.
+   GLASS THEME: Glance is shown inside a Homepage glass card, so the page is
+   see-through and uses the same colours, font and card style as Homepage's
+   macOS look (52% glass, hairline edge, 18px corners, Apple text levels).
    ============================================================================ */
 :root { color-scheme: dark; }
 html, body, .page, .page-content {
@@ -18,18 +19,36 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
-.color-highlight, .size-title-dynamic, .widget-header h2 { color: #ffffff !important; }
-.color-subdue, .color-base { color: rgba(235, 235, 245, 0.6) !important; }
+.color-highlight, .size-title-dynamic, .widget-header h2 { color: #ffffff !important; font-weight: 600 !important; }
+.widget-header h2 { letter-spacing: -0.01em; }
+.color-subdue, .color-base { color: rgba(235, 235, 245, 0.60) !important; }
 .color-primary, a:hover { color: #64d2ff !important; }
 .color-positive { color: #30d158 !important; }
 .color-negative { color: #ff453a !important; }
 hr { background-color: rgba(255, 255, 255, 0.08) !important; opacity: 1 !important; }
 
-/* cards: same glass as the Home Assistant cards next to it (05/10/2026) */
+/* cards: frosted glass with a hairline edge and a faint top highlight. No drop
+   shadow: Glance's cards sit close together, so one would bleed into a dark halo */
 .card {
-  background-color: rgba(28, 28, 30, 0.55) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.10) !important;
-  border-radius: 16px !important;
+  background-color: rgba(30, 30, 32, 0.52) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;
   overflow: hidden;
 }
 .card:hover { border-color: rgba(255, 255, 255, 0.22) !important; }
+
+/* text levels like Homepage: titles white, meta lines and other tabs 60% grey,
+   the open tab white */
+a.color-primary-if-not-visited, a.color-primary-if-not-visited:visited, .card a.text-truncate, li.min-width-0 > a.block { color: #ffffff !important; }
+.list-horizontal-text, .list-horizontal-text > li { color: rgba(235, 235, 245, 0.60) !important; }
+.widget-group-title { color: rgba(235, 235, 245, 0.60) !important; }
+.widget-group-title-current { color: #ffffff !important; }
+
+/* the card rows' horizontal scrollbars hidden (they showed as thin lines; rows still scroll) */
+.cards-horizontal, .carousel-container, .cards-horizontal * { scrollbar-width: none !important; }
+.cards-horizontal::-webkit-scrollbar, .carousel-container ::-webkit-scrollbar { display: none !important; }
+
+/* no slide-in entrance: Homepage's custom.js fades the whole embedded page in once it
+   has loaded, so a second animation would only add movement */
+.page-columns, .page-column, .page-column-full, .page-column-small, .dynamic-columns > *, .page-content > * { animation: none !important; }

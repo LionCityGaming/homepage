@@ -1014,7 +1014,7 @@ li.bookmark > a:hover {
 .service-card:has(iframe) .service-container { margin-top: 0; padding-top: 0; }
 iframe { width: 100%; border: 0; background-color: transparent; }
 .home-assistant { height: 925px; margin: -25px -20px 0; }
-.glance { height: 820px; margin: -5px 0 -20px; }   /* 850 → 820 on 06/10/2026: Glance rows were tightened by ~30px */
+.glance { height: 836px; margin: -5px 0 -20px; }   /* 850 → 820 on 06/10/2026 (Glance rows tightened), 820 → 836 on 07/10/2026 (its two row gaps 10 → 18px, to end level with the HA panel) */
 .todo { height: 249px; margin: -28px 0 0; }   /* 529 → 249 on 06/10/2026: an empty list left ~430px blank */
 .ha-calendar { height: 1054px; margin-top: -28px; pointer-events: none; }
 .epl-calendar { height: 794px; margin: 0; pointer-events: none; }   /* 514 → 794: gets the 280px To-Do gave up, so the column still lines up */
@@ -1214,3 +1214,205 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
 .service-container.fit-tight > .service-block { margin: 4px 2px !important; padding: 4px 2px !important; }
 .service-container.fit-wrap { flex-wrap: wrap !important; }
 .service-container.fit-wrap > .service-block { flex: 1 1 40% !important; }
+
+/* ================================================================================================
+   MAC THEME (07/10/2026): macOS look. 1 wallpaper + glass, 2 fonts, 3 text levels, 4 macOS
+   segmented control, 5 one corner scale, 6 stats as widget numbers, 7 top bar as a menu bar.
+   Everything is in this block and only overrides rules above. REVERT: delete from this comment to
+   the end of the file (or git revert the commit that added it), then ans-apply docker.
+   ================================================================================================ */
+:root {
+  --mac-glass: rgba(30, 30, 32, 0.52);
+  --mac-glass-inner: rgba(255, 255, 255, 0.06);
+  --mac-hairline: rgba(255, 255, 255, 0.12);
+  --mac-label: #ffffff;
+  --mac-label-2: rgba(235, 235, 245, 0.60);
+  --mac-label-3: rgba(235, 235, 245, 0.30);
+  --mac-r-lg: 18px;
+  --mac-r-sm: 10px;
+}
+
+/* 1. wallpaper: macOS-style colour fields (day = default; dawn, dusk and night follow the time of
+   day as before), strong enough to show through the glass */
+html, body, #background { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTIlIiBjeT0iOCUiIHI9IjYyJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuNjIiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMC4yNzkiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9IjkwJSIgY3k9IjkyJSIgcj0iNjIlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC41MiIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjIzNCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iNzglIiBjeT0iMTIlIiByPSI0MiUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjMiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiM2NGQyZmYiIHN0b3Atb3BhY2l0eT0iMC4xMzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2NGQyZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMyIgY3g9IjI4JSIgY3k9IjEwMCUiIHI9IjQ4JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNmZjM3NWYiIHN0b3Atb3BhY2l0eT0iMC4wOTkiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjM3NWYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnNCIgY3g9IjU1JSIgY3k9IjU1JSIgcj0iNTUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1ZTVjZTYiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwLjE1OCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzBhMGQxYyIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cyKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzMpIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnNCkiLz48L3N2Zz4=") !important; }
+html[data-sky="night"], html[data-sky="night"] body, html[data-sky="night"] #background { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTQlIiBjeT0iOCUiIHI9IjY1JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWUzYThhIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiMxZTNhOGEiIHN0b3Atb3BhY2l0eT0iMC4yNDgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxZTNhOGEiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9Ijg4JSIgY3k9Ijk0JSIgcj0iNjIlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1ZTVjZTYiIHN0b3Atb3BhY2l0eT0iMC40Ii8+PHN0b3Agb2Zmc2V0PSIwLjU1IiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAuMTgwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzIiIGN4PSI3NSUiIGN5PSIxNSUiIHI9IjQwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMC4wODEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMyIgY3g9IjMwJSIgY3k9IjEwMCUiIHI9IjQ1JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAuMTYiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4wNzIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9IiMwNTA2MGQiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cwKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzEpIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMikiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2czKSIvPjwvc3ZnPg==") !important; }
+html[data-sky="dawn"], html[data-sky="dawn"] body, html[data-sky="dawn"] #background { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTAlIiBjeT0iOTUlIiByPSI2MiUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwLjQiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNmZjlmMGEiIHN0b3Atb3BhY2l0eT0iMC4xODAiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjlmMGEiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9Ijg1JSIgY3k9IjkwJSIgcj0iNTglIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjM3NWYiIHN0b3Atb3BhY2l0eT0iMC4zNCIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwLjE1MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iMjAlIiBjeT0iNSUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuNDIiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMC4xODkiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMyIgY3g9IjcwJSIgY3k9IjIwJSIgcj0iNDUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjA5OSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzBkMGExNCIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cyKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzMpIi8+PC9zdmc+") !important; }
+html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #background { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTIlIiBjeT0iOCUiIHI9IjYyJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAuNCIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwLjE4MCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcxIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2MiUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjUiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4yMjUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMiIgY3g9IjcwJSIgY3k9IjE1JSIgcj0iNDUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjM3NWYiIHN0b3Atb3BhY2l0eT0iMC4zIi8+PHN0b3Agb2Zmc2V0PSIwLjU1IiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAuMTM1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzMiIGN4PSIzMCUiIGN5PSI5NSUiIHI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAuMyIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwLjEzNSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzBlMGExNCIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cyKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzMpIi8+PC9zdmc+") !important; }
+html[data-weather="cloudy"] #background { filter: saturate(0.8) brightness(0.9) !important; }
+html[data-weather="rain"] #background, html[data-weather="storm"] #background { filter: saturate(0.8) brightness(0.85) !important; }
+
+/* 1. glass: frosted cards with a hairline edge and a faint top highlight, like macOS widgets */
+.service-card, .bookmark-text {
+  background-color: var(--mac-glass) !important;
+  border: 0.5px solid var(--mac-hairline) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+  backdrop-filter: blur(30px) saturate(180%) !important;
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;  /* no drop shadow: same as Glance and the HA panels (it bled into a halo where cards sit close) */
+}
+.service-card:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14) !important; }
+
+/* 2 + 3. type: Inter (closest web match to SF Pro), Apple weights, three text levels */
+body { letter-spacing: -0.011em; }
+.service-name, .bookmark-name { color: var(--mac-label) !important; font-weight: 600 !important; letter-spacing: -0.01em; }
+.service-description, .bookmark-description, .service-block-label { color: var(--mac-label-2) !important; }
+.services-group h2, .bookmark-group h2, [class*="group"] > h2 { color: var(--mac-label-2) !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; }
+
+/* 5. corners: one scale, large for cards, small for anything inside them */
+.service-card, li.bookmark > a, li.bookmark > div { border-radius: var(--mac-r-lg) !important; }
+.service-block, .bookmark-icon { border-radius: var(--mac-r-sm) !important; }
+
+/* 6. stats as widget numbers: no boxes, a big value over a small grey label (dividers tried and dropped: they curved with the corners) */
+.service-block {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.service-block-value { font-size: 20px !important; line-height: 1.15 !important; font-weight: 600 !important; letter-spacing: -0.02em; color: var(--mac-label) !important; }
+.service-block-label { font-size: 11px !important; font-weight: 500 !important; letter-spacing: 0 !important; }
+
+@media (pointer: fine) and (min-width: 1025px) {
+  /* 4. tabs as a macOS segmented control: grey track, the open tab a raised dark-grey segment. One font
+     weight for every tab: a heavier open tab made the labels jump when switching */
+  #myTab {
+    background: rgba(118, 118, 128, 0.24) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+    padding: 3px !important;
+    gap: 3px !important;
+    box-shadow: none !important;
+  }
+  #myTab [id$="-tab"] {
+    min-height: 34px !important;
+    border-radius: 9px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--mac-label) !important;
+  }
+  #myTab [id$="-tab"][aria-selected="true"] {
+    background: rgba(99, 99, 102, 0.95) !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.12) !important;
+  }
+
+  /* 7. top bar as the macOS menu bar: one thin glass strip, small text, clock on the right */
+  #information-widgets {
+    /* fixed height: the disk widgets re-render on every tab switch and briefly changed the bar's height
+       (52 <-> 73 px), bouncing the whole page by 21 px; 72 px leaves an even ~12 px above and below the drives; no negative side margins (they made the page
+       16 px wider than the window: a horizontal scrollbar in Firefox/Zen) */
+    margin: 0 0 18px !important;
+    padding: 0 18px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    justify-content: center !important;
+    background: rgba(30, 30, 32, 0.45) !important;
+    border-bottom: 0.5px solid var(--mac-hairline) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 0;  /* a straight full-width bar, like the macOS menu bar */
+  }
+  .information-widget-logo img { width: 26px !important; height: 26px !important; }
+  #widgets-wrap, #information-widgets-right { align-items: center !important; }
+  #widgets-wrap > .widget-container:has(.information-widget-resource) { align-self: center !important; }
+  #widgets-wrap > .information-widget-greeting { padding-left: 40px !important; }
+  .information-widget-greeting, .information-widget-greeting * {
+    background: none !important;
+    filter: none !important;
+    color: var(--mac-label) !important;
+    -webkit-text-fill-color: var(--mac-label) !important;
+  }
+  .information-widget-greeting span {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+  }
+  .information-widget-datetime, .information-widget-datetime * {
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+  }
+  .information-widget-datetime[data-clock="date"] {
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    font-weight: 500 !important;
+    color: var(--mac-label) !important;
+  }
+  .information-widget-datetime[data-clock="time"] { margin-left: 12px !important; font-weight: 600 !important; }
+  .information-widget-openweathermap, .information-widget-openmeteo, .hp-weather {
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    margin-right: 16px !important;
+  }
+  .hp-weather, .hp-weather * { font-size: 13px !important; font-weight: 500 !important; }
+  .hp-weather svg { width: 18px !important; height: 18px !important; }
+  /* disks: small menu-bar items, no capsule */
+  .widget-container:has(.resource-usage) {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    padding: 0 6px !important;  /* no top/bottom padding: each drive centres on its own text (even gap above and below) */
+    transform: translateY(-2px);  /* the drive name's taller line box sat it low: 2 px up makes the visible gaps even */
+  }
+  .widget-container[data-disk] .information-widget-resource::before { width: 16px; height: 16px; filter: none; }
+  .information-widget-resource .resource-usage, .information-widget-resource .resource-usage > div { height: 3px !important; box-shadow: none !important; }
+}
+
+/* smooth loading: one quiet fade per tab. custom.js holds a newly opened tab invisible
+   (html[data-settling]) until its groups stop rearranging, and embedded pages until they have loaded
+   (iframe[data-fade]); the older rise + scale-in entrance is off (it read as a bounce) */
+.services-group, .bookmark-group { animation: none !important; transition: opacity 0.25s ease-out; }
+html[data-settling] :is(.services-group, .bookmark-group) { opacity: 0 !important; transition: none; }
+iframe { transition: opacity 0.35s ease-out; }
+iframe[data-fade="wait"] { opacity: 0 !important; }
+
+/* smooth loading, part 2 (07/10/2026, Firefox/Zen stutter; the user wants every effect kept, so they
+   are made cheaper instead of removed): the wallpaper still drifts but in 4 sub-pixel steps a second
+   instead of 60 frames, so the glass cards re-blur 4 times a second, not on every frame; the drift
+   holds still while a tab is appearing; the glass blur is 20px (looks the same over this smooth
+   wallpaper, about half the work). The Calendars lists stay hidden until their data has arrived and
+   custom.js has tidied them (data-ready), then fade in instead of visibly reflowing */
+@media (prefers-reduced-motion: no-preference) {
+  #background { animation: bgDrift 70s steps(280, end) infinite alternate !important; }
+  html[data-settling] #background { animation-play-state: paused !important; }
+}
+.service-card, .bookmark-text {
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+}
+@media (pointer: fine) and (min-width: 1025px) {
+  #information-widgets {
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+  }
+}
+:is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv) { transition: opacity 0.25s ease-out; }
+:is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv):not([data-ready]) { opacity: 0; }
+
+/* consistency pass (07/10/2026, measured with a style audit): Apple text levels everywhere. Primary text
+   white (Homepage's own lists used Tailwind's off-white #e5e5e5 and 92% white), list dates and other
+   labels 60% grey */
+.service-card { color: #ffffff !important; }
+[class*="dark:text-theme-200"], [class*="dark:text-theme-100"] { color: #ffffff !important; }
+:is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv) .flex.flex-row.text-right > :first-child { color: rgba(235, 235, 245, 0.60) !important; }  /* the date column only */
+:is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > :not(:first-child) { color: #ffffff !important; }  /* titles white (they share the dates' bold class) */
+#upcomingtv .flex.flex-row > .font-bold:first-child { color: rgba(235, 235, 245, 0.60) !important; }  /* Media Releases dates (rows have no .text-right) */
+
+/* section colours retired (07/10/2026, user: "remove"): with the white Mac hover the coloured dots no longer
+   matched anything. Headings are plain grey like a macOS sidebar, bookmark icon tiles neutral glass, bookmark
+   hover the same white edge as the app cards. (custom.js still tags the sections; nothing reads it now.
+   The search sheet keeps its blue selection: that is the system accent, not a section colour) */
+.service-group-name::before, .bookmark-group-name::before { display: none !important; }
+.service-group-name, .bookmark-group-name { color: rgba(235, 235, 245, 0.60) !important; font-weight: 600 !important; }
+.bookmark-icon { background: rgba(255, 255, 255, 0.08) !important; }
+li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14) !important; }

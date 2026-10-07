@@ -22,13 +22,14 @@
 
 ## Highlights
 
-- **Glass everywhere.** Every card is a frosted, see-through panel with a hairline edge, in the style of Apple's dark mode. No thick borders, no heavy shadows.
-- **A living background.** A soft colour glow that changes with the time of day (night, dawn, day, dusk), drifts very slowly, and follows the weather: dimmer when it's overcast, faint rain streaks when it rains, the odd flash in a thunderstorm.
-- **A colour for every section.** Each group gets its own accent (shown as a glowing dot before its name, and as a glow when you hover a card).
-- **A clock that looks like a smart display.** The weather and date sit in glass capsules, with the time in large bold digits.
-- **Disk capsules.** Each disk in the top bar has its own icon and colour, turning amber at 75% and red at 90%, and they always sit in the middle of the bar.
+- **A macOS look.** Every card is a frosted, see-through panel with a hairline edge over a colourful wallpaper, in the style of macOS in dark mode. Inter type with Apple's text levels (white for titles, grey for labels and dates), one corner size for cards and a smaller one inside them, and no heavy shadows.
+- **A living wallpaper.** Colour fields that change with the time of day (night, dawn, day, dusk), drift very slowly, and follow the weather: dimmer when it's overcast, faint rain streaks when it rains, the odd flash in a thunderstorm.
+- **Stats as widget numbers.** Service figures are big numbers over small grey labels, like macOS desktop widgets, and cards shrink their figures to fit narrower screens.
+- **A menu bar on top.** A thin, straight glass bar like the macOS menu bar: the title on the left, the disks in the middle, and the weather, date and time on the right in small text.
+- **Disk meters.** Each disk in the top bar has its own icon and colour, turning amber at 75% and red at 90%, and they always sit in the middle of the bar.
 - **Glass search.** Start typing anywhere and the quick-launch search opens as a frosted sheet over a dimmed, blurred page.
 - **Quiet status dots.** Healthy services don't show a green dot until you hover them, so the ones that need attention stand out.
+- **Smooth tab switching.** A newly opened tab stays hidden until its content has settled, then fades in once, and embedded pages fade in after they load instead of flashing a loading screen. The bar heights are fixed so nothing jumps, and the effects are kept light enough to stay smooth in Firefox too.
 - **Embedded panels that match.** Home Assistant dashboards and Glance are shown inside Homepage with the same glass look (see [Extras](#extras)).
 
 ![The top bar](screenshots/topbar.png)
@@ -43,7 +44,7 @@
 | **Calendars** | Calendars, a to-do list, Premier League fixtures and table, recently downloaded films and episodes, and upcoming releases |
 | **Mobile** | A compact status view used automatically on phones (see [On phones](#on-phones)) |
 
-The tab bar works like an iOS segmented control: one glass track, with the open tab as a white pill.
+The tab bar works like a macOS segmented control: one grey track, with the open tab as a raised dark-grey segment.
 
 ![The Applications tab](screenshots/applications.png)
 
@@ -85,7 +86,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 4. Set your own location in the `openweathermap` widget in `widgets.yaml` (it's set to Singapore) and add a free [OpenWeatherMap](https://openweathermap.org/) API key as `HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY`. No key? Swap it for Homepage's `openmeteo` widget, which needs none.
 5. Service icons under `/images/icons/` are local files; swap them for [dashboard icons](https://github.com/homarr-labs/dashboard-icons) or your own.
 
-The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) and each section's colour are set in the `DISKS` and `ACCENTS` lists in `custom.js`, so rename them there to match your own labels.
+The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) are set in the `DISKS` list in `custom.js`, so rename them there to match your own labels. `custom.js` also shows Singapore dollar amounts as `S$` instead of `SGD` (the `currency()` step); change or remove it for your own currency.
 
 ## Extras
 

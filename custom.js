@@ -137,6 +137,7 @@
         if (el.style.visibility !== vis) el.style.visibility = vis;
         if (!repeat) last = date;
       });
+      if (rows.length) setData(list, "ready", "1");  // smooth loading: the list fades in once tidied
     });
   }
 
@@ -193,6 +194,7 @@
       dots.add(colour);
       if (dot.style.visibility !== vis) dot.style.visibility = vis;
     });
+    if (rows.length) setData(list, "ready", "1");  // smooth loading: fades in only after collapsing
   }
 
   /* ---------- widget labels that don't match the rest: PBS "Memory" (Proxmox and Synology say "MEM"),
@@ -216,6 +218,15 @@
 
   /* ---------- phones: an app tile's name shrinks until it fits its tile (12px down to 9px), so long
      names ("Audiobookshelf", "Free Games Claimer") show whole instead of ending in "..." ---------- */
+  /* ---------- money: "SGD 83.43" -> "S$83.43" in widget figures (Wallos; Homepage prints the ISO code), like the S$ used
+     elsewhere (07/10/2026) ---------- */
+  function currency() {
+    document.querySelectorAll("li.service .service-block *").forEach((el) => {
+      if (el.children.length) return;
+      const t = el.textContent;
+      if (/^\s*SGD[\s\u00a0]*/.test(t)) el.textContent = t.replace(/^\s*SGD[\s\u00a0]*/, "S$");
+    });
+  }
   function fitNames() {
     document.querySelectorAll('.services-group[data-acc="apps"] li.service .service-name').forEach((name) => {
       if (!PHONE.matches) { if (name.style.fontSize) name.style.removeProperty("font-size"); return; }
@@ -280,16 +291,51 @@
     collapseReleases();
     dateLists();
     widgetLabels();
+    currency();
     fitNames();
     fitBlocks();
     tcmNumbers();
   }
 
+  /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the
+     taggers above rearrange it (bookmark order, figure fitting), then fades in once; embedded pages
+     (HA, Glance) fade in after they have loaded instead of flashing their loading screens.
+     Revert: delete this block, its two calls below and the "smooth loading" rules in custom.css ---------- */
+  let settleQuiet = 0, settleCap = 0;
+  function reveal() {
+    clearTimeout(settleQuiet); clearTimeout(settleCap);
+    delete root.dataset.settling;
+  }
+  function startSettling(cap) {
+    root.dataset.settling = "1";
+    clearTimeout(settleCap);
+    settleCap = setTimeout(reveal, cap);  // never hidden longer than this
+  }
+  function settled() {  // called after each run: reveal once the page has been quiet for 250 ms
+    if (!root.dataset.settling) return;
+    clearTimeout(settleQuiet);
+    settleQuiet = setTimeout(reveal, 250);
+  }
+  function frames() {
+    document.querySelectorAll("iframe:not([data-fade])").forEach((f) => {
+      f.dataset.fade = "wait";
+      f.addEventListener("load", () => setTimeout(() => { f.dataset.fade = "in"; }, 250), { once: true });
+      setTimeout(() => { if (f.dataset.fade === "wait") f.dataset.fade = "in"; }, 3000);
+    });
+  }
+  startSettling(1500);
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest && e.target.closest('#myTab [role="tab"]');
+    if (t && t.getAttribute("aria-selected") !== "true") startSettling(1000);
+  }, true);
+  window.addEventListener("hashchange", () => startSettling(1000));
+
   let pending = false;
   new MutationObserver(() => {
+    frames();
     if (pending) return;
     pending = true;
-    setTimeout(() => { pending = false; run(); }, 150);
+    setTimeout(() => { pending = false; run(); settled(); }, 150);
   }).observe(root, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-selected"] });
 
   sky();

@@ -10,6 +10,9 @@
 // /local/home-assistant-glass-embed.js). Then edit EMBEDS below to the URL paths of
 // the dashboards you embed. Remove any view-level "theme:" from those dashboards, or
 // the theme's colours will win.
+//
+// The values match the macOS look of Homepage's custom.css: 52% glass, a hairline edge, 18px corners,
+// white text with 60% grey for secondary text, and grey macOS-style text fields.
 (function () {
   var EMBEDS = ["/dashboard-homepage", "/dashboard-calendar", "/dashboard-todo"];
   var framed;
@@ -25,17 +28,25 @@
     "--primary-background-color: transparent !important;" +
     "--secondary-background-color: rgba(44, 44, 46, 0.55) !important;" +
     "--lovelace-background: transparent !important;" +
-    "--ha-card-background: rgba(28, 28, 30, 0.55) !important;" +
-    "--card-background-color: rgba(28, 28, 30, 0.55) !important;" +
-    "--ha-card-border-color: rgba(255, 255, 255, 0.10) !important;" +
+    "--ha-card-background: rgba(30, 30, 32, 0.52) !important;" +
+    "--card-background-color: rgba(30, 30, 32, 0.52) !important;" +
+    "--ha-card-border-color: rgba(255, 255, 255, 0.12) !important;" +
     "--ha-card-border-width: 0.5px !important;" +
-    "--ha-card-border-radius: 20px !important;" +
-    "--ha-card-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;" +
-    "--primary-text-color: #f2f2f7 !important;" +
+    "--ha-card-border-radius: 18px !important;" +
+    "--ha-card-box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;" +
+    "--primary-text-color: #ffffff !important;" +
     "--secondary-text-color: rgba(235, 235, 245, 0.6) !important;" +
+    "--disabled-text-color: rgba(235, 235, 245, 0.3) !important;" +
     "--primary-color: #0a84ff !important;" +
     "--accent-color: #0a84ff !important;" +
     "--divider-color: rgba(255, 255, 255, 0.08) !important;" +
+    "--input-fill-color: rgba(118, 118, 128, 0.24) !important;" +
+    "--mdc-text-field-fill-color: rgba(118, 118, 128, 0.24) !important;" +
+    "--mdc-text-field-ink-color: #ffffff !important;" +
+    "--mdc-text-field-label-ink-color: rgba(235, 235, 245, 0.6) !important;" +
+    "--input-ink-color: #ffffff !important;" +
+    "--input-label-ink-color: rgba(235, 235, 245, 0.6) !important;" +
+    "--ha-color-form-background: rgba(118, 118, 128, 0.24) !important;" +
     "--primary-font-family: " + F + " !important;" +
     "--mdc-typography-font-family: " + F + " !important;" +
     "--ha-font-family-body: " + F + " !important;" +
