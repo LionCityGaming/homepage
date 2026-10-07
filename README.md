@@ -96,7 +96,7 @@ The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `
 ## Credits
 
 - [Homepage](https://github.com/gethomepage/homepage) by the gethomepage team
-- Fonts: [Inter](https://rsms.me/inter/) and [Cinzel](https://fonts.google.com/specimen/Cinzel) from Google Fonts
+- Font: [Inter](https://rsms.me/inter/) from Google Fonts
 - Icons: [Material Design Icons](https://pictogrammers.com/library/mdi/) (embedded) and [dashboard icons](https://github.com/homarr-labs/dashboard-icons)
 - Weather: [OpenWeatherMap](https://openweathermap.org/) (free API key), the same source as the Home Assistant weather card
 

@@ -2,7 +2,6 @@
    Deployed by Ansible (docker_host role) from the homelab-ansible repo; custom.js tags the page
    (section accents, disk colours and icons, clock, time of day, weather, open tab). */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
 
 /* ================================================================================================
    Design tokens. The --nord* names are kept because older rules below still read them; the values
@@ -1424,4 +1423,24 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
 #__next > #background, #background {
   width: auto !important; height: auto !important; right: -8% !important; bottom: -8% !important;
   max-width: none !important; max-height: none !important;  /* the phone rule "#__next > div { max-width: 100% }" capped it too */
+}
+
+/* phones in the Mac theme (07/10/2026): the title in Inter like the desktop menu bar (the Cinzel crest
+   lettering and its champagne gradient were the last un-Mac element; the Cinzel import is gone), the app tiles
+   and server cards on the same 18px corners as every other card (#__next outranks the three older 14px rules),
+   section headings already grey. The wallpaper, glass, text levels and status dots come from the rules above */
+@media (pointer: coarse), (max-width: 1024px) {
+  .information-widget-greeting, .information-widget-greeting * {
+    background: none !important;
+    filter: none !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  .information-widget-greeting span {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    font-size: 1.6rem !important;
+  }
+  #__next li.service .service-card { border-radius: 18px !important; }
 }
