@@ -1455,12 +1455,12 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
 .widget-container[data-disk="nas"] { --disk-glyph: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktbmFzIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik00LDVDMi44OSw1IDIsNS44OSAyLDdWMTdDMiwxOC4xMSAyLjg5LDE5IDQsMTlIMjBDMjEuMTEsMTkgMjIsMTguMTEgMjIsMTdWN0MyMiw1Ljg5IDIxLjExLDUgMjAsNUg0TTQuNSw3QTEsMSAwIDAsMSA1LjUsOEExLDEgMCAwLDEgNC41LDlBMSwxIDAgMCwxIDMuNSw4QTEsMSAwIDAsMSA0LjUsN003LDdIMjBWMTdIN1Y3TTgsOFYxNkgxMVY4SDhNMTIsOFYxNkgxNVY4SDEyTTE2LDhWMTZIMTlWOEgxNk05LDlIMTBWMTBIOVY5TTEzLDlIMTRWMTBIMTNWOU0xNyw5SDE4VjEwSDE3VjlaIiAvPjwvc3ZnPg=="); }
 .widget-container[data-disk="usb"] { --disk-glyph: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktdXNiLWZsYXNoLWRyaXZlIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik04IDE1QzguNTUgMTUgOSAxNS40NSA5IDE2QzkgMTYuNTUgOC41NSAxNyA4IDE3QzcuNDUgMTcgNyAxNi41NSA3IDE2QzcgMTUuNDUgNy40NSAxNSA4IDE1TTE1LjA3IDQuNjlMMTYuNSA2LjFMMTUuMDcgNy41TDEzLjY2IDYuMUwxNS4wNyA0LjY5TTE3LjkgNy41TDE5LjMxIDguOTNMMTcuOSAxMC4zNEwxNi41IDguOTNMMTcuOSA3LjVNOCAxM0M2LjM0IDEzIDUgMTQuMzQgNSAxNkM1IDE3LjY2IDYuMzQgMTkgOCAxOUM5LjY2IDE5IDExIDE3LjY2IDExIDE2QzExIDE0LjM0IDkuNjYgMTMgOCAxM005Ljc3IDQuMzNMMTAuNSA1LjA4TDE0LjI5IDEuMjlDMTQuNDcgMS4xMSAxNC43MiAxIDE1IDFDMTUuMjggMSAxNS41MyAxLjExIDE1LjcxIDEuMjlMMjIuNzggOC4zNkwyMi43OCA4LjM3QzIyLjkyIDguNTQgMjMgOC43NiAyMyA5QzIzIDkuMyAyMi44NyA5LjU3IDIyLjY2IDkuNzZMMjIuNjYgOS43NkwxOC45MyAxMy41TDE5LjY3IDE0LjIzTDEyLjk1IDIwLjk1QzExLjY4IDIyLjIyIDkuOTMgMjMgOCAyM0M0LjEzIDIzIDEgMTkuODcgMSAxNkMxIDE0LjA3IDEuNzggMTIuMzIgMy4wNSAxMS4wNUw5Ljc3IDQuMzNNMjAuNTkgOUwxNSAzLjQxTDExLjkzIDYuNUwxNy41IDEyLjA4TDIwLjU5IDlaIiAvPjwvc3ZnPg=="); }
 .widget-container[data-disk] .information-widget-resource::before {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   -webkit-mask: none;
   mask: none;
-  background: var(--disk-glyph) center / 16px 16px no-repeat,
+  background: var(--disk-glyph) center / 14px 14px no-repeat,
               linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%),
               rgb(var(--bar-rgb));
   box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.30), 0 1px 2px rgba(0, 0, 0, 0.25);
@@ -1496,4 +1496,9 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
     border-radius: 5px;
     background-size: 12px 12px, auto, auto;
   }
+}
+@media (pointer: fine) and (min-width: 1025px) {
+  /* menu bar: disk numbers in step with the date (14 px) and weather (13 px) instead of 12 px */
+  .information-widget-resource .text-xs { font-size: 13px !important; line-height: 1.2 !important; }
+  .information-widget-resource .text-xs > .pr-1 { font-size: 12px !important; }
 }
