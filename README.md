@@ -74,7 +74,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
 | `custom.css` | The whole look, grouped by part of the page (page and background, cards, status dots, tabs, top bar, embedded panels, Calendars lists, search, motion), each part with its own phone rules |
-| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks columns arranged as a peak (most links in the middle), tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, phone app names that shrink to fit their tile, the CrowdSec prefix taken off Gotify alert titles, and Technitium counts without their percentages |
+| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks columns arranged as a peak (most links in the middle), tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently (UniFi's users are called clients), phone app names that shrink to fit their tile, the CrowdSec prefix taken off Gotify alert titles, and Technitium counts without their percentages |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |
 
@@ -93,13 +93,14 @@ The UniFi, Komodo and Gotify cards have two rows of figures, each from a second 
 {{ gear | select('is_state', 'connected') | list | count }}/{{ gear | count }}
 ```
 
-Gotify messages only carry the app's id, so the `remap` list under the Gotify card turns ids into names; fill it with your own apps.
+Gotify's top row (Applications, Clients, Last 24h) comes from `extras/gotify-count.sh`, which reads Gotify's database every few minutes and writes the counts where Homepage can serve them, because Gotify's API has no totals. Its messages only carry the app's id, so the `remap` list under the Gotify card turns ids into names; fill it with your own apps.
 
 The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) are set in the `DISKS` list in `custom.js`, so rename them there to match your own labels. `custom.js` also shows Singapore dollar amounts as `S$` instead of `SGD` (the `currency()` step); change or remove it for your own currency.
 
 ## Extras
 
 - **`extras/home-assistant-glass-embed.js`** makes Home Assistant dashboards that are embedded in Homepage see-through, with glass cards and the same font. It only kicks in when a dashboard is shown inside an iframe, so Home Assistant itself looks unchanged. Instructions are at the top of the file.
+- **`extras/gotify-count.sh`** writes Gotify's real counts for the Gotify card (instructions at the top).
 - **`extras/glance-glass.css`** does the same for [Glance](https://github.com/glanceapp/glance): add it to the end of your Glance custom CSS.
 
 ## Credits

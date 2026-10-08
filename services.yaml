@@ -328,10 +328,22 @@
         description: Push Notifications
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
         widgets:
-          - type: gotify
-            url: "{{HOMEPAGE_VAR_GOTIFY_URL}}"
-            key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
-            fields: [apps, clients, messages]
+          # top row from extras/gotify-count.sh (run every few minutes on the Docker host): Gotify's API has
+          # no message totals (the built-in widget counts one page, "100"), so the counts come from its
+          # database, written to Homepage's public/images folder and read back from inside the container
+          - type: customapi
+            url: "http://127.0.0.1:3000/images/gotify-count.json"
+            refreshInterval: 60000
+            mappings:
+              - field: applications
+                label: Applications
+                format: number
+              - field: clients
+                label: Clients
+                format: number
+              - field: last_24h
+                label: Last 24h
+                format: number
           # second row: the newest message, the app it came from and when
           - type: customapi
             url: "{{HOMEPAGE_VAR_GOTIFY_URL}}/message?limit=1"

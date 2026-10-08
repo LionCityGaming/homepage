@@ -198,10 +198,12 @@
   }
 
   /* ---------- widget labels that don't match the rest: PBS "Memory" (Proxmox and Synology say "MEM"),
-     Caddy's sentence-case "Current requests" / "Failed requests" (every other label is Title Case) ---------- */
+     Caddy's sentence-case "Current requests" / "Failed requests" (every other label is Title Case),
+     UniFi's "LAN Users" / "WLAN Users", which count connected clients ("Devices" there means UniFi gear) ---------- */
   const LABELS = [
     ["Proxmox Backup", { "Memory": "MEM" }],
     ["Caddy", { "Current requests": "Current Requests", "Failed requests": "Failed Requests" }],
+    ["UniFi", { "LAN Users": "LAN Clients", "WLAN Users": "WLAN Clients" }],
   ];
 
   function widgetLabels() {
