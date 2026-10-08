@@ -282,35 +282,104 @@
         href: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Network Controller
         siteMonitor: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
-        widget:
-          type: unifi
-          url: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
-          username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
+        widgets:
+          - type: unifi
+            url: "https://unifi.{{HOMEPAGE_VAR_DOMAIN}}"
+            username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
+            password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
+          # second row from Home Assistant's UniFi Network integration: clients per Wi-Fi network
+          # (sensor.<ssid>_clients, rename to your SSIDs) and a template helper counting network
+          # devices that report "connected" (see README). state: entries work with a non-admin user.
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: sensor.home_clients
+                label: Home
+              - state: sensor.iot_clients
+                label: IoT
+              - state: sensor.guest_clients
+                label: Guest
+              - state: sensor.unifi_gear_online
+                label: Gear Online
 
     - Komodo:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komodo.webp
         href: "https://komodo.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Docker Stack Manager
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9120"
-        widget:
-          type: komodo
-          url: "{{HOMEPAGE_VAR_KOMODO_URL}}"
-          key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
-          secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
-          showSummary: true
-          showStacks: true
+        widgets:
+          - type: komodo
+            url: "{{HOMEPAGE_VAR_KOMODO_URL}}"
+            key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+            secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+            showSummary: true
+          # second row: stacks that need attention (Down = stopped + down)
+          - type: komodo
+            url: "{{HOMEPAGE_VAR_KOMODO_URL}}"
+            key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+            secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+            showStacks: true
+            fields: [down, unhealthy, unknown]
 
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
         href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Push Notifications
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
-        widget:
-          type: gotify
-          url: "{{HOMEPAGE_VAR_GOTIFY_URL}}"
-          key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
-          fields: [apps, messages]
+        widgets:
+          - type: gotify
+            url: "{{HOMEPAGE_VAR_GOTIFY_URL}}"
+            key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
+            fields: [apps, clients, messages]
+          # second row: the newest message, the app it came from and when
+          - type: customapi
+            url: "{{HOMEPAGE_VAR_GOTIFY_URL}}/message?limit=1"
+            headers:
+              X-Gotify-Key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
+            refreshInterval: 60000
+            mappings:
+              - field: messages.0.title
+                label: Latest
+              - field: messages.0.appid
+                label: From
+                # Gotify only sends the app's id: map your app ids to names (Gotify > Apps)
+                remap:
+                  - value: 4
+                    to: "Radarr"
+                  - value: 5
+                    to: "Sonarr"
+                  - value: 7
+                    to: "CrowdSec"
+                  - value: 8
+                    to: "Tautulli"
+                  - value: 10
+                    to: "Wallos"
+                  - value: 11
+                    to: "Free Games Claimer"
+                  - value: 13
+                    to: "Seerr"
+                  - value: 16
+                    to: "Komodo"
+                  - value: 17
+                    to: "Maintainerr"
+                  - value: 18
+                    to: "Proxmox Backup Server"
+                  - value: 19
+                    to: "Bazarr"
+                  - value: 20
+                    to: "Prowlarr"
+                  - value: 22
+                    to: "BookStack"
+                  - value: 23
+                    to: "Authentik"
+                  - value: 24
+                    to: "Gatus"
+                  - value: 25
+                    to: "Synology"
+              - field: messages.0.date
+                label: Received
+                format: relativeDate
 
 - Networking & Security:
     - Caddy:

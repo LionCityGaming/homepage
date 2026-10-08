@@ -74,7 +74,7 @@ Phones get their own compact layout automatically (no separate app or URL):
 | `services.yaml` | Every service and its widget |
 | `widgets.yaml` | The top bar: crest, title, weather, date, time and disks |
 | `custom.css` | The whole look, grouped by part of the page (page and background, cards, status dots, tabs, top bar, embedded panels, Calendars lists, search, motion), each part with its own phone rules |
-| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks columns arranged as a peak (most links in the middle), tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, and phone app names that shrink to fit their tile |
+| `custom.js` | Small helpers: section colours, disk colours and icons, the clock layout, time-of-day and weather moods, the phone layout, Bookmarks columns arranged as a peak (most links in the middle), tidier dates in the Calendars lists, and one row per show in Media Releases when several episodes come out on the same day ("The Terminal List · 8 episodes", every episode in its tooltip), matching labels for the few widgets that word theirs differently, phone app names that shrink to fit their tile, the CrowdSec prefix taken off Gotify alert titles, and Technitium counts without their percentages |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance |
 
@@ -85,6 +85,15 @@ Phones get their own compact layout automatically (no separate app or URL):
 3. Delete the services you don't run from `services.yaml`, and their groups from the `layout` in `settings.yaml`.
 4. Set your own location in the `openweathermap` widget in `widgets.yaml` (it's set to Singapore) and add a free [OpenWeatherMap](https://openweathermap.org/) API key as `HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY`. No key? Swap it for Homepage's `openmeteo` widget, which needs none.
 5. Service icons under `/images/icons/` are local files; swap them for [dashboard icons](https://github.com/homarr-labs/dashboard-icons) or your own.
+
+The UniFi, Komodo and Gotify cards have two rows of figures, each from a second widget on the same card. UniFi's second row comes from Home Assistant's UniFi Network integration through a long-lived token (`HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN`; a non-admin user is enough, as the card only reads states). Rename the `sensor.<ssid>_clients` entities to your own Wi-Fi networks, and make `sensor.unifi_gear_online` as a Home Assistant template helper (Settings, Helpers, Template sensor) with your gateway, access points and switches:
+
+```jinja
+{% set gear = ['sensor.gateway_state', 'sensor.ap_living_room_state', 'sensor.switch_office_state'] %}
+{{ gear | select('is_state', 'connected') | list | count }}/{{ gear | count }}
+```
+
+Gotify messages only carry the app's id, so the `remap` list under the Gotify card turns ids into names; fill it with your own apps.
 
 The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) are set in the `DISKS` list in `custom.js`, so rename them there to match your own labels. `custom.js` also shows Singapore dollar amounts as `S$` instead of `SGD` (the `currency()` step); change or remove it for your own currency.
 

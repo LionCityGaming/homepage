@@ -280,6 +280,32 @@
     });
   }
 
+  /* ---------- Gotify card, Latest box: CrowdSec alerts arrive as "🚨 crowdsecurity/http-wordpress-scan";
+     show just "http-wordpress-scan" (08/10/2026) ---------- */
+  function gotifyLatest() {
+    const card = document.querySelector('li.service[data-name="Gotify"]');
+    if (!card) return;
+    card.querySelectorAll(".service-container ~ .service-container .service-block-value").forEach((el) => {
+      // edit the text node itself so React can still update it on the next refresh
+      el.childNodes.forEach((n) => {
+        if (n.nodeType !== 3) return;
+        const short = n.nodeValue.replace(/^\s*🚨\s*crowdsecurity\//, "");
+        if (short !== n.nodeValue) n.nodeValue = short;
+      });
+    });
+  }
+
+  /* ---------- Technitium cards: the widget writes "58 (0.02%)"; show just the count (08/10/2026) ---------- */
+  function technitiumCounts() {
+    document.querySelectorAll('li.service[data-name^="Technitium"] .service-block-value').forEach((el) => {
+      el.childNodes.forEach((n) => {
+        if (n.nodeType !== 3) return;
+        const short = n.nodeValue.replace(/\s*\([\d.,]+\s*%\)\s*$/, "");
+        if (short !== n.nodeValue) n.nodeValue = short;
+      });
+    });
+  }
+
   /* ---------- run everything on load and whenever the page changes ---------- */
   function run() {
     tabs();
@@ -295,6 +321,8 @@
     fitNames();
     fitBlocks();
     tcmNumbers();
+    gotifyLatest();
+    technitiumCounts();
   }
 
   /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the

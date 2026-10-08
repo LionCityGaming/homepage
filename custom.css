@@ -1214,6 +1214,12 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
 .service-container.fit-wrap { flex-wrap: wrap !important; }
 .service-container.fit-wrap > .service-block { flex: 1 1 40% !important; }
 
+/* Gotify card, bottom row (Latest / From / Received, 08/10/2026): same three equal columns as the top row so
+   the boxes line up; a long notification title gets "..." instead of squeezing the other boxes */
+li.service[data-name="Gotify"] .service-container ~ .service-container > .service-block { flex: 1 1 0 !important; min-width: 0 !important; }
+li.service[data-name="Gotify"] .service-container ~ .service-container .service-block-value {
+  width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ================================================================================================
    MAC THEME (07/10/2026): macOS look. 1 wallpaper + glass, 2 fonts, 3 text levels, 4 macOS
    segmented control, 5 one corner scale, 6 stats as widget numbers, 7 top bar as a menu bar.
