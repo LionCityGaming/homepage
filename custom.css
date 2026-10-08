@@ -1488,3 +1488,12 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
   font-weight: 500;
   text-shadow: none;
 }
+@media (pointer: coarse), (max-width: 1024px) {
+  /* phones: smaller tiles to fit the compact top bar (it used 16 px glyphs before the tiles) */
+  .widget-container[data-disk] .information-widget-resource::before {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background-size: 12px 12px, auto, auto;
+  }
+}
