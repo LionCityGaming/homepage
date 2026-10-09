@@ -3,6 +3,27 @@
 # HOME - core servers
 # ============================================================
 - Home:
+    - Proxmox Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+        widget:
+          type: proxmox
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
+          username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
+
+    - Synology Server:
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/synology-dsm.png
+        href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+        widget:
+          type: diskstation
+          url: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
+          username: "{{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}"
+          fields: [uptime, resources.cpu, resources.mem]
+
     - Plex Media Server:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/plex.webp
         id: plex2
@@ -26,27 +47,6 @@
           username: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_USERNAME}}"
           password: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_PASSWORD}}"
           datastore: Synology
-
-    - Proxmox Server:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
-        href: "https://proxmox.{{HOMEPAGE_VAR_DOMAIN}}"
-        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
-        widget:
-          type: proxmox
-          url: "https://{{HOMEPAGE_VAR_PROXMOX_IP}}:8006"
-          username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
-
-    - Synology Server:
-        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/synology-dsm.png
-        href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
-        siteMonitor: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
-        widget:
-          type: diskstation
-          url: "{{HOMEPAGE_VAR_SYNOLOGY_URL}}"
-          username: "{{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}"
-          fields: [uptime, resources.cpu, resources.mem]
 
 # ============================================================
 # NEWS - currency rates + Glance
@@ -322,6 +322,39 @@
             showStacks: true
             fields: [down, unhealthy, unknown]
 
+    - Home Assistant:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
+        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
+        description: Smart Home Hub
+        siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+        # two rows from Home Assistant (render token; state reads only, so counts come from template
+        # helpers: sensor.lights_on (room lights), sensor.aircons_on, sensor.fans_on)
+        widgets:
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: zone.home
+                label: People Home
+              - state: sensor.lights_on
+                label: Lights On
+              - state: sensor.aircons_on
+                label: Aircons On
+              - state: sensor.fans_on
+                label: Fans On
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: cover.blinds
+                label: Blinds
+              - state: lock.frontdoor
+                label: Front Door
+              - state: vacuum.miemie
+                label: Vacuum
+              - state: sensor.mibx5_sg_991525056_f35th_status_p_2_2
+                label: Washer
+
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
         href: "https://gotify.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -394,6 +427,19 @@
                 format: relativeDate
 
 - Networking & Security:
+    - Technitium (NS1):
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
+        href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Primary DNS & Filtering
+        siteMonitor: "http://{{HOMEPAGE_VAR_TECHNITIUM_HOST}}:5380"
+        widget:
+          type: technitium
+          url: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_TECHNITIUM_API_KEY}}"
+          node: ns1.dns.home.arpa
+          range: LastDay
+          fields: [totalQueries, totalBlocked, totalClients, totalServerFailure]
+
     - Caddy:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/caddy.webp
         href: "https://{{HOMEPAGE_VAR_DOMAIN}}"
@@ -425,19 +471,7 @@
           url: "https://authentik.{{HOMEPAGE_VAR_DOMAIN}}"
           key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
           version: 2
-          fields: [loginsLast24H, failedLoginsLast24H]
-
-    - Technitium (NS1):
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
-        href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Primary DNS & Filtering
-        siteMonitor: "http://{{HOMEPAGE_VAR_TECHNITIUM_HOST}}:5380"
-        widget:
-          type: technitium
-          url: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"
-          key: "{{HOMEPAGE_VAR_TECHNITIUM_API_KEY}}"
-          node: ns1.dns.home.arpa
-          range: LastDay
+          fields: [users, loginsLast24H, failedLoginsLast24H]
 
     - Technitium (NS2):
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
@@ -450,30 +484,15 @@
           key: "{{HOMEPAGE_VAR_TECHNITIUM_API_KEY}}"
           node: ns2.dns.home.arpa
           range: LastDay
+          fields: [totalQueries, totalBlocked, totalClients, totalServerFailure]
+
+    - Vaultwarden:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
+        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Password Vault
+        siteMonitor: "https://{{HOMEPAGE_VAR_VAULTWARDEN_HOST}}:8000"
 
 - Media Acquisition:
-    - Seerr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
-        href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Movie & TV Requests
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5555"
-        widget:
-          type: jellyseerr
-          url: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
-          key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
-          fields: [pending, approved, available]
-
-    - Prowlarr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
-        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Indexer Manager
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9696"
-        widget:
-          type: prowlarr
-          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
-          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
-          fields: [numberOfGrabs, numberOfQueries]
-
     - Radarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/radarr-light-hybrid.webp
         href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -494,25 +513,16 @@
           url: "{{HOMEPAGE_VAR_SONARR_URL}}"
           key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
 
-    - Chaptarr:
-        icon: /images/icons/chaptarr.svg
-        href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Book & Audiobook Downloads
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
+    - Prowlarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/prowlarr-radarr-light.webp
+        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Indexer Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9696"
         widget:
-          type: readarr
-          url: "{{HOMEPAGE_VAR_CHAPTARR_URL}}"
-          key: "{{HOMEPAGE_VAR_CHAPTARR_API_KEY}}"
-
-    - Bazarr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
-        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Subtitle Downloads
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6767"
-        widget:
-          type: bazarr
-          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
-          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+          type: prowlarr
+          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+          fields: [numberOfGrabs, numberOfQueries]
 
     - SABnzbd:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
@@ -524,17 +534,89 @@
           url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
           key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
 
-- Media Tools:
-    - Maintainerr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
-        href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Library Cleanup
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+    - Seerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
+        href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Movie & TV Requests
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5555"
         widget:
-          type: maintainerr
-          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
-          fields: [itemsHandled, reclaimable, totalCapacity]
+          type: jellyseerr
+          url: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
+          key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+          fields: [pending, processing, available, issues]
 
+    - Bazarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bazarr.webp
+        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Subtitle Downloads
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6767"
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+
+    - Chaptarr:
+        icon: /images/icons/chaptarr.svg
+        href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Book & Audiobook Downloads
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
+        widget:
+          type: readarr
+          url: "{{HOMEPAGE_VAR_CHAPTARR_URL}}"
+          key: "{{HOMEPAGE_VAR_CHAPTARR_API_KEY}}"
+
+    - Kapowarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/kapowarr.svg
+        href: "https://kapowarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Comic Downloads
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656"
+        # library stats (API key in HOMEPAGE_VAR_KAPOWARR_API_KEY)
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656/api/volumes/stats?api_key={{HOMEPAGE_VAR_KAPOWARR_API_KEY}}"
+          refreshInterval: 300000
+          mappings:
+            - field: result.volumes
+              label: Volumes
+              format: number
+            - field: result.issues
+              label: Issues
+              format: number
+            - field: result.downloaded_issues
+              label: Downloaded
+              format: number
+
+    - MeTube:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
+        href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: YouTube Downloader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
+        # download history (no key needed): finished and waiting downloads
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081/history"
+          refreshInterval: 60000
+          mappings:
+            - field: done
+              label: Downloaded
+              format: size
+            - field: queue
+              label: Queued
+              format: size
+
+    - Profilarr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
+        href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Quality Profile Sync
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6868"
+
+    - DroppedNeedle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/droppedneedle.webp
+        href: "https://droppedneedle.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Music Requests & Downloads
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8688"
+
+- Media Tools:
     - Tautulli:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
         href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -545,6 +627,73 @@
           url: "{{HOMEPAGE_VAR_PLEX_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_PLEX_API_KEY}}"
           fields: [tv, movies]
+
+    - Audiobookshelf:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
+        href: "https://abs.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Audiobooks & Podcasts
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:13378"
+        widget:
+          type: audiobookshelf
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+          fields: [podcasts, podcastsDuration, books, booksDuration]
+
+    - Komga:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komga.webp
+        href: "https://komga.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Comic Library
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:25600"
+        widget:
+          type: komga
+          url: "{{HOMEPAGE_VAR_KOMGA_URL}}"
+          username: "{{HOMEPAGE_VAR_KOMGA_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_KOMGA_PASSWORD}}"
+
+    - Grimmory:
+        icon: /images/icons/grimmory.png
+        href: "https://grimmory.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Ebook Library
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
+        widget:
+          type: booklore
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
+          username: "{{HOMEPAGE_VAR_BOOKLORE_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}"
+
+    - Suwayomi:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
+        href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Manga Library
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
+        widget:
+          type: suwayomi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
+          username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
+          fields: [download, read, unread]
+
+    - Maintainerr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/maintainerr.webp
+        href: "https://maintainerr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Library Cleanup
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+        widget:
+          type: maintainerr
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6246"
+          fields: [itemsHandled, reclaimable, totalCapacity]
+
+    - Dispatcharr:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
+        href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: IPTV Channel Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+        widget:
+          type: dispatcharr
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+          username: "{{HOMEPAGE_VAR_DISPATCHARR_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
+          enableActiveStreams: true
 
     - TitleCardMaker:
         id: titlecardmaker
@@ -567,64 +716,85 @@
               label: Size
               suffix: GB
 
-    - Dispatcharr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dispatcharr.webp
-        href: "https://dispatcharr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: IPTV Channel Manager
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
+    - PosterFlow:
+        icon: /images/icons/posterflow.webp
+        href: "https://posterflow.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Movie & TV Poster Sync
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357"
+        # unauthenticated: how many Radarr/Sonarr items (movies, series, seasons, collections) have a poster
         widget:
-          type: dispatcharr
-          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9191"
-          username: "{{HOMEPAGE_VAR_DISPATCHARR_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
-          enableActiveStreams: true
-
-    - Audiobookshelf:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/audiobookshelf.webp
-        href: "https://abs.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Audiobook Library
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:13378"
-        widget:
-          type: audiobookshelf
-          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
-          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
-          fields: [podcasts, books]
-
-    - Grimmory:
-        icon: /images/icons/grimmory.png
-        href: "https://grimmory.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Ebook Library
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
-        widget:
-          type: booklore
-          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6060"
-          username: "{{HOMEPAGE_VAR_BOOKLORE_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}"
-
-    - Komga:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/komga.webp
-        href: "https://komga.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Comic Library
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:25600"
-        widget:
-          type: komga
-          url: "{{HOMEPAGE_VAR_KOMGA_URL}}"
-          username: "{{HOMEPAGE_VAR_KOMGA_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_KOMGA_PASSWORD}}"
-
-    - Suwayomi:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
-        href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Manga Library
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
-        widget:
-          type: suwayomi
-          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4567"
-          username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
-          fields: [download, read, unread]
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357/api/posterflow/unmatched-stats"
+          refreshInterval: 300000
+          mappings:
+            - field: summary.grand_total.total
+              label: Library Items
+              format: number
+            - field: summary.grand_total.unmatched
+              label: Missing Posters
+              format: number
+            - field: summary.grand_total.percent_complete
+              label: Coverage
+              format: percent
 
 - Personal & Productivity:
+    - Immich:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
+        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
+        description: Photo & Video Backup
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:2283"
+        widget:
+          type: immich
+          url: "{{HOMEPAGE_VAR_IMMICH_URL}}"
+          key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"
+          version: 2
+
+    - Paperless-ngx:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
+        href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Document Archive
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8585"
+        widget:
+          type: paperlessngx
+          url: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
+          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
+
+    - BookStack:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
+        href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Homelab Wiki
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6875/login"
+        # read-only "homepage" BookStack user (token id:secret in HOMEPAGE_VAR_BOOKSTACK_TOKEN);
+        # one API call per count, laid out as one row by custom.css (BookStack card)
+        widgets:
+          - type: customapi
+            url: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}/api/shelves?count=1"
+            headers:
+              Authorization: "Token {{HOMEPAGE_VAR_BOOKSTACK_TOKEN}}"
+            refreshInterval: 300000
+            mappings:
+              - field: total
+                label: Shelves
+                format: number
+          - type: customapi
+            url: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}/api/books?count=1"
+            headers:
+              Authorization: "Token {{HOMEPAGE_VAR_BOOKSTACK_TOKEN}}"
+            refreshInterval: 300000
+            mappings:
+              - field: total
+                label: Books
+                format: number
+          - type: customapi
+            url: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}/api/pages?count=1"
+            headers:
+              Authorization: "Token {{HOMEPAGE_VAR_BOOKSTACK_TOKEN}}"
+            refreshInterval: 300000
+            mappings:
+              - field: total
+                label: Pages
+                format: number
+
     - Mealie:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mealie.webp
         href: "https://mealie.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -647,21 +817,61 @@
           url: "{{HOMEPAGE_VAR_WALLOS_URL}}"
           key: "{{HOMEPAGE_VAR_WALLOS_API_KEY}}"
 
-    - Immich:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/immich.webp
-        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}/photos"
-        description: Photo & Video Backup
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:2283"
+    - Linkding:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+        href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Saved Links
+        siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/health"
         widget:
-          type: immich
-          url: "{{HOMEPAGE_VAR_IMMICH_URL}}"
-          key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"
-          version: 2
+          type: customapi
+          url: "{{HOMEPAGE_VAR_LINKDING_STATS_URL}}"
+          refreshInterval: 300000
+          mappings:
+            - field: total
+              label: Links
+            - field: archived
+              label: Archived
+            - field: tags
+              label: Tags
+
+    - FreshRSS:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
+        href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: News Feed Reader
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
+        widget:
+          type: freshrss
+          url: "{{HOMEPAGE_VAR_FRESHRSS_URL}}"
+          username: "{{HOMEPAGE_VAR_FRESHRSS_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_FRESHRSS_PASSWORD}}"
+
+    - Zipline:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zipline.png
+        href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: File Sharing & Short Links
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321"
+        # uploads (API key in HOMEPAGE_VAR_ZIPLINE_API_KEY)
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321/api/user/stats"
+          headers:
+            Authorization: "{{HOMEPAGE_VAR_ZIPLINE_API_KEY}}"
+          refreshInterval: 300000
+          mappings:
+            - field: filesUploaded
+              label: Files
+              format: number
+            - field: views
+              label: Views
+              format: number
+            - field: storageUsed
+              label: Storage
+              format: bytes
 
     - Palworld:
         icon: /images/icons/palworld.png
         href: "https://palworld.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Palworld Game Server
+        description: Multiplayer Game Server
         # the REST API answers unauthenticated checks with a malformed 401, so check by ping
         ping: "{{HOMEPAGE_VAR_PALWORLD_HOST}}"
         widget:
@@ -684,109 +894,11 @@
               label: Uptime
               format: duration
 
-    - Paperless-ngx:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/paperless-ngx.webp
-        href: "https://paperless.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Document Archive
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8585"
-        widget:
-          type: paperlessngx
-          url: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
-          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
-
-    - Linkding:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
-        href: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Saved Links
-        siteMonitor: "https://linkding.{{HOMEPAGE_VAR_DOMAIN}}/health"
-        widget:
-          type: customapi
-          url: "{{HOMEPAGE_VAR_LINKDING_STATS_URL}}"
-          refreshInterval: 300000
-          mappings:
-            - field: total
-              label: Total
-            - field: active
-              label: Active
-            - field: archived
-              label: Archived
-            - field: tags
-              label: Tags
-
-    - FreshRSS:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
-        href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: News Feed Reader
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
-        widget:
-          type: freshrss
-          url: "{{HOMEPAGE_VAR_FRESHRSS_URL}}"
-          username: "{{HOMEPAGE_VAR_FRESHRSS_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_FRESHRSS_PASSWORD}}"
-
-# ============================================================
-# SECONDARY APPLICATIONS - utilities & tools (alphabetical)
-# ============================================================
-- More Apps:
-    - Bambuddy:
-        icon: /images/icons/bambuddy.png
-        href: "https://bambuddy.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Bambu Printer Manager
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8010"
-
-    - BentoPDF:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
-        href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: PDF Toolkit
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
-
-    - BookStack:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
-        href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Homelab Wiki
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6875/login"
-
-    - Code-server:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
-        href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: VS Code in the Browser
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
-
-    - degoog:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/degoog.webp
-        href: "https://degoog.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Private Web Search
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4445"
-
-    - Dozzle:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
-        href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Live Container Logs
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9999"
-
-    - DroppedNeedle:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/droppedneedle.webp
-        href: "https://droppedneedle.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Music Requests & Downloads
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8688"
-
-    - FileBrowser Quantum:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
-        href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Web File Manager
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
-
-    - Free Games Claimer:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/free-games-claimer.webp
-        href: "https://freegames.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Epic, GOG & Steam Freebies
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7080"
-
-    - Gitea:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
-        href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Self-Hosted Git
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+    - Paperless-GPT:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/paperless-ai.png
+        href: "https://paperless-gpt.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: AI OCR & Tagging
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8095"
 
     - Glance:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/glance.webp
@@ -794,57 +906,68 @@
         description: News & Feeds Dashboard
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4444"
 
-    - Home Assistant:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
-        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
-        description: Smart Home Hub
-        siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+    - Bambuddy:
+        icon: /images/icons/bambuddy.png
+        href: "https://bambuddy.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Bambu Printer Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8010"
 
-    - Kapowarr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/kapowarr.svg
-        href: "https://kapowarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Comic Downloads
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5656"
-
-    - MeTube:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
-        href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Video Downloads
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
-
-    - Paperless-GPT:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/paperless-ai.png
-        href: "https://paperless-gpt.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: AI OCR & Tagging
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8095"
-
-    - PosterFlow:
-        icon: /images/icons/posterflow.webp
-        href: "https://posterflow.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Movie & TV Poster Sync
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8357"
-
-    - Profilarr:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
-        href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Quality Profile Sync
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6868"
-
-    - Vaultwarden:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/vaultwarden-light.webp
-        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Password Vault
-        siteMonitor: "https://{{HOMEPAGE_VAR_VAULTWARDEN_HOST}}:8000"
-
-    - Zipline:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zipline.png
-        href: "https://zipline.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Uploads & Short Links
-        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3321"
+    - Free Games Claimer:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/free-games-claimer.webp
+        href: "https://freegames.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Auto-Claims Free Games
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:7080"
 
 # ============================================================
 # BOOKMARKS & EXTERNAL SERVICES
 # ============================================================
+
+# ============================================================
+# SECONDARY APPLICATIONS - utilities & tools (alphabetical)
+# ============================================================
+- Utilities:
+    - Gitea:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Self-Hosted Git
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+        # API key in HOMEPAGE_VAR_GITEA_API_KEY
+        widget:
+          type: gitea
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:3052"
+          key: "{{HOMEPAGE_VAR_GITEA_API_KEY}}"
+          fields: [repositories, notifications, issues, pulls]
+
+    - Dozzle:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dozzle.svg
+        href: "https://dozzle.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Live Container Logs
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9999"
+
+    - Code-server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
+        href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: VS Code in the Browser
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8377"
+
+    - FileBrowser Quantum:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/filebrowser-quantum.webp
+        href: "https://filebrowser.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Web File Manager
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8085"
+
+    - BentoPDF:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
+        href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: PDF Toolkit
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
+
+    - degoog:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/degoog.webp
+        href: "https://degoog.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Private Web Search
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4445"
+
 - 3D Printing:
     - MakerWorld:
         icon: /images/icons/makerworld.webp

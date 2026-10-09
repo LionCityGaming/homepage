@@ -393,14 +393,11 @@ html::after {
   .services-group:nth-child(n+6), .bookmark-group:nth-child(n+6) { animation-delay: 0.25s; }
 }
 
-/* wide screens: More Apps ten across (19 tiles: 10 + 9; 8 left a row of 3). Homepage's own `columns`
-   stops at 8 (a higher number falls back to one column), so settings.yaml stays at 8. Below 2200px ten
-   tiles cut names short ("Free Games Claime" at 1680px), so narrower screens keep Homepage's 8 */
-@media (pointer: fine) and (min-width: 2200px) {
-  .services-group[data-acc="more apps"] .services-list {
-    grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
-  }
-}
+/* BookStack card: three one-figure widgets (Shelves, Books, Pages; one API call each) shown as one row of
+   figures like every other card (08/10/2026) */
+li.service[data-name="BookStack"] .service-card { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+li.service[data-name="BookStack"] .service-card > :not(.service-container) { grid-column: 1 / -1; }
+
 @media (pointer: coarse), (max-width: 1024px) {
   /* phones: the Apps list as three columns of compact tiles (icon, short name, status dot); the
      server cards above stay two across */
@@ -1013,7 +1010,7 @@ li.bookmark > a:hover {
 .service-card:has(iframe) .service-container { margin-top: 0; padding-top: 0; }
 iframe { width: 100%; border: 0; background-color: transparent; }
 .home-assistant { height: 925px; margin: -25px -20px 0; }
-.glance { height: 836px; margin: -5px 0 -20px; }   /* 850 → 820 on 06/10/2026 (Glance rows tightened), 820 → 836 on 07/10/2026 (its two row gaps 10 → 18px, to end level with the HA panel) */
+.glance { height: 836px; margin: -7px 0 -20px; }   /* 850 → 820 on 06/10/2026 (Glance rows tightened), 820 → 836 on 07/10/2026 (its two row gaps 10 → 18px); top margin -5 → -7px on 09/10/2026: the video cards end level with the HA panel's vacuum card ON THE USER'S SCREEN (the docs-render headless render draws Glance ~20px differently, so judge this by the user's screenshot) */
 .todo { height: 249px; margin: -28px 0 0; }   /* 529 → 249 on 06/10/2026: an empty list left ~430px blank */
 .ha-calendar { height: 1054px; margin-top: -28px; pointer-events: none; }
 .epl-calendar { height: 794px; margin: 0; pointer-events: none; }   /* 514 → 794: gets the 280px To-Do gave up, so the column still lines up */
@@ -1219,6 +1216,48 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
 li.service[data-name="Gotify"] .service-container ~ .service-container > .service-block { flex: 1 1 0 !important; min-width: 0 !important; }
 li.service[data-name="Gotify"] .service-container ~ .service-container .service-block-value {
   width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Stats switch (custom.js statsSwitch, 08/10/2026): iOS-style switch at the end of the Infrastructure
+   heading folds or unfolds all the other Applications sections at once (Infrastructure keeps its figures) */
+.service-group-name:has(.stats-switch) { display: flex !important; align-items: center; width: 100%; }
+.stats-switch {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 2px 4px;
+  background: none; border: 0; cursor: pointer; color: var(--mac-label-2);
+  font: 500 13px/1 var(--font-family); letter-spacing: 0;
+}
+.stats-switch-track {
+  position: relative; width: 36px; height: 22px; border-radius: 11px;
+  background: rgba(120, 120, 128, 0.32); transition: background-color 0.2s ease;
+}
+.stats-switch-knob {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); transition: transform 0.2s ease;
+}
+.stats-switch[aria-checked="true"] .stats-switch-track { background: #30d158; }
+.stats-switch[aria-checked="true"] .stats-switch-knob { transform: translateX(14px); }
+.stats-switch:focus-visible { outline: 2px solid #0a84ff; outline-offset: 2px; border-radius: 6px; }
+/* no-figures-compact (08/10/2026, user trial): in the Applications sections, a card without figures keeps its
+   compact height instead of stretching to the row (top-aligned, so icons and names still line up with the
+   cards beside it); it reads as "nothing to show". To revert, delete these two rules */
+.services-group.stats-optional li.service:not(:has(.service-container)) { align-self: start; }
+.services-group.stats-optional li.service:not(:has(.service-container)) .service-card { height: auto !important; }
+
+/* section folds: click a section heading (chevron) to fold just its figure rows */
+.stats-fold-head { cursor: pointer; }
+.stats-fold {
+  display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; margin-left: 6px;
+  padding: 0; background: none; border: 0; cursor: pointer; color: var(--mac-label-2); transition: transform 0.2s ease;
+}
+.stats-fold svg { width: 12px; height: 12px; }
+.stats-fold[aria-expanded="true"] { transform: rotate(90deg); }
+.stats-fold:focus-visible { outline: 2px solid #0a84ff; outline-offset: 2px; border-radius: 6px; }
+.services-group.stats-folded li.service .service-container { display: none !important; }
+@media (pointer: coarse), (max-width: 1024px) {
+  .stats-switch { display: none !important; }
+  .stats-fold { display: none !important; }
+  .stats-fold-head { cursor: auto; }
+  .services-group.stats-folded li.service .service-container { display: revert !important; }
+}
 
 /* ================================================================================================
    MAC THEME (07/10/2026): macOS look. 1 wallpaper + glass, 2 fonts, 3 text levels, 4 macOS

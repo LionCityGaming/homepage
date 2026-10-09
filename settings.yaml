@@ -41,13 +41,13 @@ layout:
     header: true
     tab: Applications
     style: row
-    columns: 3
+    columns: 4
   Networking & Security:
     disableCollapse: true
     header: true
     tab: Applications
     style: row
-    columns: 5
+    columns: 6
   Media Acquisition:
     disableCollapse: true
     header: true
@@ -59,19 +59,19 @@ layout:
     header: true
     tab: Applications
     style: row
-    columns: 8
+    columns: 7
   Personal & Productivity:
     disableCollapse: true
     header: true
     tab: Applications
     style: row
     columns: 7
-  More Apps:
+  Utilities:
     disableCollapse: true
     header: true
     tab: Applications
     style: row
-    columns: 8
+    columns: 6
   3D Printing:
     disableCollapse: true
     header: true

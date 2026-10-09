@@ -25,12 +25,12 @@
   /* ---------- section accent colours (header dot, hover glow, bookmark chips) ---------- */
   const ACCENTS = [
     ["infrastructure", "100, 210, 255"], ["networking", "48, 209, 88"], ["acquisition", "255, 159, 10"],
-    ["media tools", "255, 55, 95"], ["productivity", "191, 90, 242"], ["more apps", "94, 92, 230"],
+    ["media tools", "255, 55, 95"], ["productivity", "191, 90, 242"], ["utilities", "94, 92, 230"],
     ["3d printing", "255, 159, 10"],
     ["homelab help", "94, 92, 230"], ["homelab", "100, 210, 255"],  // "homelab help" first, so it gets its own colour
     ["reference", "255, 214, 10"], ["shopping", "48, 209, 88"], ["social", "255, 55, 95"],  // Social & Media took over Entertainment's pink (blue sat beside Homelab's two blues)
     ["tools", "172, 142, 104"], ["work", "191, 90, 242"], ["servers", "10, 132, 255"],
-    ["apps", "48, 209, 88"],  // after "more apps", so that one keeps its own colour
+    ["apps", "48, 209, 88"],
   ];
 
   function sectionAccents() {
@@ -220,13 +220,13 @@
 
   /* ---------- phones: an app tile's name shrinks until it fits its tile (12px down to 9px), so long
      names ("Audiobookshelf", "Free Games Claimer") show whole instead of ending in "..." ---------- */
-  /* ---------- money: "SGD 83.43" -> "S$83.43" in widget figures (Wallos; Homepage prints the ISO code), like the S$ used
-     elsewhere (07/10/2026) ---------- */
+  /* ---------- money: "SGD 83.43" -> "$83.43" in widget figures (Wallos; Homepage prints the ISO code); plain "$"
+     everywhere since 08/10/2026 (was "S$", 07/10/2026) ---------- */
   function currency() {
     document.querySelectorAll("li.service .service-block *").forEach((el) => {
       if (el.children.length) return;
       const t = el.textContent;
-      if (/^\s*SGD[\s\u00a0]*/.test(t)) el.textContent = t.replace(/^\s*SGD[\s\u00a0]*/, "S$");
+      if (/^\s*SGD[\s\u00a0]*/.test(t)) el.textContent = t.replace(/^\s*SGD[\s\u00a0]*/, "$");
     });
   }
   function fitNames() {
@@ -308,6 +308,139 @@
     });
   }
 
+  /* ---------- figures the user prefers plain (08/10/2026): Komodo and Proxmox write "running / total"
+     ("49 / 49") and Seerr "open / all" issues ("0 / 0"), shown as just the first number (problems show in
+     Komodo's Down/Unhealthy row);
+     SABnzbd's idle "0:00:00" Time Left shows as "–"; Audiobookshelf's two "Duration" labels say which, in hours, as does Palworld's uptime; Immich storage in GB.
+     Text nodes are edited in place so React keeps updating them ---------- */
+  function editText(el, fn) {
+    el.childNodes.forEach((n) => {
+      if (n.nodeType !== 3) return;
+      const v = fn(n.nodeValue);
+      if (v !== n.nodeValue) n.nodeValue = v;
+    });
+  }
+
+  // "1d3h" / "15h26m" -> whole hours ("27h", "15h"); anything else is left as it is
+  function toHours(t) {
+    const m = t.trim().match(/^(?:(\d+)d)?\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:\d+s)?$/);
+    if (!m || !(m[1] || m[2])) return t;
+    return Math.round((+m[1] || 0) * 24 + (+m[2] || 0) + (+m[3] || 0) / 60).toLocaleString("en") + "h";
+  }
+
+  function runningOnly() {
+    document.querySelectorAll('li.service:is([data-name="Komodo"], [data-name="Proxmox Server"], [data-name="Seerr"]) .service-block-value')
+      .forEach((el) => editText(el, (t) => t.replace(/^\s*([\d,]+)\s*\/\s*[\d,]+\s*$/, "$1")));
+    document.querySelectorAll('li.service[data-name="SABnzbd"] .service-block-value')
+      .forEach((el) => editText(el, (t) => (/^\s*0:00:00\s*$/.test(t) ? "–" : t)));
+    document.querySelectorAll('li.service[data-name="Audiobookshelf"] .service-block').forEach((b) => {
+      const label = b.querySelector(".service-block-label");
+      const prev = b.previousElementSibling && b.previousElementSibling.querySelector(".service-block-label");
+      if (!label || !prev) return;
+      const kind = { Podcasts: "Podcast Length", Books: "Book Length" }[prev.textContent.trim()];
+      if (!kind) return;
+      editText(label, (t) => (t.trim() === "Duration" ? kind : t));
+      // "1d3h" -> "27h": whole hours read better than days + hours (user, 08/10/2026)
+      const value = b.querySelector(".service-block-value");
+      if (value) editText(value, toHours);
+    });
+    // Home Assistant card: HA states are lower case ("locked", "docked"); show them in Title Case like the rest
+    document.querySelectorAll('li.service[data-name="Home Assistant"] .service-block-value')
+      .forEach((el) => editText(el, (t) => t.replace(/^(\s*)([a-z])/, (m, s, c) => s + c.toUpperCase())));
+    // Palworld uptime too ("15h26m" -> "15h")
+    document.querySelectorAll('li.service[data-name="Palworld"] .service-block').forEach((b) => {
+      const label = b.querySelector(".service-block-label");
+      const value = b.querySelector(".service-block-value");
+      if (label && value && label.textContent.trim() === "Uptime") editText(value, toHours);
+    });
+    // Immich storage in decimal units like drives and phones ("65.7 GiB" -> "70.5 GB")
+    document.querySelectorAll('li.service[data-name="Immich"] .service-block-value').forEach((el) => editText(el, (t) => {
+      const m = t.trim().match(/^([\d.,]+)\s*(KiB|MiB|GiB|TiB)$/);
+      if (!m) return t;
+      const bytes = parseFloat(m[1].replace(/,/g, "")) * 1024 ** ({ KiB: 1, MiB: 2, GiB: 3, TiB: 4 }[m[2]]);
+      const [n, unit] = bytes >= 1e12 ? [bytes / 1e12, "TB"] : bytes >= 1e9 ? [bytes / 1e9, "GB"] : [bytes / 1e6, "MB"];
+      return n.toFixed(1) + " " + unit;
+    }));
+  }
+
+  /* ---------- "All Stats" switch and section folds (08/10/2026): an iOS-style switch at the end of the
+     Infrastructure heading is on while every section shows its figures, and folds or opens them all at once;
+     clicking a section's heading (chevron) folds just that section. Infrastructure always keeps its figures.
+     Folded sections are remembered in this browser. Desktop only (phones have their own layout) ---------- */
+  const STATS_KEY = "homepage-stats-folded";  // JSON list of folded section names
+  const STATS_GROUPS = ["Networking & Security", "Media Acquisition", "Media Tools", "Personal & Productivity", "Utilities"];
+  const CHEVRON = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function groupName(g) {
+    return (((g.querySelector(".service-group-name") || {}).firstChild || {}).textContent || "").trim();
+  }
+  function readFolded() {
+    try {
+      const v = JSON.parse(localStorage.getItem(STATS_KEY) || "null");
+      if (Array.isArray(v)) return v.filter((n) => STATS_GROUPS.includes(n));
+      if (localStorage.getItem("homepage-stats") === "off") return STATS_GROUPS.slice();  // the earlier all-or-nothing switch
+    } catch (e) { /* storage blocked: everything unfolded */ }
+    return [];
+  }
+  function saveFolded(list) {
+    try { localStorage.setItem(STATS_KEY, JSON.stringify(list)); } catch (e) { /* not remembered */ }
+  }
+  function setAttr(el, name, value) {
+    if (el && el.getAttribute(name) !== value) el.setAttribute(name, value);
+  }
+  function applyFolds(folded) {
+    document.querySelectorAll(".services-group.stats-optional").forEach((g) => {
+      const isFolded = folded.includes(groupName(g));
+      g.classList.toggle("stats-folded", isFolded);
+      setAttr(g.querySelector(".stats-fold"), "aria-expanded", String(!isFolded));
+    });
+    setAttr(document.querySelector(".stats-switch"), "aria-checked", String(folded.length === 0));  // on = every section open
+  }
+
+  function statsSwitch() {
+    document.querySelectorAll(".services-group").forEach((g) => {
+      const name = groupName(g);
+      const optional = STATS_GROUPS.includes(name);
+      g.classList.toggle("stats-optional", optional);
+      const head = g.querySelector(".service-group-name");
+      if (!optional || !head || head.querySelector(".stats-fold")) return;
+      const chev = document.createElement("button");
+      chev.type = "button";
+      chev.className = "stats-fold";
+      chev.setAttribute("aria-label", "Show or hide the figures in " + name);
+      chev.innerHTML = CHEVRON;
+      head.appendChild(chev);
+      head.classList.add("stats-fold-head");
+      head.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const folded = readFolded();
+        const i = folded.indexOf(name);
+        if (i === -1) folded.push(name); else folded.splice(i, 1);
+        saveFolded(folded);
+        applyFolds(folded);
+      });
+    });
+    const infra = [...document.querySelectorAll(".service-group-name")]
+      .find((h) => ((h.firstChild || {}).textContent || "").trim() === "Infrastructure");
+    if (infra && !infra.querySelector(".stats-switch")) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "stats-switch";
+      btn.setAttribute("role", "switch");
+      btn.innerHTML = '<span class="stats-switch-label">All Stats</span><span class="stats-switch-track"><span class="stats-switch-knob"></span></span>';
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const next = readFolded().length === 0 ? STATS_GROUPS.slice() : [];  // all open: fold all; any folded: open all
+        saveFolded(next);
+        applyFolds(next);
+      });
+      infra.appendChild(btn);
+    }
+    applyFolds(readFolded());
+  }
+
   /* ---------- run everything on load and whenever the page changes ---------- */
   function run() {
     tabs();
@@ -325,6 +458,8 @@
     tcmNumbers();
     gotifyLatest();
     technitiumCounts();
+    runningOnly();
+    statsSwitch();
   }
 
   /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the

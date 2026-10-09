@@ -25,6 +25,7 @@
 - **A macOS look.** Every card is a frosted, see-through panel with a hairline edge over a colourful wallpaper, in the style of macOS in dark mode. Inter type with Apple's text levels (white for titles, grey for labels and dates), one corner size for cards and a smaller one inside them, and no heavy shadows.
 - **A living wallpaper.** Colour fields that change with the time of day (night, dawn, day, dusk), drift very slowly, and follow the weather: dimmer when it's overcast, faint rain streaks when it rains, the odd flash in a thunderstorm.
 - **Stats as widget numbers.** Service figures are big numbers over small grey labels, like macOS desktop widgets, and cards shrink their figures to fit narrower screens.
+- **Stats you can fold.** Click a section heading on the Applications tab to fold its figures away, or use the All Stats switch beside Infrastructure to fold or open every section at once. Folded sections are remembered in the browser. Each row holds at most seven cards, apps with figures first and the rest after them as compact cards.
 - **A menu bar on top.** A thin, straight glass bar like the macOS menu bar: the title on the left, the disks in the middle, and the weather, date and time on the right in small text.
 - **Disk meters.** Each disk in the top bar has its own icon and colour, turning amber at 75% and red at 90%, and they always sit in the middle of the bar.
 - **Glass search.** Start typing anywhere and the quick-launch search opens as a frosted sheet over a dimmed, blurred page.
@@ -39,7 +40,7 @@
 | Tab | What's on it |
 |---|---|
 | **Home** | Server stats (Proxmox, PBS, Synology, Plex), a Home Assistant panel, exchange rates and a Glance news feed |
-| **Applications** | Every self-hosted app, grouped: Infrastructure, Networking & Security, Media Acquisition, Media Tools, Personal & Productivity, More Apps |
+| **Applications** | Every self-hosted app, grouped: Infrastructure, Networking & Security, Media Acquisition, Media Tools, Personal & Productivity, Utilities |
 | **Bookmarks** | Everyday links: 3D Printing, Homelab, Homelab Help, Reference, Shopping, Social & Media, Tools, Work & Admin |
 | **Calendars** | Calendars, a to-do list, Premier League fixtures and table, recently downloaded films and episodes, and upcoming releases |
 | **Mobile** | A compact status view used automatically on phones (see [On phones](#on-phones)) |
@@ -47,6 +48,12 @@
 The tab bar works like a macOS segmented control: one grey track, with the open tab as a raised dark-grey segment.
 
 ![The Applications tab](screenshots/applications.png)
+
+With every section folded (All Stats off), and with only Media Acquisition open:
+
+![Every section folded](screenshots/applications-folded.png)
+
+![Only Media Acquisition open](screenshots/applications-one.png)
 
 ![The Bookmarks tab](screenshots/bookmarks.png)
 
@@ -95,7 +102,7 @@ The UniFi, Komodo and Gotify cards have two rows of figures, each from a second 
 
 Gotify's top row (Applications, Clients, Last 24h) comes from `extras/gotify-count.sh`, which reads Gotify's database every few minutes and writes the counts where Homepage can serve them, because Gotify's API has no totals. Its messages only carry the app's id, so the `remap` list under the Gotify card turns ids into names; fill it with your own apps.
 
-The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) are set in the `DISKS` list in `custom.js`, so rename them there to match your own labels. `custom.js` also shows Singapore dollar amounts as `S$` instead of `SGD` (the `currency()` step); change or remove it for your own currency.
+The disk names that get their own icon and colour (`Docker VM`, `NAS Storage`, `USB Backup`) are set in the `DISKS` list in `custom.js`, so rename them there to match your own labels. `custom.js` also shows Singapore dollar amounts as `$` instead of `SGD` (the `currency()` step); change or remove it for your own currency.
 
 ## Extras
 
