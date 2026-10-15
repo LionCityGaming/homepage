@@ -19,6 +19,12 @@
 
   function tabs() {
     if (PHONE.matches && activeTab() !== "mobile") document.getElementById("Mobile-tab")?.click();
+    // an address with ?something and no #tab (the ?mood= and ?dock= previews) opens with no tab selected and an
+    // empty page; open the first tab then (15/10/2026)
+    else if (!PHONE.matches && !activeTab()) document.querySelector('#myTab [role="tab"]')?.click();
+    // the Bookmarks tab is hidden since its links moved into the Dock's Stacks (15/10/2026): an old #bookmarks
+    // address goes to Home (add ?dock=0 to see the old tab again)
+    else if (!PHONE.matches && activeTab() === "bookmarks" && PARAMS.get("dock") !== "0") document.getElementById("Home-tab")?.click();
     setData(root, "tab", activeTab());
   }
 
@@ -99,13 +105,129 @@
     let mood = "clear";
     if (/thunder/.test(t)) mood = "storm";
     else if (/rain|drizzle|shower/.test(t)) mood = "rain";
-    else if (/overcast|fog|mist|haze|smoke/.test(t) || (/cloud/.test(t) && !/partly|mainly|few/.test(t))) mood = "cloudy";  // partly cloudy stays clear
-    setData(root, "weather", mood);
+    else if (/overcast|fog|mist|haze|smoke/.test(t) || (/cloud/.test(t) && !/partly|mainly|few/.test(t))) mood = "cloudy";
+    else if (/cloud/.test(t)) mood = "partly";
+    setData(root, "weather", preview()[0] || haMood || mood);  // a preview, then Home Assistant's reading, then the widget's text
+    topBarWeather(w);
+    fxLayer();
+  }
+
+  /* weather mood from Home Assistant's weather.openweathermap, the same reading the Nest Hubs use (15/10/2026).
+     Homepage's own OpenWeatherMap widget asks a different OWM service and caches it, so it can disagree (it said
+     "scattered clouds" while HA said rainy). The HA state arrives through the Home Assistant tile's third widget,
+     which custom.css hides; if that fails, weather() falls back to the widget's text */
+  const HA_MOOD = {
+    sunny: "clear", "clear-night": "clear", windy: "clear", "windy-variant": "partly", partlycloudy: "partly",
+    cloudy: "cloudy", fog: "cloudy", exceptional: "cloudy", rainy: "rain", pouring: "rain", "snowy-rainy": "rain",
+    snowy: "rain", hail: "rain", lightning: "storm", "lightning-rainy": "storm",
+  };
+  let haMood = null, haCond = null, haTemp = null;
+  function haWeatherPoll() {
+    fetch("/api/services/proxy?group=Infrastructure&service=Home%20Assistant&index=2", { cache: "no-store" })
+      .then((r) => r.json()).then((d) => {
+        const rows = Array.isArray(d) ? d : [];
+        const cond = String((rows.find((x) => x.label === "Weather") || {}).value || "").trim().toLowerCase();
+        const temp = parseFloat((rows.find((x) => x.label === "Temperature") || {}).value);
+        haCond = HA_MOOD[cond] ? cond : null;
+        haMood = haCond ? HA_MOOD[haCond] : null;
+        haTemp = isNaN(temp) ? null : temp;
+        weather();
+      }).catch(() => { haMood = haCond = haTemp = null; });
+  }
+
+  /* top-bar weather from Home Assistant too (15/10/2026, user: "the weather on the top bar is always different from
+     ha"): the widget keeps its place and look, but its temperature, condition and icon are HA's. Whole degrees, like
+     HA's weather card (clock-weather-card show_decimal: false) and the Nest Hubs ("30°C"; user 15/10/2026); condition in Title Case; icon = the Material Design weather icon HA itself uses, drawn
+     white over the widget's own (custom.css .hp-weather[data-ha-icon]). If HA can't be read, the widget is left as is */
+  const HA_LABEL = {
+    sunny: "Sunny", "clear-night": "Clear", partlycloudy: "Partly Cloudy", cloudy: "Cloudy", fog: "Fog", rainy: "Rainy",
+    pouring: "Pouring", lightning: "Lightning", "lightning-rainy": "Thunderstorms", hail: "Hail", snowy: "Snowy",
+    "snowy-rainy": "Sleet", windy: "Windy", "windy-variant": "Windy", exceptional: "Exceptional",
+  };
+  const HA_ICON = { partlycloudy: "partly-cloudy", "clear-night": "night", "lightning-rainy": "lightning-rainy", "snowy-rainy": "snowy-rainy", "windy-variant": "windy-variant", exceptional: "cloudy-alert" };
+  function topBarWeather(w) {
+    if (!w || !haCond) { if (w) delete w.dataset.haIcon; return; }
+    const primary = w.querySelector(".primary-text"), secondary = w.querySelector(".secondary-text");
+    if (primary && haTemp !== null) {
+      const t = primary.textContent.replace(/-?[\d.,]+\s*°\s*([CF])?/, Math.round(haTemp) + "°$1");
+      if (t !== primary.textContent) primary.textContent = t;
+    }
+    const label = HA_LABEL[haCond];
+    if (secondary && label && secondary.textContent !== label) secondary.textContent = label;
+    let icon = HA_ICON[haCond] || haCond;
+    if (haCond === "partlycloudy" && root.dataset.sky === "night") icon = "night-partly-cloudy";
+    const url = 'url("https://cdn.jsdelivr.net/npm/@mdi/svg@7.4.47/svg/weather-' + icon + '.svg")';
+    if (w.style.getPropertyValue("--ha-icon") !== url) w.style.setProperty("--ha-icon", url);
+    setData(w, "haIcon", icon);
+  }
+
+  /* the three extra moods (15/10/2026, from the Nest Hub dashboards): stars on clear nights, drifting soft clouds
+     (partly cloudy, cloudy and rain), a warm sun glow on clear days. One layer inside #background, so it sits
+     behind the glass and drifts with the wallpaper; looks and timings are in custom.css */
+  const FX_HTML = '<div id="hp-fx" aria-hidden="true"><i class="fx-sun"></i><i class="fx-stars fx-a"></i>' +
+    '<i class="fx-stars fx-b"></i><i class="fx-cloud fx-c1"></i><i class="fx-cloud fx-c2"></i>' +
+    '<i class="fx-cloud fx-c3"></i><i class="fx-cloud fx-c4"></i><i class="fx-cloud fx-c5"></i></div>';
+  function fxLayer() {
+    const bg = document.getElementById("background");
+    if (bg && !bg.querySelector("#hp-fx")) bg.insertAdjacentHTML("beforeend", FX_HTML);
+    rainLayer();
+  }
+
+  /* rain drops (15/10/2026): built only while it rains or storms, removed after, so dry days cost nothing. The same
+     drops every time (fixed seed); looks in custom.css (#hp-rain). 140 drops: the first 100 for rain, all 140 in a storm */
+  function rainLayer() {
+    const wet = root.dataset.weather === "rain" || root.dataset.weather === "storm";
+    const layer = document.getElementById("hp-rain");
+    if (!wet) { if (layer) layer.remove(); return; }
+    if (layer) return;
+    let seed = 20261015;
+    const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+    let html = "";
+    for (let k = 0; k < 140; k++) {
+      const near = k % 3 === 0;  // a third near: longer, brighter, faster
+      const len = near ? 90 + rnd() * 70 : 40 + rnd() * 45;
+      const dur = near ? 0.55 + rnd() * 0.25 : 0.95 + rnd() * 0.45;
+      html += '<i' + (k >= 100 ? ' class="fx-storm"' : "") + ' style="--x:' + (rnd() * 135).toFixed(1) + "%;--l:" + len.toFixed(0) +
+        "px;--w:" + (near ? 1.6 : 1.1) + "px;--a:" + (near ? 0.5 + rnd() * 0.25 : 0.22 + rnd() * 0.2).toFixed(2) +
+        ";--d:" + dur.toFixed(2) + "s;--t:-" + (rnd() * dur).toFixed(2) + "s;--y:" + (rnd() * 100).toFixed(0) + 'vh"></i>';
+    }
+    document.body.insertAdjacentHTML("beforeend", '<div id="hp-rain" aria-hidden="true">' + html + "</div>");
   }
 
   function sky() {
     const h = new Date().getHours();
-    setData(root, "sky", h >= 22 || h < 5 ? "night" : h < 8 ? "dawn" : h < 17 ? "day" : "dusk");
+    setData(root, "sky", preview()[1] || (h >= 22 || h < 5 ? "night" : h < 8 ? "dawn" : h < 17 ? "day" : "dusk"));
+  }
+
+  /* mood preview (15/10/2026): add ?mood=clear|partly|cloudy|rain|storm (optionally &sky=day|night|dawn|dusk) to the
+     Homepage address to see that mood now, or ?mood=cycle to step through all eight looks every 12 s with a caption.
+     Without the parameter nothing changes */
+  const PARAMS = new URLSearchParams(location.search);
+  // the apps' domain, from the address Homepage is opened on (homepage.example.com -> example.com), so no domain is
+  // written in this file; used by the notification banners and the Dock
+  const DOMAIN = location.hostname.split(".").slice(-2).join(".");
+  const APP = (name) => "https://" + name + "." + DOMAIN;
+  const CYCLE = [["clear", "day", "Sun"], ["partly", "day", "Partly Cloudy · Day"], ["cloudy", "day", "Cloudy"],
+    ["rain", "day", "Rain"], ["storm", "day", "Storm"], ["clear", "night", "Stars"],
+    ["partly", "night", "Partly Cloudy · Night"], ["rain", "night", "Rain · Night"]];
+  function preview() {
+    const m = PARAMS.get("mood");
+    if (m === "cycle") return CYCLE[Math.floor(Date.now() / 12000) % CYCLE.length];
+    return m ? [m, PARAMS.get("sky"), "Preview · " + m + (PARAMS.get("sky") ? " · " + PARAMS.get("sky") : "")] : [null, null, null];
+  }
+  function previewTick() {
+    const label = preview()[2];
+    if (!label) return;
+    weather(); sky();
+    let cap = document.getElementById("hp-mood-caption");
+    if (!cap) {
+      document.body.insertAdjacentHTML("beforeend", '<div id="hp-mood-caption"></div>');
+      cap = document.getElementById("hp-mood-caption");
+      cap.style.cssText = "position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;padding:6px 14px;" +
+        "border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:600;pointer-events:none;" +
+        "-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)";
+    }
+    if (cap.textContent !== label) cap.textContent = label;
   }
 
   /* ---------- Calendars lists: "Oct 5" -> "Oct 05", and a date shown once per run of rows ---------- */
@@ -232,10 +354,16 @@
   function fitNames() {
     document.querySelectorAll('.services-group[data-acc="apps"] li.service .service-name').forEach((name) => {
       if (!PHONE.matches) { if (name.style.fontSize) name.style.removeProperty("font-size"); return; }
-      const room = String(name.clientWidth);
+      const room = String((name.closest(".service-card") || name).clientWidth);
       if (!name.clientWidth || (name.dataset.fitText === name.textContent && name.dataset.fitRoom === room)) return;  // hidden, or already fitted
       name.style.removeProperty("font-size");  // the phone CSS sets 12px !important, so the fitted size is !important too
-      for (let px = 12; px > 9 && name.scrollWidth > name.clientWidth; px -= 0.5) name.style.setProperty("font-size", (px - 0.5) + "px", "important");
+      // measured on the text itself, with 4 px clear each side: a name exactly as wide as its tile (Channel Manager)
+      // read as spilling over the tile's edge (16/10/2026)
+      const range = document.createRange();
+      range.selectNodeContents(name);
+      const textW = () => range.getBoundingClientRect().width;
+      const tile = (name.closest(".service-card") || name).clientWidth;  // the tile, not the name (its box follows the text)
+      for (let px = 12; px > 9 && textW() > tile - 8; px -= 0.5) name.style.setProperty("font-size", (px - 0.5) + "px", "important");
       name.dataset.fitText = name.textContent;
       name.dataset.fitRoom = room;
     });
@@ -287,14 +415,88 @@
   function gotifyLatest() {
     const card = document.querySelector('li.service[data-name="Gotify"]');
     if (!card) return;
-    card.querySelectorAll(".service-container ~ .service-container .service-block-value").forEach((el) => {
+    const units = { second: "sec", minute: "min", hour: "hr" };  // "hr" and "min" everywhere (user 15/10/2026); days and longer stay whole words
+    card.querySelectorAll(".service-block-value").forEach((el) => {
       // edit the text node itself so React can still update it on the next refresh
       el.childNodes.forEach((n) => {
         if (n.nodeType !== 3) return;
-        const short = n.nodeValue.replace(/^\s*🚨\s*crowdsecurity\//, "");
+        // "12 minutes ago" -> "12 min" (the label says "Last Received"; 10/10/2026, "ago" dropped 15/10/2026)
+        const short = n.nodeValue.replace(/^\s*🚨\s*crowdsecurity\//, "")
+          .replace(/\b(\d+) (second|minute|hour)s? ago\b/, (m, num, u) => num + " " + units[u])
+          .replace(/\b(\d+) (day|week|month|year)(s?) ago\b/, "$1 $2$3");
         if (short !== n.nodeValue) n.nodeValue = short;
       });
     });
+  }
+
+  /* ---------- Gotify card "Received" (10/10/2026): Homepage only redraws a box when its data changes, so
+     "3 min ago" froze between messages. Worked out here instead, from the count file (written every 15 s by
+     gotify-count on the Docker VM), re-read every 15 s ---------- */
+  let gotifyDate = null;
+  function gotifyAgo(ms) {
+    // no "ago": the labels already say it ("Last Received", "Last Reading"); user 15/10/2026
+    const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
+    if (s < 60) return "Now";
+    const m = Math.floor(s / 60);
+    if (m < 60) return m + " min";
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+    return h < 24 ? h + " hr" : d + (d === 1 ? " day" : " days");
+  }
+  function gotifyReceived() {
+    if (gotifyDate === null) return;
+    const card = document.querySelector('li.service[data-name="Gotify"]');
+    const block = card && [...card.querySelectorAll(".service-container:first-of-type > .service-block, .service-block")]
+      .find((b) => /^(last )?received$/i.test((b.querySelector(".service-block-label")?.textContent || "").trim()));
+    const value = block && block.querySelector(".service-block-value");
+    if (!value) return;
+    const text = gotifyAgo(gotifyDate);
+    const node = [...value.childNodes].find((n) => n.nodeType === 3);
+    if (node && node.nodeValue !== text) node.nodeValue = text;  // the text node itself, so React can still update it
+  }
+  function gotifyPoll() {
+    if (!document.querySelector('li.service[data-name="Gotify"]')) return;
+    fetch("/images/gotify-count.json", { cache: "no-store" }).then((r) => r.json()).then((d) => {
+      const t = Date.parse(d.latest_date);
+      if (!isNaN(t)) { gotifyDate = t; gotifyReceived(); }
+    }).catch(() => {});
+  }
+
+  /* ---------- Scrutiny card "Last Reading" (15/10/2026): readings come once a day, so Homepage's own
+     "46 minutes ago" would freeze for hours on an open page. Worked out here like Gotify's Received, in the
+     same short style ("45 min", no "ago" since 15/10/2026), from the widget's own data via Homepage's proxy, re-read every 60 s ---------- */
+  let scrutinyDate = null, scrutinyHot = null, scrutinyHours = null;
+  function scrutinyReading() {
+    if (scrutinyDate === null) return;
+    const card = document.querySelector('li.service[data-name="Scrutiny"]');
+    if (!card) return;
+    const set = (label, text) => {
+      const block = [...card.querySelectorAll(".service-block")]
+        .find((b) => (b.querySelector(".service-block-label")?.textContent || "").trim() === label);
+      const node = block && [...block.querySelector(".service-block-value").childNodes].find((n) => n.nodeType === 3);
+      if (node && node.nodeValue !== text) node.nodeValue = text;  // the text node itself, so React can still update it
+    };
+    set("Last Reading", gotifyAgo(scrutinyDate));
+    if (scrutinyHot !== null) set("Hottest Drive", scrutinyHot + " °C");
+    if (scrutinyHours !== null) set("Oldest Drive", scrutinyHours.toLocaleString("en") + " hr");
+  }
+  /* all drives (15/10/2026): Proxmox NVMe + the NAS's four; archived drives left out like the widget's counts */
+  let scrutinyAsked = false;  // a read is under way (the card can appear many times a second while the page builds)
+  function scrutinyPoll() {
+    if (!document.querySelector('li.service[data-name="Scrutiny"]') || scrutinyAsked) return;
+    scrutinyAsked = true;
+    fetch("/api/services/proxy?group=Infrastructure&service=Scrutiny&index=1", { cache: "no-store" })
+      .then((r) => r.json()).then((d) => {
+        const drives = Object.values((d.data || {}).summary || {}).filter((x) => !(x.device || {}).archived);
+        const times = drives.map((x) => Date.parse((x.smart || {}).collector_date)).filter((t) => !isNaN(t));
+        const temps = drives.map((x) => (x.smart || {}).temp).filter((t) => typeof t === "number" && t > 0);
+        const hours = drives.map((x) => (x.smart || {}).power_on_hours).filter((h) => typeof h === "number");
+        if (!times.length) return;
+        scrutinyDate = Math.min(...times);  // the oldest of the latest readings: a collector that stops shows here
+        scrutinyHot = temps.length ? Math.max(...temps) : null;
+        scrutinyHours = hours.length ? Math.max(...hours) : null;
+        scrutinyReading();
+      }).catch(() => {}).finally(() => { scrutinyAsked = false; });
   }
 
   /* ---------- Technitium cards: the widget writes "58 (0.02%)"; show just the count (08/10/2026) ---------- */
@@ -325,12 +527,62 @@
   function toHours(t) {
     const m = t.trim().match(/^(?:(\d+)d)?\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:\d+s)?$/);
     if (!m || !(m[1] || m[2])) return t;
-    return Math.round((+m[1] || 0) * 24 + (+m[2] || 0) + (+m[3] || 0) / 60).toLocaleString("en") + "h";
+    return Math.round((+m[1] || 0) * 24 + (+m[2] || 0) + (+m[3] || 0) / 60).toLocaleString("en") + " hr";
+  }
+
+  /* UniFi card (15/10/2026, user): WAN "UP" -> "Up", and Uptime in whole hours ("58 hr") instead of "2.4 Days". The
+     exact uptime (seconds) comes from the UniFi data the widget itself reads (gw_system-stats), so the hours are not
+     rounded from a tenth of a day; until it arrives, the widget's days are converted */
+  let unifiUptime = null;  // [seconds, when read]
+  function unifiPoll() {
+    if (!document.querySelector('li.service[data-name="UniFi"]')) return;
+    fetch("/api/services/proxy?group=Infrastructure&service=UniFi&index=0&endpoint=stat/sites", { cache: "no-store" })
+      .then((r) => r.json()).then((d) => {
+        let up = null;
+        (function walk(o) {
+          if (up !== null || !o || typeof o !== "object") return;
+          if (o["gw_system-stats"] && o["gw_system-stats"].uptime) { up = parseFloat(o["gw_system-stats"].uptime); return; }
+          Object.values(o).forEach(walk);
+        })(d);
+        if (up !== null && !isNaN(up)) { unifiUptime = [up, Date.now()]; unifiFigures(); }
+      }).catch(() => {});
+  }
+  /* Synology Server uptime in hours like UniFi and Palworld (15/10/2026): "4 Days" -> "109 hr", from the widget's own
+     system_info (up_time "108:33:48"), re-read every minute */
+  let synoUptime = null;  // [seconds, when read]
+  function synoPoll() {
+    if (!document.querySelector('li.service[data-name="Synology Server"]')) return;
+    fetch("/api/services/proxy?group=Home&service=Synology%20Server&index=0&endpoint=system_info", { cache: "no-store" })
+      .then((r) => r.json()).then((d) => {
+        const m = String(((d && d.data) || d || {}).up_time || "").match(/^(\d+):(\d+):(\d+)$/);
+        if (m) { synoUptime = [+m[1] * 3600 + +m[2] * 60 + +m[3], Date.now()]; unifiFigures(); }
+      }).catch(() => {});
+  }
+  function unifiFigures() {
+    document.querySelectorAll('li.service[data-name="UniFi"] .service-block').forEach((b) => {
+      const label = (b.querySelector(".service-block-label")?.textContent || "").trim();
+      const value = b.querySelector(".service-block-value");
+      if (!value) return;
+      if (label === "WAN") editText(value, (t) => (/^\s*[A-Z]+\s*$/.test(t) ? t.trim().charAt(0) + t.trim().slice(1).toLowerCase() : t));
+      if (label === "Uptime") editText(value, (t) => {
+        if (unifiUptime) return Math.round((unifiUptime[0] + (Date.now() - unifiUptime[1]) / 1000) / 3600).toLocaleString("en") + " hr";
+        const m = t.match(/^\s*([\d.]+)\s*(day|hour)/i);
+        return m ? Math.round(parseFloat(m[1]) * (/day/i.test(m[2]) ? 24 : 1)).toLocaleString("en") + " hr" : t;
+      });
+    });
+    if (synoUptime) document.querySelectorAll('li.service[data-name="Synology Server"] .service-block').forEach((b) => {
+      const value = b.querySelector(".service-block-value");
+      if (value && (b.querySelector(".service-block-label")?.textContent || "").trim() === "Uptime")
+        editText(value, () => Math.round((synoUptime[0] + (Date.now() - synoUptime[1]) / 1000) / 3600).toLocaleString("en") + " hr");
+    });
   }
 
   function runningOnly() {
-    document.querySelectorAll('li.service:is([data-name="Komodo"], [data-name="Proxmox Server"], [data-name="Seerr"]) .service-block-value')
+    document.querySelectorAll('li.service:is([data-name="Komodo"], [data-name="Proxmox Server"], [data-name="Seerr"], [data-name="Beszel"]) .service-block-value')
       .forEach((el) => editText(el, (t) => t.replace(/^\s*([\d,]+)\s*\/\s*[\d,]+\s*$/, "$1")));
+    // Beszel: "13.52%" -> "14%", whole percentages like the other cards (user, 15/10/2026)
+    document.querySelectorAll('li.service[data-name="Beszel"] .service-block-value')
+      .forEach((el) => editText(el, (t) => t.replace(/^\s*(\d+(?:\.\d+)?)\s*%\s*$/, (m, n) => Math.round(+n) + "%")));
     document.querySelectorAll('li.service[data-name="SABnzbd"] .service-block-value')
       .forEach((el) => editText(el, (t) => (/^\s*0:00:00\s*$/.test(t) ? "–" : t)));
     document.querySelectorAll('li.service[data-name="Audiobookshelf"] .service-block').forEach((b) => {
@@ -340,7 +592,7 @@
       const kind = { Podcasts: "Podcast Length", Books: "Book Length" }[prev.textContent.trim()];
       if (!kind) return;
       editText(label, (t) => (t.trim() === "Duration" ? kind : t));
-      // "1d3h" -> "27h": whole hours read better than days + hours (user, 08/10/2026)
+      // "1d3h" -> "27 hr": whole hours read better than days + hours (user, 08/10/2026)
       const value = b.querySelector(".service-block-value");
       if (value) editText(value, toHours);
     });
@@ -441,6 +693,302 @@
     applyFolds(readFolded());
   }
 
+  /* ---------- notification banners (15/10/2026, Apple touches): a new Gotify message slides in at the top
+     right like a macOS banner. Read every 15 s from the Gotify card's own widget through Homepage's proxy, so
+     it works on every tab. The first read only notes the newest message; priority 0-3 stays quiet (as on the
+     phone); 8 and up stays until closed. Click opens Gotify. ?note=test shows a sample banner.
+     App names and icons follow the From remap on the Gotify card in services.yaml: keep the two in step ---------- */
+  const NOTE_APPS = {
+    4: ["Radarr", "radarr"], 5: ["Sonarr", "sonarr"], 7: ["CrowdSec", "crowdsec"], 8: ["Tautulli", "tautulli"],
+    10: ["Wallos", "wallos"], 11: ["Free Games", null], 13: ["Seerr", "seerr"], 16: ["Komodo", "komodo"],
+    17: ["Maintainerr", "maintainerr"], 18: ["PBS", "proxmox"], 19: ["Bazarr", "bazarr"], 20: ["Prowlarr", "prowlarr"],
+    22: ["BookStack", "bookstack"], 23: ["Authentik", "authentik"], 24: ["Gatus", "gatus"], 25: ["Synology", "synology"],
+    26: ["Bambuddy", null], 27: ["PosterFlow", null],
+  };
+  const ICON_URL = (slug) => "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/" + slug + ".webp";
+  let noteLast = null;
+  function plainText(s) {
+    return String(s || "").replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_`#>]+/g, "").replace(/\s+/g, " ").trim();
+  }
+  function showNote(m) {
+    let box = document.getElementById("hp-notes");
+    if (!box) {
+      document.body.insertAdjacentHTML("beforeend", '<div id="hp-notes" aria-live="polite"></div>');
+      box = document.getElementById("hp-notes");
+    }
+    const [app, slug] = NOTE_APPS[m.appid] || ["Gotify", null];
+    const note = document.createElement("div");
+    note.className = "hp-note";
+    note.setAttribute("role", "status");
+    note.innerHTML = '<img class="hp-note-icon" alt=""><div class="hp-note-body"><div class="hp-note-head">' +
+      '<span class="hp-note-app"></span><span class="hp-note-time">Now</span></div>' +
+      '<div class="hp-note-title"></div><div class="hp-note-msg"></div></div>' +
+      '<button class="hp-note-close" type="button" aria-label="Close">×</button>';
+    const img = note.querySelector("img");
+    img.onerror = () => { img.onerror = null; img.src = ICON_URL("gotify"); };
+    img.src = ICON_URL(slug || "gotify");
+    // message text goes in as text, never as HTML
+    note.querySelector(".hp-note-app").textContent = app;
+    note.querySelector(".hp-note-title").textContent = plainText(m.title) || app;
+    const msg = plainText(m.message);
+    if (msg) note.querySelector(".hp-note-msg").textContent = msg; else note.querySelector(".hp-note-msg").remove();
+    const close = () => { note.classList.add("hp-note-out"); setTimeout(() => note.remove(), 350); };
+    note.querySelector(".hp-note-close").addEventListener("click", (e) => { e.stopPropagation(); close(); });
+    note.addEventListener("click", () => { window.open(APP("gotify"), "_blank", "noopener"); close(); });
+    if ((m.priority || 0) >= 8) note.dataset.sticky = "1";
+    else {
+      let timer = setTimeout(close, 7000);
+      note.addEventListener("mouseenter", () => clearTimeout(timer));
+      note.addEventListener("mouseleave", () => { timer = setTimeout(close, 3000); });
+    }
+    box.prepend(note);
+    [...box.children].slice(3).forEach((n) => n.remove());  // at most three on screen, like Notification Centre's stack
+  }
+  function notesPoll() {
+    fetch("/api/services/proxy?group=Infrastructure&service=Gotify&index=0", { cache: "no-store" })
+      .then((r) => r.json()).then((d) => {
+        const m = (d.messages || [])[0];
+        if (!m || typeof m.id !== "number") return;
+        const first = noteLast === null;
+        if (!first && m.id <= noteLast) return;
+        noteLast = m.id;
+        if (first || document.hidden || (m.priority || 0) < 4) return;
+        showNote(m);
+      }).catch(() => {});
+  }
+
+  /* ---------- Dock (15/10/2026; on for everyone on desktop since the same day, ?dock=0 hides it and brings the
+     Bookmarks tab back): favourite apps, then the Bookmarks tab's groups as
+     macOS Stacks, in a frosted bar at the bottom. Icons grow under the pointer like the macOS Dock's magnification
+     and a label shows above. An app click bounces the icon while it opens in a new tab; a Stack click opens a
+     frosted grid of that group's links above the Dock (Esc or a click elsewhere closes it). The Stacks read the
+     groups live from Homepage (/api/services), so they always match services.yaml; only their names and order
+     are listed here ---------- */
+  // the Dock's icon size at rest in px (the icons are drawn at 1.5 x and shown scaled); ?docksize=60 previews another
+  const DOCK_SIZE = Math.min(96, Math.max(40, parseInt(PARAMS.get("docksize"), 10) || 64));  // 64 px (user 16/10/2026; was 52)
+  root.style.setProperty("--ds", DOCK_SIZE + "px");
+  // the four apps used most (user 16/10/2026: "komodo, proxmox, home assistant, unifi"); was 11
+  const DOCK = [
+    ["Komodo", APP("komodo"), "komodo"], ["Proxmox", APP("proxmox"), "proxmox"],
+    ["Home Assistant", APP("homeassistant"), "home-assistant"], ["UniFi", APP("unifi"), "ubiquiti-unifi"],
+  ];
+  const STACKS = ["Homelab", "Homelab Help", "Tools", "Reference", "Work & Admin", "Social & Media", "Shopping", "3D Printing"];
+  // Homepage icon values: a full URL, a /images path, "si-<slug>" (Simple Icons, drawn black: inverted by the CSS)
+  // or a dashboard-icons file name
+  function iconSrc(icon) {
+    const i = String(icon || "");
+    if (/^(https?:)?\/\//.test(i) || i.startsWith("/")) return i;
+    if (i.startsWith("si-")) return "https://cdn.jsdelivr.net/npm/simple-icons@13/icons/" + i.slice(3) + ".svg";
+    if (i.startsWith("mdi-")) return "https://cdn.jsdelivr.net/npm/@mdi/svg@7/svg/" + i.slice(4) + ".svg";
+    return i ? "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/" + i.replace(/\.(png|svg|webp)$/, "") + ".png" : ICON_URL("homepage");
+  }
+  function iconImg(icon) {
+    const img = document.createElement("img");
+    img.alt = "";
+    img.src = iconSrc(icon);
+    if (/^(si|mdi)-/.test(String(icon || ""))) img.className = "hp-mono";
+    img.onerror = () => { img.onerror = null; img.src = ICON_URL("homepage"); img.className = ""; };
+    return img;
+  }
+  function closeStack() {
+    const s = document.getElementById("hp-stack");
+    if (!s) return;
+    s.dataset.out = "1";
+    setTimeout(() => s.remove(), 220);
+    document.querySelectorAll(".hp-dock-item[data-open]").forEach((b) => delete b.dataset.open);
+  }
+  function openStack(btn, name, links) {
+    const was = btn.dataset.open;
+    closeStack();
+    if (was) return;  // a second click on the same Stack closes it, as on the Mac
+    btn.dataset.open = "1";
+    const s = document.createElement("div");
+    s.id = "hp-stack";
+    s.setAttribute("role", "dialog");
+    s.setAttribute("aria-label", name);
+    s.innerHTML = '<div class="hp-stack-title"></div><div class="hp-stack-grid"></div>';
+    s.querySelector(".hp-stack-title").textContent = name;
+    const grid = s.querySelector(".hp-stack-grid");
+    grid.style.setProperty("--cols", Math.min(4, Math.max(3, Math.ceil(Math.sqrt(links.length)))));
+    links.forEach((l) => {
+      const a = document.createElement("a");
+      a.className = "hp-stack-link"; a.href = l.href; a.target = "_blank"; a.rel = "noreferrer";
+      a.title = l.description || l.name;
+      const plate = document.createElement("span");
+      plate.className = "hp-stack-icon";
+      plate.appendChild(iconImg(l.icon));
+      const label = document.createElement("span");
+      label.className = "hp-stack-name"; label.textContent = l.name;
+      a.append(plate, label);
+      a.addEventListener("click", () => setTimeout(closeStack, 120));
+      grid.appendChild(a);
+    });
+    document.body.appendChild(s);
+    // centred over its Dock icon, kept on screen
+    const r = btn.getBoundingClientRect(), w = s.offsetWidth;
+    s.style.left = Math.max(12, Math.min(window.innerWidth - w - 12, r.left + r.width / 2 - w / 2)) + "px";
+    s.style.setProperty("--arrow", (r.left + r.width / 2 - parseFloat(s.style.left)) + "px");
+  }
+  function dock() {
+    if (PARAMS.get("dock") === "0" || PHONE.matches || document.getElementById("hp-dock")) return;
+    root.dataset.dock = "1";
+    const bar = document.createElement("nav");
+    bar.id = "hp-dock";
+    bar.setAttribute("aria-label", "Dock");
+    bar.insertAdjacentHTML("afterbegin", '<span class="hp-dock-bg" aria-hidden="true"></span>');
+    // each item: a DOCK_SIZE slot holding the icon layer (drawn at 1.5 x, scaled) and its label
+    const item = (label, tag) => {
+      const el = document.createElement(tag);
+      el.className = "hp-dock-item";
+      el.setAttribute("aria-label", label);
+      el.insertAdjacentHTML("beforeend", '<span class="hp-dock-icon"></span><span class="hp-dock-label"></span>');
+      el.querySelector(".hp-dock-label").textContent = label;
+      return el;
+    };
+    DOCK.forEach((d) => {
+      if (!d) { bar.insertAdjacentHTML("beforeend", '<span class="hp-dock-sep"></span>'); return; }
+      const a = item(d[0], "a");
+      a.href = d[1]; a.target = "_blank"; a.rel = "noreferrer";
+      const img = document.createElement("img"); img.alt = ""; img.src = ICON_URL(d[2]);
+      a.querySelector(".hp-dock-icon").appendChild(img);
+      a.addEventListener("click", () => { delete a.dataset.bounce; void a.offsetWidth; a.dataset.bounce = "1"; });
+      a.addEventListener("animationend", () => { delete a.dataset.bounce; });
+      bar.appendChild(a);
+    });
+    // magnification: each icon grows with closeness to the pointer (up to 1.5x within 140 px) and its neighbours
+    // move aside to make room, as on the Mac. Only transforms change (see the CSS), positions are measured once
+    // when the pointer comes in, and the work is done at most once per screen frame
+    let rest = null, barLeft = 0, barWidth = 0, px = null, raf = 0;
+    const measure = () => {
+      rest = [...bar.children].filter((k) => k.matches(".hp-dock-item, .hp-dock-sep")).map((k) => ({
+        el: k, icon: k.querySelector(".hp-dock-icon"), label: k.querySelector(".hp-dock-label"),
+        c: k.offsetLeft + k.offsetWidth / 2,
+      }));
+      barLeft = bar.getBoundingClientRect().left; barWidth = bar.offsetWidth;
+    };
+    // transforms are written straight onto the moving parts (no CSS variables: a variable change restyles the
+    // whole icon), and only when they changed, so a frame usually touches just the icons near the pointer
+    const put = (el, v) => { if (el && el.__t !== v) { el.__t = v; el.style.transform = v; } };
+    // Two modes (user 15/10/2026). "full" is the default in every browser (user: same Dock in Zen as in Chrome).
+    // "lite" (?dock=lite), the lighter one for a browser that struggles, e.g. Firefox-based ones where blur is costly: kept as
+    // cheap as possible: whole-pixel shifts and 0.005 scale steps (small pointer moves often change nothing), only the
+    // two labels nearest the pointer moved (the others are invisible), the bar's stretch (which redoes its blur) in
+    // 2 px steps, frames with the pointer under 1 px from the last skipped. "full": no rounding, every label follows,
+    // and the icons ease into place (data-full in the CSS) like the first Dock
+    const FULL = PARAMS.get("dock") !== "lite";
+    // the bar stretches with the icons in every browser (16/10/2026, user: back to the stretching bar after trying a
+    // fixed one in Zen); ?dockbar=fixed keeps it at its width, for a browser where the stretch is slow
+    const STRETCH = PARAMS.get("dockbar") !== "fixed";
+    if (PARAMS.get("dockbar") === "none") bar.dataset.nobar = "1";  // preview: icons with no frosted bar behind them
+    if (FULL) bar.dataset.full = "1";
+    let lastPx = null, shown = [];
+    const frame = () => {
+      raf = 0;
+      if (px === null || !rest) return;
+      if (!FULL && lastPx !== null && Math.abs(px - lastPx) < 1) return;
+      lastPx = px;
+      const reach = 140 * DOCK_SIZE / 52;  // how far magnification spreads, in step with the icon size
+      const extra = rest.map((r) => (r.icon ? DOCK_SIZE * 0.5 * Math.max(0, 1 - Math.abs(px - r.c) / reach) : 0));  // up to 1.5 x
+      const total = extra.reduce((a, b) => a + b, 0);
+      let before = 0;
+      rest.forEach((r, i) => {
+        const raw = before + extra[i] / 2 - total / 2;
+        const dx = FULL ? Math.round(raw * 10) / 10 : Math.round(raw);
+        before += extra[i];
+        if (!r.icon) { put(r.el, "translateX(" + dx + "px)"); return; }
+        const sc = FULL ? 1 + extra[i] / DOCK_SIZE : Math.round((1 + extra[i] / DOCK_SIZE) * 200) / 200;
+        put(r.icon, "translateX(" + dx + "px) scale(" + (sc * 0.6667).toFixed(4) + ")");
+        r.dx = dx; r.sc = sc; r.ex = extra[i];
+      });
+      // labels: in lite only the two icons nearest the pointer (the one under it shows its label; two covers the
+      // moment the pointer sits between them); labels that drop out go back to their resting place
+      const near = rest.filter((r) => r.icon && r.ex > 0).sort((x, y) => y.ex - x.ex).slice(0, FULL ? 99 : 2);
+      shown.forEach((r) => { if (!near.includes(r)) put(r.label, ""); });
+      near.forEach((r) => put(r.label, "translateX(calc(-50% + " + r.dx + "px)) translateY(" + (-DOCK_SIZE * (r.sc - 1)).toFixed(1) + "px)"));
+      shown = near;
+      if (STRETCH) {
+        const bw = FULL ? total : Math.round(total / 2) * 2;
+        put(bar.querySelector(".hp-dock-bg"), bw ? "scaleX(" + ((barWidth + bw) / barWidth).toFixed(4) + ")" : "");
+      }
+    };
+    bar.addEventListener("mouseenter", () => { measure(); bar.dataset.mag = "1"; });
+    bar.addEventListener("mousemove", (e) => {
+      if (!rest) { measure(); bar.dataset.mag = "1"; }
+      px = e.clientX - barLeft;
+      if (!raf) raf = requestAnimationFrame(frame);
+    });
+    bar.addEventListener("mouseleave", () => {
+      px = null; lastPx = null; shown = []; delete bar.dataset.mag;  // transitions back on: everything eases back to rest
+      [...bar.querySelectorAll(".hp-dock-icon, .hp-dock-label, .hp-dock-sep, .hp-dock-bg")].forEach((el) => { el.__t = ""; el.style.transform = ""; });
+      rest = null;
+    });
+    document.body.appendChild(bar);
+    // Stacks: iOS-folder icons (the group's first four links in a 2 x 2 grid)
+    fetch("/api/services").then((r) => r.json()).then((groups) => {
+      bar.insertAdjacentHTML("beforeend", '<span class="hp-dock-sep"></span>');
+      STACKS.forEach((name) => {
+        const g = groups.find((x) => x.name === name);
+        const links = ((g && g.services) || []).filter((l) => l.href);
+        if (!links.length) return;
+        const b = item(name, "button");
+        b.type = "button";
+        b.classList.add("hp-dock-stack");
+        const mini = document.createElement("span");
+        mini.className = "hp-dock-folder";
+        links.slice(0, 4).forEach((l) => mini.appendChild(iconImg(l.icon)));
+        b.querySelector(".hp-dock-icon").appendChild(mini);
+        b.addEventListener("click", (e) => { e.stopPropagation(); openStack(b, name, links); });
+        bar.appendChild(b);
+      });
+    }).catch(() => {});
+    document.addEventListener("click", (e) => { if (!e.target.closest("#hp-stack")) closeStack(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStack(); });
+  }
+
+  /* ---------- room for the Dock (15/10/2026): only a tab that scrolls anyway gets 100 px under its last row, so the
+     Dock never covers it; a tab that fits the screen (Home) gets none, or it would scroll just for that room ---------- */
+  function dockRoom() {
+    const iw = document.getElementById("inner_wrapper");
+    if (!iw || !root.dataset.dock) return;
+    const has = !!root.dataset.dockroom;
+    const room = DOCK_SIZE + 54;  // as in the CSS
+    const need = iw.scrollHeight - (has ? room : 0) > iw.clientHeight + 1;  // the content's own height, without the room
+    // (on a tab that fits, the column's min-height keeps it at exactly the screen height, so no room is added)
+    if (need !== has) { if (need) root.dataset.dockroom = "1"; else delete root.dataset.dockroom; }
+  }
+
+  /* ---------- sliding tab pill (15/10/2026, Apple touches): the grey "open tab" pill slides to the next tab with a
+     spring, like an iOS / macOS segmented control, instead of jumping. One extra element at the end of the tab list;
+     made again if Homepage ever redraws the list. Desktop only (phones have no tab bar) ---------- */
+  let pillTarget = null, pillUntil = 0;  // the tab just pressed: Homepage marks it selected a moment later
+  function tabPill(target) {
+    const bar = document.getElementById("myTab");
+    if (target) { pillTarget = target; pillUntil = Date.now() + 1000; }
+    const selected = bar && bar.querySelector('[role="tab"][aria-selected="true"]');
+    if (selected === pillTarget) pillUntil = 0;
+    const on = (Date.now() < pillUntil && pillTarget && pillTarget.isConnected) ? pillTarget : selected;
+    if (!bar || !on || PHONE.matches) return;
+    let pill = document.getElementById("hp-tab-pill");
+    if (!pill) {
+      pill = document.createElement("span");
+      pill.id = "hp-tab-pill";
+      pill.setAttribute("aria-hidden", "true");
+      bar.appendChild(pill);
+    }
+    // measured on screen, relative to the bar's padding box (the pill's containing block); not offsetLeft, which
+    // would be relative to whatever list item happens to be positioned
+    const br = bar.getBoundingClientRect(), r = on.getBoundingClientRect();
+    const x = Math.round(r.left - br.left - bar.clientLeft), y = Math.round(r.top - br.top - bar.clientTop);
+    const w = Math.round(r.width), h = Math.round(r.height);
+    if (!w) return;
+    const val = x + "," + y + "," + w + "," + h;
+    if (pill.dataset.at === val) return;
+    pill.dataset.at = val;
+    pill.style.width = w + "px"; pill.style.height = h + "px"; pill.style.top = y + "px";
+    pill.style.transform = "translateX(" + x + "px)";
+    if (!root.dataset.pill) requestAnimationFrame(() => requestAnimationFrame(() => { root.dataset.pill = "1"; }));  // no slide on first paint
+  }
+
   /* ---------- run everything on load and whenever the page changes ---------- */
   function run() {
     tabs();
@@ -457,9 +1005,16 @@
     fitBlocks();
     tcmNumbers();
     gotifyLatest();
+    gotifyReceived();
+    if (scrutinyDate === null) scrutinyPoll();  // first read as soon as the card exists, not up to a minute later (16/10/2026)
+    scrutinyReading();
     technitiumCounts();
     runningOnly();
+    unifiFigures();
     statsSwitch();
+    dock();
+    tabPill();
+    dockRoom();
   }
 
   /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the
@@ -479,7 +1034,7 @@
   function settled() {  // called after each run: reveal once the page has been quiet for 250 ms
     if (!root.dataset.settling) return;
     clearTimeout(settleQuiet);
-    settleQuiet = setTimeout(reveal, 250);
+    settleQuiet = setTimeout(reveal, 100);  // 100 ms of quiet (was 250; user 15/10/2026: shorter fade-in)
   }
   function frames() {
     document.querySelectorAll("iframe:not([data-fade])").forEach((f) => {
@@ -488,12 +1043,18 @@
       setTimeout(() => { if (f.dataset.fade === "wait") f.dataset.fade = "in"; }, 3000);
     });
   }
-  startSettling(1500);
+  startSettling(800);  // first load: at most 0.8 s hidden (was 1.5 s)
   document.addEventListener("click", (e) => {
     const t = e.target.closest && e.target.closest('#myTab [role="tab"]');
-    if (t && t.getAttribute("aria-selected") !== "true") startSettling(1000);
+    if (t && t.getAttribute("aria-selected") !== "true") startSettling(400);  // tab switch: at most 0.4 s (was 1 s)
   }, true);
-  window.addEventListener("hashchange", () => startSettling(1000));
+  window.addEventListener("hashchange", () => startSettling(400));
+  // the tab pill starts sliding on pointer-down, before Homepage redraws the new tab (that redraw would otherwise
+  // hold the slide back until the page watcher runs)
+  document.addEventListener("pointerdown", (e) => {
+    const t = e.target.closest && e.target.closest('#myTab [role="tab"]');
+    if (t && e.button === 0) tabPill(t);
+  }, true);
 
   let pending = false;
   new MutationObserver(() => {
@@ -505,6 +1066,26 @@
 
   sky();
   setInterval(sky, 300000);
+  haWeatherPoll();
+  setInterval(haWeatherPoll, 300000);
+  if (PARAMS.get("mood")) { previewTick(); setInterval(previewTick, 1000); }
+  gotifyPoll();
+  setInterval(gotifyPoll, 15000);
+  scrutinyPoll();
+  unifiPoll();
+  setInterval(unifiPoll, 60000);
+  synoPoll();
+  setInterval(synoPoll, 60000);
+  setInterval(scrutinyPoll, 60000);
+  notesPoll();
+  setInterval(notesPoll, 15000);
+  // sample banners: a normal one and a priority 8 one that stays; ?note=hold keeps both on screen (for screenshots)
+  if (/^(test|hold)$/.test(PARAMS.get("note") || "")) setTimeout(() => {
+    const hold = PARAMS.get("note") === "hold";
+    showNote({ appid: 5, priority: hold ? 8 : 5, title: "Episode Downloaded", message: "The Bear · S04E03 · WEB-DL 1080p" });
+    setTimeout(() => showNote({ appid: 24, priority: 8, title: "Immich Is Down", message: "HTTP check failed 3 times in a row." }), 900);
+  }, 1500);
   PHONE.addEventListener?.("change", run);
+  window.addEventListener("resize", () => { tabPill(); dockRoom(); });
   window.addEventListener("load", run);
 })();

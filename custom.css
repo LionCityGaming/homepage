@@ -25,7 +25,8 @@
   --accent-color-dim: rgba(10, 132, 255, 0.35);
   --card-border: 0.5px solid rgba(255, 255, 255, 0.10);
   --border-radius: 20px;
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
+  /* Apple's own San Francisco on Macs and iPhones (-apple-system / BlinkMacSystemFont), Inter everywhere else (15/10/2026; was Inter first) */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-primary: 10 132 255;
   --color-accent: 100 210 255;
   --glass: rgba(28, 28, 30, 0.55);
@@ -109,17 +110,6 @@ html[data-weather="cloudy"] #background { filter: saturate(0.6) brightness(0.8) 
 html[data-weather="rain"] #background, html[data-weather="storm"] #background {
   filter: saturate(0.7) brightness(0.75) !important;
 }
-html::before {
-  content: "";
-  position: fixed;
-  inset: -20% 0 0 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  background-image: repeating-linear-gradient(105deg, transparent 0 22px, rgba(180, 210, 255, 0.10) 22px 23px, transparent 23px 61px), repeating-linear-gradient(105deg, transparent 0 37px, rgba(180, 210, 255, 0.07) 37px 38px, transparent 38px 97px);
-  background-size: 100% 240px, 100% 300px;
-  transition: opacity 3s ease;
-}
 html::after {
   content: "";
   position: fixed;
@@ -130,13 +120,74 @@ html::after {
   background: radial-gradient(120% 80% at 50% 0%, rgba(200, 220, 255, 0.35), transparent 70%);
 }
 
+/* rain (15/10/2026, replaces one striped texture that slid and visibly jumped back every 0.9 s): separate drops
+   from custom.js (#hp-rain), each falling from above the screen to below it at its own speed and time, so no restart
+   is ever seen. Two depths: near drops longer, brighter and faster, far drops short and dim (100 drops, 140 in a storm). The layer sits ABOVE the
+   glass (like rain on a window), so the cards never re-blur for it and the drops can move at full frame rate. Only
+   built while it rains; storms add the far third of the drops and the flash. With reduced motion they hold still */
+#hp-rain { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+#hp-rain i {
+  position: absolute; top: 0; left: var(--x); width: var(--w); height: var(--l); border-radius: 1px;
+  background: linear-gradient(to bottom, rgba(200, 222, 255, 0), rgba(200, 222, 255, var(--a)));
+  transform: translate(calc(var(--y) * -0.21), var(--y)) rotate(12deg);
+}
+html[data-weather="rain"] #hp-rain i.fx-storm { display: none; }
 @media (prefers-reduced-motion: no-preference) {
-  html[data-weather="rain"]::before, html[data-weather="storm"]::before {
-    opacity: 1;
-    animation: rainFall 0.9s linear infinite;
-  }
+  #hp-rain i { animation: hpDrop var(--d) linear var(--t) infinite; will-change: transform; }
   html[data-weather="storm"]::after { animation: stormFlash 11s linear infinite; }
 }
+@keyframes hpDrop {
+  from { transform: translate(0, -25vh) rotate(12deg); }
+  to   { transform: translate(-32vh, 125vh) rotate(12deg); }
+}
+
+/* three more moods (15/10/2026, from the Nest Hub dashboards; custom.js adds the #hp-fx layer inside #background,
+   so it sits behind the glass and drifts with the wallpaper):
+   stars = clear or partly cloudy nights; sun = a warm glow top right on clear (and, fainter, partly cloudy) days;
+   clouds = soft shapes drifting across when partly cloudy, cloudy or raining. Gradients only (no blur filters), and
+   the motion moves in 4 steps a second like the wallpaper drift, so the glass cards re-blur 4 times a second, not
+   60 (the Firefox/Zen smoothness rule). With reduced motion the layers stay but hold still */
+#hp-fx { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+#hp-fx > i { position: absolute; display: block; opacity: 0; transition: opacity 4s ease; }
+#hp-fx .fx-sun {
+  top: -14vmax; right: -4vmax; width: 52vmax; height: 52vmax; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 130, 0.55) 0%, rgba(255, 179, 64, 0.26) 28%, rgba(255, 159, 10, 0.09) 50%, rgba(255, 159, 10, 0) 68%);
+}
+#hp-fx .fx-stars { top: 0; left: 0; width: 2.5px; height: 2.5px; border-radius: 50%; }
+#hp-fx .fx-a { box-shadow: 102.5vw 16.7vh 0 1px rgba(255, 255, 255, 0.74), 92.0vw 4.2vh 0 1px rgba(255, 255, 255, 0.79), 59.3vw 34.4vh 0 1px rgba(255, 255, 255, 0.71), 73.4vw 78.4vh 0 1px rgba(255, 255, 255, 0.80), 73.5vw 79.6vh 0 1px rgba(255, 255, 255, 0.88), 88.7vw 40.3vh 0 1px rgba(255, 255, 255, 0.89), 7.4vw 19.5vh 0 1px rgba(255, 255, 255, 0.62), 111.0vw 22.4vh 0 1px rgba(255, 255, 255, 0.69), 104.2vw 22.3vh 0 1px rgba(255, 255, 255, 0.71), 95.1vw 4.6vh 0 1px rgba(255, 255, 255, 0.88), 103.6vw 64.3vh 0 1px rgba(255, 255, 255, 0.77), 48.2vw 71.0vh 0 1px rgba(255, 255, 255, 0.81), 74.3vw 40.2vh 0 1px rgba(255, 255, 255, 0.60), 8.7vw 16.1vh 0 1px rgba(255, 255, 255, 0.56), 49.9vw 70.5vh 0 1px rgba(255, 255, 255, 0.63), 3.0vw 75.6vh 0 1px rgba(255, 255, 255, 0.77), 65.6vw 57.2vh 0 1px rgba(255, 255, 255, 0.94), 111.4vw 31.0vh 0 1px rgba(255, 255, 255, 0.92), 80.5vw 11.5vh 0 1px rgba(255, 255, 255, 0.67), 4.6vw 41.6vh 0 1px rgba(255, 255, 255, 0.69), 27.6vw 49.4vh 0 1px rgba(255, 255, 255, 0.73), 81.5vw 24.3vh 0 1px rgba(255, 255, 255, 0.57), 80.9vw 24.8vh 0 1px rgba(255, 255, 255, 0.65), 70.6vw 36.0vh 0 1px rgba(255, 255, 255, 0.89), 30.6vw 60.9vh 0 1px rgba(255, 255, 255, 0.85), 97.6vw 46.5vh 0 1px rgba(255, 255, 255, 0.91), 102.4vw 78.5vh 0 1px rgba(255, 255, 255, 0.56), 87.0vw 48.7vh 0 1px rgba(255, 255, 255, 0.60), 44.8vw 38.5vh 0 1px rgba(255, 255, 255, 0.59), 22.2vw 32.7vh 0 1px rgba(255, 255, 255, 0.69), 39.3vw 4.8vh 0 1px rgba(255, 255, 255, 0.93), 10.6vw 78.4vh 0 1px rgba(255, 255, 255, 0.59), 90.5vw 74.6vh 0 1px rgba(255, 255, 255, 0.62), 56.5vw 24.5vh 0 1px rgba(255, 255, 255, 0.68), 98.2vw 12.7vh 0 1px rgba(255, 255, 255, 0.92), 75.5vw 47.6vh 0 1px rgba(255, 255, 255, 0.78), 29.2vw 25.7vh 0 1px rgba(255, 255, 255, 0.71), 91.9vw 45.8vh 0 1px rgba(255, 255, 255, 0.88), 6.6vw 51.0vh 0 1px rgba(255, 255, 255, 0.93), 42.0vw 65.2vh 0 1px rgba(255, 255, 255, 0.88), 33.9vw 67.5vh 0 1px rgba(255, 255, 255, 0.91), 16.9vw 49.4vh 0 1px rgba(255, 255, 255, 0.86), 43.1vw 14.3vh 0 1px rgba(255, 255, 255, 0.61), 104.4vw 72.4vh 0 1px rgba(255, 255, 255, 0.56), 88.1vw 73.3vh 0 1px rgba(255, 255, 255, 0.83), 40.6vw 5.5vh 0 1px rgba(255, 255, 255, 0.78); }
+#hp-fx .fx-b { width: 2px; height: 2px; box-shadow: 20.4vw 53.9vh 0 0.3px rgba(255, 255, 255, 0.41), 43.4vw 34.1vh 0 0.3px rgba(255, 255, 255, 0.50), 77.2vw 10.4vh 0 0.3px rgba(255, 255, 255, 0.57), 59.8vw 48.4vh 0 0.3px rgba(255, 255, 255, 0.49), 45.6vw 5.5vh 0 0.3px rgba(255, 255, 255, 0.36), 12.4vw 5.7vh 0 0.3px rgba(255, 255, 255, 0.34), 8.0vw 25.2vh 0 0.3px rgba(255, 255, 255, 0.44), 12.7vw 46.7vh 0 0.3px rgba(255, 255, 255, 0.46), 97.2vw 21.3vh 0 0.3px rgba(255, 255, 255, 0.34), 16.9vw 39.9vh 0 0.3px rgba(255, 255, 255, 0.37), 81.2vw 46.7vh 0 0.3px rgba(255, 255, 255, 0.32), 59.9vw 59.6vh 0 0.3px rgba(255, 255, 255, 0.39), 7.8vw 3.7vh 0 0.3px rgba(255, 255, 255, 0.56), 35.3vw 65.9vh 0 0.3px rgba(255, 255, 255, 0.46), 29.8vw 67.9vh 0 0.3px rgba(255, 255, 255, 0.36), 64.8vw 38.7vh 0 0.3px rgba(255, 255, 255, 0.41), 109.0vw 45.9vh 0 0.3px rgba(255, 255, 255, 0.41), 43.8vw 23.7vh 0 0.3px rgba(255, 255, 255, 0.43), 86.6vw 46.5vh 0 0.3px rgba(255, 255, 255, 0.53), 97.3vw 62.5vh 0 0.3px rgba(255, 255, 255, 0.58), 92.8vw 58.0vh 0 0.3px rgba(255, 255, 255, 0.40), 13.0vw 78.3vh 0 0.3px rgba(255, 255, 255, 0.43), 89.9vw 68.0vh 0 0.3px rgba(255, 255, 255, 0.57), 26.4vw 41.8vh 0 0.3px rgba(255, 255, 255, 0.40), 76.1vw 39.0vh 0 0.3px rgba(255, 255, 255, 0.39), 40.2vw 4.9vh 0 0.3px rgba(255, 255, 255, 0.53), 21.0vw 14.1vh 0 0.3px rgba(255, 255, 255, 0.57), 1.9vw 29.4vh 0 0.3px rgba(255, 255, 255, 0.48), 95.4vw 32.0vh 0 0.3px rgba(255, 255, 255, 0.36), 92.3vw 64.0vh 0 0.3px rgba(255, 255, 255, 0.35), 66.1vw 54.9vh 0 0.3px rgba(255, 255, 255, 0.57), 52.5vw 20.1vh 0 0.3px rgba(255, 255, 255, 0.53), 65.2vw 24.8vh 0 0.3px rgba(255, 255, 255, 0.36), 69.7vw 59.3vh 0 0.3px rgba(255, 255, 255, 0.46), 7.9vw 16.5vh 0 0.3px rgba(255, 255, 255, 0.50), 69.6vw 70.7vh 0 0.3px rgba(255, 255, 255, 0.47), 94.4vw 41.7vh 0 0.3px rgba(255, 255, 255, 0.36), 108.9vw 67.1vh 0 0.3px rgba(255, 255, 255, 0.30), 72.4vw 14.7vh 0 0.3px rgba(255, 255, 255, 0.51), 11.8vw 4.2vh 0 0.3px rgba(255, 255, 255, 0.48); }
+#hp-fx .fx-cloud {
+  left: 0; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(235, 240, 255, 0.32) 0%, rgba(235, 240, 255, 0.15) 40%, rgba(235, 240, 255, 0) 70%);
+}
+#hp-fx .fx-c1 { top: 4vh; width: 58vw; height: 26vh; transform: translateX(8vw); }
+#hp-fx .fx-c2 { top: 22vh; width: 44vw; height: 20vh; transform: translateX(62vw); }
+#hp-fx .fx-c3 { top: 40vh; width: 64vw; height: 28vh; transform: translateX(30vw); }
+#hp-fx .fx-c4 { top: 62vh; width: 48vw; height: 22vh; transform: translateX(-6vw); }
+#hp-fx .fx-c5 { top: 80vh; width: 56vw; height: 24vh; transform: translateX(70vw); }
+
+html[data-sky="day"][data-weather="clear"] #hp-fx .fx-sun { opacity: 1; }
+html[data-sky="day"][data-weather="partly"] #hp-fx .fx-sun { opacity: 0.55; }
+html[data-sky="night"][data-weather="clear"] #hp-fx .fx-stars { opacity: 1; }
+html[data-sky="night"][data-weather="partly"] #hp-fx .fx-stars { opacity: 0.6; }
+html[data-weather="partly"] #hp-fx .fx-cloud { opacity: 0.6; }
+html:is([data-weather="cloudy"], [data-weather="rain"], [data-weather="storm"]) #hp-fx .fx-cloud { opacity: 1; }
+html[data-sky="night"] #hp-fx .fx-cloud { filter: brightness(0.7); }
+
+/* stars twinkle by brightness (opacity belongs to the mood switch above) */
+@media (prefers-reduced-motion: no-preference) {
+  #hp-fx .fx-sun { animation: fxSun 12s steps(48, end) infinite alternate; }
+  #hp-fx .fx-a { animation: fxTwinkle 5s steps(20, end) infinite alternate; }
+  #hp-fx .fx-b { animation: fxTwinkle 7s steps(28, end) -3s infinite alternate-reverse; }
+  #hp-fx .fx-c1 { animation: fxCloud 340s steps(1360, end) -60s infinite; }
+  #hp-fx .fx-c2 { animation: fxCloud 280s steps(1120, end) -200s infinite; }
+  #hp-fx .fx-c3 { animation: fxCloud 400s steps(1600, end) -150s infinite; }
+  #hp-fx .fx-c4 { animation: fxCloud 320s steps(1280, end) -20s infinite; }
+  #hp-fx .fx-c5 { animation: fxCloud 360s steps(1440, end) -290s infinite; }
+}
+@keyframes fxSun { from { transform: scale(1); } to { transform: scale(1.08); } }
+@keyframes fxTwinkle { from { filter: brightness(0.45); } to { filter: brightness(1.25); } }
+@keyframes fxCloud { from { transform: translateX(-70vw); } to { transform: translateX(120vw); } }
 
 @media (pointer: fine) and (min-width: 1025px) {
   /* Bookmarks: all 8 sections side by side as equal columns on desktop (settings.yaml's fiveColumns
@@ -980,8 +1031,8 @@ li.bookmark > a:hover {
   color: transparent !important;
   -webkit-text-fill-color: transparent;
 }
-/* weather: Open-Meteo widget as a glass capsule like the date; background moods from its condition
-   (custom.js sets data-weather): cloudy = dimmer glow, rain = faint falling streaks, storm = rain +
+/* weather: OpenWeatherMap widget as a glass capsule like the date; background moods from Home Assistant's
+   weather (or this widget's text as a fallback; custom.js sets data-weather): cloudy = dimmer glow, rain = faint falling streaks, storm = rain +
    an occasional soft flash. Streaks and flash are off when reduced motion is asked for; Top-bar
    rule kept here: it must come after the bookmark rules it overrides */
 .information-widget-openweathermap, .information-widget-openmeteo, .hp-weather {
@@ -1190,7 +1241,6 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
   50%  { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
   100% { transform: translate3d(3%, -1%, 0) scale(1.02); }
 }
-@keyframes rainFall { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-40px, 240px, 0); } }
 @keyframes stormFlash { 0%, 91%, 100% { opacity: 0; } 92% { opacity: 0.9; } 93% { opacity: 0.2; } 94.5% { opacity: 0.7; } 96% { opacity: 0; } }
 
 /* phones: the disk row spans exactly the card grid below it, 26px from each edge (layout-groups 16px +
@@ -1211,11 +1261,20 @@ dialog:has(> input[placeholder="Search"]) .font-bold { font-weight: 600 !importa
 .service-container.fit-wrap { flex-wrap: wrap !important; }
 .service-container.fit-wrap > .service-block { flex: 1 1 40% !important; }
 
-/* Gotify card, bottom row (Latest / From / Received, 08/10/2026): same three equal columns as the top row so
-   the boxes line up; a long notification title gets "..." instead of squeezing the other boxes */
-li.service[data-name="Gotify"] .service-container ~ .service-container > .service-block { flex: 1 1 0 !important; min-width: 0 !important; }
-li.service[data-name="Gotify"] .service-container ~ .service-container .service-block-value {
+/* Gotify card (10/10/2026): Latest on top with From beside it, then three equal columns (Applications, Clients,
+   Last Received; Last 24h dropped 15/10/2026). The title wraps to two lines instead of being cut (anything longer still gets "...").
+   Rows swapped 10/10/2026 so the title is read first; was Latest / From / Received in thirds (08/10/2026). */
+li.service[data-name="Gotify"] .service-container { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+li.service[data-name="Gotify"] .service-container > .service-block { min-width: 0 !important; }
+li.service[data-name="Gotify"] .service-block-value {
   width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+li.service[data-name="Gotify"] .service-container:not(.service-container ~ .service-container) > .service-block:first-child .service-block-value {
+  white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3;
+  }   /* the message at the cards' normal 20px figure size, wrapping to two lines (user 15/10/2026: one size for every widget) */
+/* columns line up (15/10/2026, user): the top row uses the same three columns as the bottom row, Latest Message
+   across the first two and From in the third, exactly over Last Received. Every figure is the normal 20px */
+li.service[data-name="Gotify"] .service-container:not(.service-container ~ .service-container) { align-items: end !important; }   /* From's label level with Latest's when the title wraps */
+li.service[data-name="Gotify"] .service-container:not(.service-container ~ .service-container) > .service-block:first-child { grid-column: span 2; }
 
 /* Stats switch (custom.js statsSwitch, 08/10/2026): iOS-style switch at the end of the Infrastructure
    heading folds or unfolds all the other Applications sections at once (Infrastructure keeps its figures) */
@@ -1368,7 +1427,7 @@ body { letter-spacing: -0.011em; }
     -webkit-text-fill-color: var(--mac-label) !important;
   }
   .information-widget-greeting span {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif !important;
     font-size: 15px !important;
     font-weight: 700 !important;
     letter-spacing: -0.01em !important;
@@ -1482,7 +1541,7 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
     -webkit-text-fill-color: #ffffff !important;
   }
   .information-widget-greeting span {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     font-size: 1.6rem !important;
@@ -1547,3 +1606,255 @@ li.bookmark > a:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-
   .information-widget-resource .text-xs { font-size: 13px !important; line-height: 1.2 !important; }
   .information-widget-resource .text-xs > .pr-1 { font-size: 12px !important; }
 }
+
+/* Home Assistant tile: its third widget only carries HA's weather state for the background mood (custom.js
+   haWeatherPoll), so it is never shown; the tile keeps its two rows (15/10/2026) */
+li.service[data-name="Home Assistant"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
+
+/* top-bar weather icon from Home Assistant (15/10/2026): custom.js sets data-ha-icon and --ha-icon (the Material Design
+   weather icon HA uses) on the widget; the widget's own icon keeps its size but is hidden, and HA's is drawn white in
+   its place, so the capsule doesn't move. Without HA's reading the widget's own icon shows as before */
+.hp-weather[data-ha-icon] .widget-inner-icon { position: relative; }
+.hp-weather[data-ha-icon] .widget-inner-icon svg { opacity: 0; }
+.hp-weather[data-ha-icon] .widget-inner-icon::after {
+  content: ""; position: absolute; inset: 0; background: #ffffff;
+  -webkit-mask: var(--ha-icon) center / contain no-repeat; mask: var(--ha-icon) center / contain no-repeat;
+}
+
+/* ================================================================================================
+   APPLE TOUCHES (15/10/2026, user: "even more Apple-like", items 1-4 + Dock preview). 1 the real San
+   Francisco font on Apple devices (in --font-family at the top), 2 spring motion, 3 app icons on squircle
+   plates, 4 notification banners for new Gotify messages (custom.js notes), 5 Dock with the Bookmarks
+   groups as Stacks (on for everyone on desktop; ?dock=0 hides it and brings back the Bookmarks tab). REVERT: delete from this comment to the end of the file, the notes/dock blocks
+   in custom.js, and put "Inter" back first in --font-family.
+   ================================================================================================ */
+:root {
+  --mac-spring: cubic-bezier(0.34, 1.45, 0.64, 1);  /* a little overshoot, like a SwiftUI spring */
+  --mac-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --mac-squircle: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath d="M100.0 50.0 L99.9 68.8 L99.7 74.8 L99.3 79.1 L98.8 82.6 L98.1 85.4 L97.2 87.9 L96.2 90.0 L94.9 91.9 L93.5 93.5 L91.9 94.9 L90.0 96.2 L87.9 97.2 L85.4 98.1 L82.6 98.8 L79.1 99.3 L74.8 99.7 L68.8 99.9 L50.0 100.0 L31.2 99.9 L25.2 99.7 L20.9 99.3 L17.4 98.8 L14.6 98.1 L12.1 97.2 L10.0 96.2 L8.1 94.9 L6.5 93.5 L5.1 91.9 L3.8 90.0 L2.8 87.9 L1.9 85.4 L1.2 82.6 L0.7 79.1 L0.3 74.8 L0.1 68.8 L0.0 50.0 L0.1 31.2 L0.3 25.2 L0.7 20.9 L1.2 17.4 L1.9 14.6 L2.8 12.1 L3.8 10.0 L5.1 8.1 L6.5 6.5 L8.1 5.1 L10.0 3.8 L12.1 2.8 L14.6 1.9 L17.4 1.2 L20.9 0.7 L25.2 0.3 L31.2 0.1 L50.0 0.0 L68.8 0.1 L74.8 0.3 L79.1 0.7 L82.6 1.2 L85.4 1.9 L87.9 2.8 L90.0 3.8 L91.9 5.1 L93.5 6.5 L94.9 8.1 L96.2 10.0 L97.2 12.1 L98.1 14.6 L98.8 17.4 L99.3 20.9 L99.7 25.2 L99.9 31.2Z"/%3E%3C/svg%3E');
+}
+
+/* 2. motion: cards grow a touch on hover with a spring and sink when pressed, like tapping an iOS tile.
+   Cards holding a page (HA, Glance, calendars) keep still, as before */
+.service-card {
+  transition: transform 0.5s var(--mac-spring), box-shadow 0.3s var(--mac-ease), border-color 0.3s var(--mac-ease),
+    background-color 0.3s var(--mac-ease) !important;
+}
+@media (pointer: fine) and (min-width: 1025px) {
+  .service-card:not(:has(iframe)):hover { transform: scale(1.012); }
+}
+.service-card:not(:has(iframe)):active { transform: scale(0.975); transition-duration: 0.12s !important; }
+#myTab [id$="-tab"] {
+  position: relative; z-index: 1;
+  transition: background-color 0.35s var(--mac-ease), color 0.35s var(--mac-ease), box-shadow 0.35s var(--mac-ease),
+    transform 0.3s var(--mac-spring) !important;
+}
+#myTab [id$="-tab"]:active { transition-duration: 0.1s !important; }
+#myTab [id$="-tab"]:active { transform: scale(0.96); }
+dialog:has(> input[placeholder="Search"]) { animation: mac-sheet-in 0.35s var(--mac-spring); }
+@keyframes mac-sheet-in { from { opacity: 0; transform: scale(0.96) translateY(-6px); } }
+
+/* 3. app icons on squircle plates (the macOS / iOS icon shape), desktop cards only: a light glass plate
+   behind each logo, the logo a little smaller so it sits inside like an app icon's artwork */
+@media (pointer: fine) and (min-width: 1025px) {
+  .service-card .service-icon { position: relative; isolation: isolate; }
+  .service-card .service-icon::before {
+    content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: 40px; height: 40px;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.05));
+    -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+    transition: background 0.3s var(--mac-ease);
+  }
+  .service-card:hover .service-icon::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.10) 55%, rgba(255, 255, 255, 0.07));
+  }
+  .service-card .service-icon img { width: 26px !important; height: 26px !important; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35)); }
+  /* cards without a description (Home's top row, link cards) have a 36 px header instead of 52 px: a smaller
+     plate keeps the same gap above it (user 15/10/2026: the 40 px plate sat 3 px from the top there) */
+  .service-card:not(:has(.service-description:not(:empty))) .service-icon::before { width: 30px; height: 30px; }
+  .service-card:not(:has(.service-description:not(:empty))) .service-icon img { width: 20px !important; height: 20px !important; }
+}
+
+/* Blur in this block is 20 px (15/10/2026, was 30): the same as the cards since the 07/10 performance pass;
+   a blur's cost grows with its radius and the difference is hard to see. */
+/* 4. notification banners (custom.js notes): new Gotify messages slide in at the top right like macOS
+   banners; priority 8 and up stay until closed (macOS "alerts"), the rest leave after 7 s */
+#hp-notes {
+  position: fixed; top: 82px; right: 18px; z-index: 60; width: 360px;
+  display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+}
+.hp-note {
+  position: relative; display: flex; gap: 11px; align-items: flex-start; padding: 11px 14px 12px 11px;
+  border-radius: 20px; pointer-events: auto; cursor: pointer;
+  background: rgba(40, 40, 44, 0.62); border: 0.5px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14), 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: var(--mac-label); animation: mac-note-in 0.55s var(--mac-spring);
+  transition: opacity 0.35s var(--mac-ease), transform 0.35s var(--mac-ease);
+}
+.hp-note.hp-note-out { opacity: 0; transform: translateX(24px); }
+@keyframes mac-note-in { from { opacity: 0; transform: translateX(110%); } }
+.hp-note-icon {
+  flex: none; width: 34px; height: 34px; padding: 5px; box-sizing: border-box; object-fit: contain;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08));
+  -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+}
+.hp-note-body { flex: 1; min-width: 0; }
+.hp-note-head { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 14px; color: var(--mac-label-2); }
+.hp-note-app { font-weight: 600; letter-spacing: 0.01em; }
+.hp-note-title { margin-top: 2px; font-size: 13px; line-height: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.hp-note-msg {
+  margin-top: 1px; font-size: 13px; line-height: 17px; color: rgba(235, 235, 245, 0.78);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere;
+}
+.hp-note-close {
+  position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: 50%; padding: 0;
+  display: grid; place-items: center; font-size: 13px; line-height: 1; cursor: pointer; opacity: 0;
+  background: rgba(60, 60, 64, 0.92); border: 0.5px solid rgba(255, 255, 255, 0.22); color: var(--mac-label);
+  transition: opacity 0.2s var(--mac-ease);
+}
+.hp-note:hover .hp-note-close, .hp-note[data-sticky] .hp-note-close { opacity: 1; }
+@media (pointer: coarse), (max-width: 1024px) {
+  #hp-notes { top: 10px; left: 10px; right: 10px; width: auto; }
+}
+
+/* 5. Dock (custom.js dock; on for everyone on desktop since 15/10/2026, ?dock=0 in the address hides it):
+   favourite apps in a frosted bar at the bottom, icons grow under the pointer, a label shows above, a click
+   bounces the icon like an app launching. Desktop only */
+#hp-dock {
+  position: fixed; left: 50%; bottom: 24px; z-index: 45; transform: translateX(-50%);  /* 24 px off the bottom (user 16/10/2026 with 64 px icons; was 18, first 10) */
+  display: flex; align-items: flex-end; gap: 6px; padding: 7px 9px; isolation: isolate;
+}
+/* Smooth magnification (15/10/2026, user: "a bit laggy"): nothing in the Dock changes size any more. Growing an
+   icon's width and height made the browser lay the Dock out again, redraw every squircle at its new size and redo
+   the blur on every mouse move. Now each icon is drawn once at its full magnified size (78 px) and shown scaled
+   down at rest; magnification only changes transforms (scale for the icon, a sideways shift for its neighbours,
+   a horizontal stretch for the frosted bar), which the graphics card handles. custom.js writes those transforms
+   once per frame while the pointer is over the Dock (data-mag, when transitions are off so nothing lags), only
+   for the parts that moved */
+.hp-dock-bg {
+  position: absolute; inset: 0; z-index: -1; border-radius: calc(var(--ds, 52px) * 0.46); pointer-events: none;
+  background: rgba(36, 36, 40, 0.48); border: 0.5px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14), 0 12px 34px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s var(--mac-ease); will-change: transform;
+}
+/* room under the last row so the Dock never covers it, only on tabs that scroll anyway (custom.js dockRoom sets
+   data-dockroom): giving every tab the room made Home, which fits the screen exactly, scroll by 100 px */
+#hp-dock[data-nobar] .hp-dock-bg { display: none; }  /* ?dockbar=none preview: no frosted bar, icons only */
+html[data-dockroom] #inner_wrapper > div { height: auto; padding-bottom: calc(var(--ds, 52px) + 54px); }  /* the column is fixed at screen height and its rows overflow it; let it grow so the room lands after the last row */
+/* --ds: the icon size at rest (custom.js DOCK_SIZE sets it on <html>) */
+.hp-dock-item { position: relative; display: block; flex: none; width: var(--ds, 52px); height: var(--ds, 52px); pointer-events: none; }
+.hp-dock-icon {  /* the visible icon; it takes the pointer, so hover and clicks follow it where it has moved */
+  position: absolute; left: 50%; bottom: 0; width: calc(var(--ds, 52px) * 1.5); height: calc(var(--ds, 52px) * 1.5);
+  margin-left: calc(var(--ds, 52px) * -0.75); pointer-events: auto;
+  transform-origin: 50% 100%; transform: scale(0.6667);
+  transition: transform 0.3s var(--mac-ease); will-change: transform;
+}
+.hp-dock-icon::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.06));
+  -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+}
+.hp-dock-icon > img {
+  position: absolute; inset: 18%; width: 64%; height: 64%; object-fit: contain;
+  filter: drop-shadow(0 1.5px 3px rgba(0, 0, 0, 0.35));
+}
+.hp-dock-item[data-bounce] { animation: mac-dock-bounce 0.9s var(--mac-ease); }
+@keyframes mac-dock-bounce {
+  0%, 50%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-22px); }
+  75% { transform: translateY(-10px); }
+}
+.hp-dock-label {
+  position: absolute; left: 50%; bottom: calc(100% + 12px); white-space: nowrap;
+  transform: translateX(-50%);
+  padding: 4px 11px; border-radius: 8px; font-size: 13px; font-weight: 500; pointer-events: none; opacity: 0;
+  /* no blur behind the label (15/10/2026): it moves with the magnification, so a blur had to be redone every frame;
+     at 90% the background looks the same without it */
+  background: rgba(40, 40, 44, 0.9); border: 0.5px solid rgba(255, 255, 255, 0.16); color: var(--mac-label);
+  transition: opacity 0.15s var(--mac-ease), transform 0.3s var(--mac-ease);
+}
+.hp-dock-item:hover .hp-dock-label { opacity: 1; }
+.hp-dock-sep {
+  align-self: stretch; width: 0.5px; margin: 6px 4px; background: rgba(255, 255, 255, 0.22);
+  transition: transform 0.3s var(--mac-ease);
+}
+#hp-dock[data-mag] .hp-dock-bg, #hp-dock[data-mag] .hp-dock-icon, #hp-dock[data-mag] .hp-dock-sep { transition: none; }
+#hp-dock[data-mag] .hp-dock-label { transition: opacity 0.15s var(--mac-ease); }
+/* "full" Dock (every browser; ?dock=lite switches it off): the icons, labels and bar ease into place while the pointer moves,
+   like the first Dock, instead of following it frame by frame */
+#hp-dock[data-mag][data-full] .hp-dock-bg, #hp-dock[data-mag][data-full] .hp-dock-icon, #hp-dock[data-mag][data-full] .hp-dock-sep {
+  transition: transform 0.18s var(--mac-ease);
+}
+#hp-dock[data-mag][data-full] .hp-dock-label { transition: opacity 0.15s var(--mac-ease), transform 0.18s var(--mac-ease); }
+@media (pointer: coarse), (max-width: 1024px) { #hp-dock { display: none; } html[data-dockroom] #inner_wrapper > div { padding-bottom: 0; } }
+
+/* Dock Stacks (15/10/2026): each Bookmarks group as an iOS folder (its first four links
+   in a 2 x 2 grid on the squircle plate); a click opens a frosted macOS "Grid" stack above the Dock */
+button.hp-dock-item { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit; }
+a.hp-dock-item .hp-dock-icon, button.hp-dock-item .hp-dock-icon { cursor: pointer; }
+.hp-dock-folder {
+  position: absolute; inset: 17%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 9%;
+}
+.hp-dock-icon .hp-dock-folder img { position: static; inset: auto; width: 100%; height: 100%; object-fit: contain; filter: none; }
+.hp-dock-item[data-open]::after {  /* the "open" dot under an open Stack, like a running app */
+  content: ""; position: absolute; left: 50%; bottom: -5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+img.hp-mono { filter: invert(1) !important; }
+#hp-stack {
+  position: fixed; z-index: 46; bottom: calc(var(--ds, 52px) + 58px); max-width: calc(100vw - 24px); padding: 14px 14px 12px;
+  border-radius: 22px; background: rgba(36, 36, 40, 0.62); border: 0.5px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14), 0 18px 48px rgba(0, 0, 0, 0.45);
+  transform-origin: var(--arrow, 50%) 100%; animation: mac-stack-in 0.4s var(--mac-spring);
+  transition: opacity 0.2s var(--mac-ease), transform 0.2s var(--mac-ease);
+}
+#hp-stack[data-out] { opacity: 0; transform: scale(0.92) translateY(8px); }
+@keyframes mac-stack-in { from { opacity: 0; transform: scale(0.85) translateY(16px); } }
+#hp-stack::after {  /* the little arrow pointing at the Stack's icon */
+  content: ""; position: absolute; left: calc(var(--arrow, 50%) - 9px); bottom: -9px; width: 18px; height: 9px;
+  background: inherit; clip-path: polygon(0 0, 100% 0, 50% 100%);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.hp-stack-title { padding: 0 6px 10px; font-size: 13px; font-weight: 600; color: var(--mac-label); text-align: center; }
+.hp-stack-grid { display: grid; grid-template-columns: repeat(var(--cols, 4), 96px); gap: 6px 4px; }
+.hp-stack-link {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px 6px; border-radius: 12px;
+  text-decoration: none; color: var(--mac-label); transition: background-color 0.15s var(--mac-ease);
+}
+.hp-stack-link:hover { background: rgba(255, 255, 255, 0.10); }
+.hp-stack-link:active { transform: scale(0.95); }
+.hp-stack-icon { position: relative; width: 48px; height: 48px; }
+.hp-stack-icon::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.06));
+  -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+}
+.hp-stack-icon img { position: absolute; inset: 20%; width: 60%; height: 60%; object-fit: contain; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35)); }
+.hp-stack-name {
+  max-width: 100%; font-size: 12px; line-height: 15px; font-weight: 500; text-align: center;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+@media (pointer: coarse), (max-width: 1024px) { #hp-stack { display: none; } }
+/* Bookmarks tab hidden (15/10/2026, user: Dock option 2): its links live in the Dock's Stacks now. The groups stay
+   in services.yaml (the Stacks read them from there). html[data-dock] is only set while the Dock is showing, so
+   ?dock=0 brings the tab back */
+html[data-dock] #myTab > :has(#Bookmarks-tab) { display: none !important; }
+
+
+/* sliding tab pill (custom.js tabPill, 15/10/2026): the open-tab pill is one element that slides between tabs with
+   a spring; the open tab itself turns see-through and keeps its white text. Until the pill is placed
+   (html[data-pill] unset) the open tab keeps its own white background, so nothing flashes */
+#myTab { position: relative; }
+#hp-tab-pill {
+  position: absolute; left: 0; z-index: 0; border-radius: 999px; pointer-events: none;
+  /* the Mac theme's open-tab look (dark-mode macOS segmented control: grey pill, white text), see "4. macOS segmented control" */
+  background: rgba(99, 99, 102, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
+}
+html[data-pill] #hp-tab-pill { transition: transform 0.5s var(--mac-spring), width 0.5s var(--mac-spring); }
+html[data-pill] #myTab [id$="-tab"][aria-selected="true"] { background: transparent !important; box-shadow: none !important; }
+html:not([data-pill]) #hp-tab-pill { opacity: 0; }
+@media (pointer: coarse), (max-width: 1024px) { #hp-tab-pill { display: none; } }

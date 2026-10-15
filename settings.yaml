@@ -41,7 +41,7 @@ layout:
     header: true
     tab: Applications
     style: row
-    columns: 4
+    columns: 7
   Networking & Security:
     disableCollapse: true
     header: true

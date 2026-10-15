@@ -354,6 +354,75 @@
                 label: Vacuum
               - state: sensor.mibx5_sg_991525056_f35th_status_p_2_2
                 label: Washer
+          # not shown (custom.css hides it): HA's weather for the background mood, the Nest Hubs' source
+          # (custom.js haWeatherPoll reads it as index 2; 15/10/2026)
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: weather.openweathermap
+                label: Weather
+              - state: weather.openweathermap   # its temperature, for the top-bar weather (custom.js)
+                label: Temperature
+                value: "{attributes.temperature}"
+
+    - Beszel:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/beszel.svg
+        href: "https://beszel.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Server Monitoring
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8090"
+        widgets:
+          - type: beszel
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8090"
+            username: "{{HOMEPAGE_VAR_BESZEL_USERNAME}}"
+            password: "{{HOMEPAGE_VAR_BESZEL_PASSWORD}}"
+            version: 2
+            fields: [systems, up]
+          # second row: busiest machine (CPU) and fullest disk across all 11 systems (user 15/10/2026),
+          # from the beszel-summary helper in the Komodo beszel stack (komodo network only).
+          - type: customapi
+            url: "http://beszel-summary:8091/"
+            refreshInterval: 60000
+            mappings:
+              - field: busiest
+                label: Busiest System
+              - field: fullest
+                label: Fullest Disk
+
+    - Gatus:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/gatus.svg
+        href: "https://gatus.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Uptime Checks
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8070"
+        widgets:
+          - type: gatus
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8070"
+          # second row: the latest check of each server. Gatus lists checks by key (group, then name),
+          # so these numbers are positions in that list: re-check them if checks are added to Gatus.
+          - type: customapi
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8070/api/v1/endpoints/statuses?page=1&pageSize=1"
+            mappings:
+              - field: 11.results.0.success
+                label: Proxmox
+                remap:
+                  - value: true
+                    to: Up
+                  - any: true
+                    to: Down
+              - field: 12.results.0.success
+                label: Synology
+                remap:
+                  - value: true
+                    to: Up
+                  - any: true
+                    to: Down
+              - field: 10.results.0.success
+                label: PBS
+                remap:
+                  - value: true
+                    to: Up
+                  - any: true
+                    to: Down
 
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
@@ -361,31 +430,16 @@
         description: Push Notifications
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6742"
         widgets:
-          # top row from extras/gotify-count.sh (run every few minutes on the Docker host): Gotify's API has
-          # no message totals (the built-in widget counts one page, "100"), so the counts come from its
-          # database, written to Homepage's public/images folder and read back from inside the container
-          - type: customapi
-            url: "http://127.0.0.1:3000/images/gotify-count.json"
-            refreshInterval: 60000
-            mappings:
-              - field: applications
-                label: Applications
-                format: number
-              - field: clients
-                label: Clients
-                format: number
-              - field: last_24h
-                label: Last 24h
-                format: number
-          # second row: the newest message, the app it came from and when
+          # top row: the newest message's title and its app
           - type: customapi
             url: "{{HOMEPAGE_VAR_GOTIFY_URL}}/message?limit=1"
+            # every 15 s so Latest changes together with Received (custom.js gotifyReceived)
             headers:
               X-Gotify-Key: "{{HOMEPAGE_VAR_GOTIFY_API_KEY}}"
-            refreshInterval: 60000
+            refreshInterval: 15000
             mappings:
               - field: messages.0.title
-                label: Latest
+                label: Latest Message
               - field: messages.0.appid
                 label: From
                 # Gotify only sends the app's id: map your app ids to names (Gotify > Apps)
@@ -401,7 +455,7 @@
                   - value: 10
                     to: "Wallos"
                   - value: 11
-                    to: "Free Games Claimer"
+                    to: "Free Games"
                   - value: 13
                     to: "Seerr"
                   - value: 16
@@ -409,7 +463,7 @@
                   - value: 17
                     to: "Maintainerr"
                   - value: 18
-                    to: "Proxmox Backup Server"
+                    to: "PBS"
                   - value: 19
                     to: "Bazarr"
                   - value: 20
@@ -422,8 +476,52 @@
                     to: "Gatus"
                   - value: 25
                     to: "Synology"
-              - field: messages.0.date
-                label: Received
+                  - value: 26
+                    to: "Bambuddy"
+                  - value: 27
+                    to: "PosterFlow"
+          # second row from extras/gotify-count.sh (run every 15 s on the Docker host): Gotify's API has no
+          # message totals (the built-in widget counts one page, "100"), so the counts come from its database,
+          # written to Homepage's public/images folder and read back from inside the container. custom.js keeps
+          # "Last Received" ticking between messages
+          - type: customapi
+            url: "http://127.0.0.1:3000/images/gotify-count.json"
+            refreshInterval: 60000
+            mappings:
+              - field: applications
+                label: Applications
+                format: number
+              - field: clients
+                label: Clients
+                format: number
+              - field: latest_date
+                label: Last Received
+                format: relativeDate
+
+    - Scrutiny:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/scrutiny.svg
+        href: "https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Drive Health
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6090"
+        widgets:
+          - type: scrutiny
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6090"
+          # second row across ALL drives (Proxmox NVMe + the NAS's four, 15/10/2026): custom.js scrutinyPoll fills in
+          # the hottest drive's temperature, the most power-on hours, and the oldest of the drives' latest readings
+          # (so one collector going quiet shows). The mappings (the NVMe) only show until custom.js has read them
+          - type: customapi
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6090/api/summary"
+            mappings:
+              - field: data.summary.d63bb6cc-e9b9-54ea-9add-a032f27abfc7.smart.temp
+                label: Hottest Drive
+                format: number
+                suffix: "°C"
+              - field: data.summary.d63bb6cc-e9b9-54ea-9add-a032f27abfc7.smart.power_on_hours
+                label: Oldest Drive
+                format: number
+                suffix: " hr"
+              - field: data.summary.d63bb6cc-e9b9-54ea-9add-a032f27abfc7.smart.collector_date
+                label: Last Reading
                 format: relativeDate
 
 - Networking & Security:
@@ -736,6 +834,19 @@
             - field: summary.grand_total.percent_complete
               label: Coverage
               format: percent
+
+    # Tiles without a stats widget go last (user rule, 14/10/2026)
+    - Teamarr:
+        icon: https://cdn.jsdelivr.net/gh/Pharaoh-Labs/teamarr@main/frontend/public/icon-192x192.png
+        href: "https://teamarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Sports Guide & Channels
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9195"
+
+    - Channel Manager:
+        icon: https://cdn.jsdelivr.net/gh/MotWakorb/enhancedchannelmanager@main/frontend/src/assets/ECMLogo.png
+        href: "https://ecm.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Bulk Channel Editor
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6100"
 
 - Personal & Productivity:
     - Immich:
@@ -1212,6 +1323,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bentopdf.webp
         href: "https://bentopdf.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8280"
+    - Beszel:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/beszel.svg
+        href: "https://beszel.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8090"
     - BookStack:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bookstack.webp
         href: "https://bookstack.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1224,6 +1339,10 @@
         icon: /images/icons/chaptarr.svg
         href: "https://chaptarr.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8789"
+    - Channel Manager:
+        icon: https://cdn.jsdelivr.net/gh/MotWakorb/enhancedchannelmanager@main/frontend/src/assets/ECMLogo.png
+        href: "https://ecm.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6100"
     - Code-server:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/visual-studio-code.webp
         href: "https://code-server.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1260,6 +1379,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/freshrss.webp
         href: "https://freshrss.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9009"
+    - Gatus:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/gatus.svg
+        href: "https://gatus.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8070"
     - Gitea:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
         href: "https://gitea.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1349,6 +1472,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
         href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8080"
+    - Scrutiny:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/scrutiny.svg
+        href: "https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6090"
     - Seerr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/seerr.webp
         href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1365,6 +1492,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/tautulli.webp
         href: "https://tautulli.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_TAUTULLI_HOST}}:8181"
+    - Teamarr:
+        icon: https://cdn.jsdelivr.net/gh/Pharaoh-Labs/teamarr@main/frontend/public/icon-192x192.png
+        href: "https://teamarr.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9195"
     - Technitium 1:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/technitium.webp
         href: "https://technitium.{{HOMEPAGE_VAR_DOMAIN}}"

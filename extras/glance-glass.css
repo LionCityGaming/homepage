@@ -14,7 +14,7 @@ html, body, .page, .page-content {
   background-color: transparent !important;
 }
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif !important;  /* San Francisco on Apple devices, Inter elsewhere */
   color: rgba(235, 235, 245, 0.88) !important;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
@@ -52,3 +52,19 @@ a.color-primary-if-not-visited, a.color-primary-if-not-visited:visited, .card a.
 /* no slide-in entrance: Homepage's custom.js fades the whole embedded page in once it
    has loaded, so a second animation would only add movement */
 .page-columns, .page-column, .page-column-full, .page-column-small, .dynamic-columns > *, .page-content > * { animation: none !important; }
+
+/* cards grow a touch on hover with a spring and sink when clicked, as on Homepage; the growth always applies, the
+   spring only when the system allows motion */
+@media (pointer: fine) {
+  .card:hover { transform: scale(1.02); }
+  .card:active { transform: scale(0.97); }
+}
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card {
+    transition: transform 0.5s cubic-bezier(0.34, 1.45, 0.64, 1), border-color 0.3s ease, background-color 0.3s ease !important;
+  }
+  .card:active { transition-duration: 0.12s !important; }
+}
+/* the sideways carousels scroll, so they clip anything poking out of them: a few pixels of room on each side,
+   cancelled by a matching negative margin, so a hovered card keeps its border */
+.carousel-items-container { padding: 6px 5px 8px !important; margin: -6px -5px -2px !important; scroll-padding-inline: 5px; }
