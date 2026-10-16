@@ -550,6 +550,51 @@
   /* Synology Server uptime in hours like UniFi and Palworld (15/10/2026): "4 Days" -> "109 hr", from the widget's own
      system_info (up_time "108:33:48"), re-read every minute */
   let synoUptime = null;  // [seconds, when read]
+  /* trend lines (16/10/2026): the last 24 hours of CPU and memory as a faint line along the bottom of those figures
+     on the Home tab's server cards, like the small charts in macOS's Activity Monitor widgets. The readings come from
+     the beszel-summary helper's /history (Beszel's 20-minute readings, 72 a day) through the hidden third widget on the
+     Beszel card, read every 10 minutes. Each line is a small SVG set as the figure block's background through a CSS
+     variable, so nothing is added inside Homepage's own blocks and nothing moves. Hover a figure for the day's range */
+  const TREND_CARDS = { "Proxmox Server": "Proxmox", "Synology Server": "Synology", "Proxmox Backup Server": "PBS" };
+  const TREND_KEYS = { CPU: "cpu", MEM: "mem" };
+  let trendData = null;
+  function trendPoll() {
+    proxy("group=Infrastructure&service=Beszel&index=2").then((d) => {
+      if (d && d.updated) { trendData = d; trendDraw(); }
+    });
+  }
+  function trendSvg(vals, minSpan) {
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    if (hi - lo < minSpan) { const mid = (hi + lo) / 2; lo = Math.max(0, mid - minSpan / 2); hi = lo + minSpan; }
+    const W = 144, H = 24, n = vals.length;
+    const pts = vals.map((v, i) => (i * W / (n - 1)).toFixed(1) + "," + (H - 2 - (v - lo) / (hi - lo) * (H - 4)).toFixed(1));
+    const line = "M" + pts.join(" L");
+    return "url(\"data:image/svg+xml," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none">' +
+      '<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a84ff" stop-opacity="0.28"/>' +
+      '<stop offset="1" stop-color="#0a84ff" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + line + " L" + W + "," + H + " L0," + H + ' Z" fill="url(#f)"/>' +
+      '<path d="' + line + '" fill="none" stroke="#409cff" stroke-opacity="0.75" stroke-width="1.25" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
+      "</svg>") + "\")";
+  }
+  function trendDraw() {
+    if (!trendData) return;
+    for (const [card, sys] of Object.entries(TREND_CARDS)) {
+      const h = trendData[sys];
+      if (!h) continue;
+      document.querySelectorAll('li.service[data-name="' + card + '"] .service-block').forEach((b) => {
+        const k = TREND_KEYS[(b.querySelector(".service-block-label")?.textContent || "").trim()];
+        const vals = k && h[k];
+        if (!vals || vals.length < 2) return;
+        const stamp = trendData.updated + k;
+        if (b.dataset.trend === stamp) return;
+        b.style.setProperty("--hp-trend", trendSvg(vals, k === "cpu" ? 6 : 3));
+        b.dataset.trend = stamp;
+        const lo = Math.round(Math.min(...vals)), hi = Math.round(Math.max(...vals));
+        b.title = (k === "cpu" ? "CPU" : "Memory") + ", last 24 hr: " + lo + "% to " + hi + "%";
+      });
+    }
+  }
   function synoPoll() {
     if (!document.querySelector('li.service[data-name="Synology Server"]')) return;
     fetch("/api/services/proxy?group=Home&service=Synology%20Server&index=0&endpoint=system_info", { cache: "no-store" })
@@ -984,8 +1029,12 @@
     const val = x + "," + y + "," + w + "," + h;
     if (pill.dataset.at === val) return;
     pill.dataset.at = val;
+    const moved = pill.style.transform && pill.style.transform !== "translateX(" + x + "px)";
     pill.style.width = w + "px"; pill.style.height = h + "px"; pill.style.top = y + "px";
     pill.style.transform = "translateX(" + x + "px)";
+    if (moved && root.dataset.tabglass) {  // the Liquid Glass stretch while it slides
+      pill.classList.remove("hp-moving"); void pill.offsetWidth; pill.classList.add("hp-moving");
+    }
     if (!root.dataset.pill) requestAnimationFrame(() => requestAnimationFrame(() => { root.dataset.pill = "1"; }));  // no slide on first paint
   }
 
@@ -1257,6 +1306,7 @@
     dock();
     tabPill();
     dockRoom();
+    trendDraw();
     liveRender();
   }
 
@@ -1309,6 +1359,8 @@
 
   sky();
   setInterval(sky, 300000);
+  if (PARAMS.get("tabs") !== "grey") root.dataset.tabglass = "1";
+  if (PARAMS.get("glass") === "old") root.dataset.glassold = "1";  // ?glass=old: the frosted look from before Liquid Glass (16/10/2026)  // macOS 26 glass tab pill, default since 16/10/2026 (?tabs=grey = old pill)
   haWeatherPoll();
   setInterval(haWeatherPoll, 300000);
   if (PARAMS.get("mood")) { previewTick(); setInterval(previewTick, 1000); }
@@ -1319,6 +1371,8 @@
   setInterval(unifiPoll, 60000);
   synoPoll();
   setInterval(synoPoll, 60000);
+  trendPoll();
+  setInterval(trendPoll, 600000);
   setInterval(scrutinyPoll, 60000);
   notesPoll();
   setInterval(notesPoll, 15000);

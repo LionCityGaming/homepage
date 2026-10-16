@@ -7,7 +7,7 @@
     text: The Lion's Den
     href: https://gethomepage.dev/
     target: _blank
-- openweathermap:        # weather (Hub-style); also drives the background mood (custom.js)
+- openweathermap:        # weather (Hub-style), same source as HA's weather.openweathermap; also drives the background mood (custom.js)
     label: Singapore
     latitude: 1.35         # city-level, not the home location
     longitude: 103.82
@@ -16,7 +16,8 @@
     apiKey: "{{HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY}}"
     cache: 15
     format:
-      maximumFractionDigits: 0   # whole degrees, rounded (28.5 -> 29)
+      maximumFractionDigits: 1   # one decimal at most, like the HA weather card (28.2, or 28 when whole)
+      roundingMode: halfEven     # halves to the even digit, as HA's Python round() does (28.25 -> 28.2 on both, not 28.3)
 - datetime:              # date capsule (Hub-style)
     locale: en-sg
     text_size: xl

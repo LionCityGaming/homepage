@@ -1858,6 +1858,25 @@ html[data-pill] #hp-tab-pill { transition: transform 0.5s var(--mac-spring), wid
 html[data-pill] #myTab [id$="-tab"][aria-selected="true"] { background: transparent !important; box-shadow: none !important; }
 html:not([data-pill]) #hp-tab-pill { opacity: 0; }
 @media (pointer: coarse), (max-width: 1024px) { #hp-tab-pill { display: none; } }
+/* macOS 26 "Liquid Glass" open-tab pill (16/10/2026, the default since the same day; ?tabs=grey shows the old grey pill;
+   custom.js sets html[data-tabglass]): a clear lens instead of the grey pill. It lets the bar show through a little brighter and more saturated, with a bright rim
+   of light on its edge, and stretches briefly while it slides to another tab (custom.js adds .hp-moving), then settles */
+html[data-tabglass] #hp-tab-pill {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.12) 100%);
+  -webkit-backdrop-filter: blur(4px) saturate(1.8) brightness(1.18);
+  backdrop-filter: blur(4px) saturate(1.8) brightness(1.18);
+  border: 0.5px solid rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.55), inset 0 -1px 1px rgba(255, 255, 255, 0.14),
+    inset 1px 0 1px rgba(255, 255, 255, 0.10), inset 0 0 14px rgba(255, 255, 255, 0.07), 0 6px 16px rgba(0, 0, 0, 0.28);
+}
+/* no stretch any more (user, three times: still a bit too much bounce): the pill only glides */
+@keyframes hpLiquid {  /* a slight stretch (user: 7 % then 2.5 % wider was too much) */
+  0% { scale: 1 1; }
+  40% { scale: 1.012 0.98; }
+  100% { scale: 1 1; }
+}
+/* the glass pill glides without overshooting (user: the spring's bounce was too much): Apple's standard ease-out */
+html[data-tabglass][data-pill] #hp-tab-pill { transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); }
 
 /* Live Activities (custom.js LIVE_SOURCES / liveRender, 16/10/2026, on for everyone on desktop since 16/10/2026, ?live=0 hides them, ?live=demo shows samples): compact glass
    capsules in the menu bar just before the weather, like macOS's Live Activities: icon, short text, a progress ring
@@ -1916,6 +1935,8 @@ html[data-idle] body *:not(#hp-idle):not(#hp-idle *) { animation-play-state: pau
 /* Komodo tile: its third widget only carries every stack's name and state for the Live Activities (custom.js), so it
    is never shown; the tile keeps its two rows (16/10/2026) */
 li.service[data-name="Komodo"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
+/* Beszel's third widget only carries the trend-line readings for custom.js (16/10/2026) */
+li.service[data-name="Beszel"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
 /* Live Activities: the menu bar's right side fills up, so the title text steps aside and the disks sit just
    after the crest, as the macOS menu bar keeps its middle free (user 16/10/2026, html[data-live] set by custom.js) */
 @media (pointer: fine) and (min-width: 1025px) {
@@ -1943,3 +1964,98 @@ li.service[data-name="Komodo"] .service-card > .relative.flex-row ~ .relative.fl
      6 px left of the plate's centre) */
   #widgets-wrap > .information-widget-logo > * { margin: 0 !important; }
 }
+
+/* Trend lines (custom.js trendDraw, 16/10/2026): the last 24 hours of CPU and memory along the bottom of those figures
+   on the Home tab's server cards (Proxmox, Synology, PBS), from Beszel. A background picture of the block, under the
+   figure, so the figure and label keep their standard sizes */
+li.service .service-block[data-trend] {
+  background-image: var(--hp-trend) !important;
+  background-repeat: no-repeat !important;
+  background-position: center bottom !important;
+  background-size: 80% 55% !important;  /* 80 % wide and centred (user 16/10/2026: full-width lines almost touched their neighbours) */
+}
+
+/* LIQUID GLASS (macOS 26 look, 16/10/2026, user: "just apply it"; ?glass=old shows the previous frosted look; custom.js
+   sets html[data-glassold]). Clearer glass than before: a faint light-to-clear gradient over a thinner dark tint,
+   a bright rim of light along the top edge, and a lighter hairline. Cards keep enough tint for their figures to read.
+   The same look is in Glance (extras/glance-glass.css) and the Home Assistant panels (extras/home-assistant-glass-embed.js) */
+:root {
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.07) 100%);
+  --lg-rim: inset 0 1px 0.5px rgba(255, 255, 255, 0.42), inset 0 -1px 1px rgba(255, 255, 255, 0.08),
+    inset 1px 0 0.5px rgba(255, 255, 255, 0.06), inset -1px 0 0.5px rgba(255, 255, 255, 0.06);
+  --lg-rim-soft: inset 0 1px 0.5px rgba(255, 255, 255, 0.22), inset 0 -0.5px 0 rgba(255, 255, 255, 0.05);
+  --lg-edge: rgba(255, 255, 255, 0.24);
+}
+/* cards: a little clearer, rim on top. Not the cards holding an embedded panel (HA, Glance): their frame stays
+   invisible so the panel's own cards are the only glass (user 16/10/2026: a second frame looked out of place) */
+html:not([data-glassold]) .service-card:not(:has(iframe)), html:not([data-glassold]) .bookmark-text {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: var(--lg-rim-soft) !important;
+}
+/* truly clear and exactly like the HA and Glance cards beside them (user 16/10/2026: "must match exactly"): those sit
+   in embedded pages, which can't blur what's behind them, so Homepage's cards don't either; the wallpaper and the rain
+   show through. Same 40% tint, sheen, edge, rim and 18 px corners as the HA panels (extras/home-assistant-glass-embed.js) */
+html:not([data-glassold]) .service-card:not(:has(iframe)), html:not([data-glassold]) .bookmark-text,
+html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+html:not([data-glassold]) .service-card:not(:has(iframe)):hover { border-color: rgba(255, 255, 255, 0.28) !important; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.30), inset 0 -0.5px 0 rgba(255, 255, 255, 0.06) !important; }
+/* the currency boxes beside Glance: same glass as the cards */
+html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: var(--lg-rim-soft) !important;
+}
+/* menu bar: clear glass like the cards (user 16/10/2026: "glassy and transparent"): no blur, so the wallpaper and the
+   rain show through, the same faint light sheen over a light tint, and a thin bright line along its bottom edge */
+@media (pointer: fine) and (min-width: 1025px) {
+  html:not([data-glassold]) #information-widgets {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)), rgba(28, 28, 30, 0.22) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  }
+}
+/* tab bar, Dock, Stacks, banners and capsules: clear lenses */
+html:not([data-glassold]) #myTab {
+  background: var(--lg-sheen), rgba(30, 30, 32, 0.26) !important;
+  border-color: var(--lg-edge) !important;
+  box-shadow: var(--lg-rim), 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+html:not([data-glassold]) .hp-dock-bg {
+  background: var(--lg-sheen), rgba(30, 30, 34, 0.26);
+  border-color: rgba(255, 255, 255, 0.30);
+  -webkit-backdrop-filter: blur(16px) saturate(190%) brightness(1.08); backdrop-filter: blur(16px) saturate(190%) brightness(1.08);
+  box-shadow: var(--lg-rim), 0 14px 36px rgba(0, 0, 0, 0.32);
+}
+html:not([data-glassold]) #hp-stack, html:not([data-glassold]) .hp-note {
+  background: var(--lg-sheen), rgba(34, 34, 38, 0.50);
+  border-color: rgba(255, 255, 255, 0.26);
+  box-shadow: var(--lg-rim), 0 18px 48px rgba(0, 0, 0, 0.40);
+}
+html:not([data-glassold]) .hp-live-pill { box-shadow: var(--lg-rim); border-color: rgba(255, 255, 255, 0.26); }
+html:not([data-glassold]) .hp-live-pill:not(.hp-live-bad):not(.hp-live-warn) { background: var(--lg-sheen), rgba(255, 255, 255, 0.06); }
+/* even edges on standard-resolution screens (16/10/2026): a half-pixel border is drawn as one full pixel by Chrome but
+   rounded per side by Firefox/Zen when a card sits between pixels (one edge bright, the other faint). A full 1 px
+   hairline there looks the same in Chrome and even in Firefox; Retina screens keep the half-pixel hairline.
+   Same rule in the HA panels (extras/home-assistant-glass-embed.js) */
+@media (max-resolution: 1.5dppx) {
+  html:not([data-glassold]) :is(.service-card:not(:has(iframe)), .bookmark-text, #myTab, .hp-dock-bg, #hp-stack, .hp-note, .hp-live-pill),
+  html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) { border-width: 1px !important; }
+}
+/* the Calendars tab's list cards (Movies, TV Episodes, Media Releases) keep still on hover: no growth and no brighter edge
+   (user 16/10/2026), like the calendar panels beside them */
+li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card,
+li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:hover,
+li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:active {
+  transform: none !important;
+}
+html:not([data-glassold]) li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:hover {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: var(--lg-rim-soft) !important;
+}
+
+/* END LIQUID GLASS */
+

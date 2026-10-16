@@ -5,12 +5,17 @@ busiest" across all of them, and Beszel's API needs a login token that expires. 
 with the same login the widget uses (BESZEL_USER / BESZEL_PASSWORD from the environment, never printed),
 reads all systems every minute and serves the result on :8091 for Homepage's customapi widget:
   {"busiest": "Proxmox (16%)", "fullest": "Synology (71%)", "systems": 11, "updated": "..."}
+and on :8091/history the last 24 hours of each machine's CPU and memory use, one reading per 20 minutes, for the
+small trend lines on Homepage's server cards (16/10/2026):
+  {"Proxmox": {"cpu": [4.2, 5.1, ...], "mem": [79.1, ...]}, ..., "updated": "..."}   (oldest first, up to 72 each)
 Only reachable on the komodo Docker network (no published port). Standard library only."""
-import json, os, threading, time, urllib.request
+import json, os, threading, time, urllib.parse, urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HUB = os.environ.get("BESZEL_URL", "http://beszel:8090")
 state = {"busiest": "-", "fullest": "-", "systems": 0, "updated": None}
+history = {"updated": None}
+last_history = 0
 token = None
 
 
@@ -47,6 +52,36 @@ def refresh():
         state["fullest"] = "%s (%d%%)" % (f["name"], round(f["info"].get("dp") or 0))
     state["systems"] = len(items)
     state["updated"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    global last_history
+    if time.time() - last_history >= 600:  # Beszel adds a 20-minute reading every 20 minutes; checked twice as often
+        read_history(items)
+        last_history = time.time()
+
+
+def read_history(items):
+    names = {s["id"]: s["name"] for s in items}
+    since = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time() - 86400))
+    flt = urllib.parse.quote("type='20m' && created>='%s'" % since)
+    rows, page = [], 1
+    while True:
+        r = call("/api/collections/system_stats/records?perPage=500&sort=created&fields=system,stats,created"
+                 "&filter=%s&page=%d" % (flt, page))
+        rows += r.get("items", [])
+        if page >= r.get("totalPages", 1):
+            break
+        page += 1
+    out = {}
+    for row in rows:
+        n = names.get(row["system"])
+        st = row.get("stats") or {}
+        if not n:
+            continue
+        h = out.setdefault(n, {"cpu": [], "mem": []})
+        h["cpu"].append(round(st.get("cpu") or 0, 1))
+        h["mem"].append(round(st.get("mp") or 0, 1))
+    out["updated"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    history.clear()
+    history.update(out)
 
 
 def loop():
@@ -62,8 +97,9 @@ def loop():
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        body = json.dumps(state).encode()
-        self.send_response(200 if state["updated"] else 503)
+        data = history if self.path.rstrip("/") == "/history" else state
+        body = json.dumps(data).encode()
+        self.send_response(200 if data["updated"] else 503)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()

@@ -13,6 +13,17 @@
           username: "{{HOMEPAGE_VAR_PROXMOX_USERNAME}}"
           password: "{{HOMEPAGE_VAR_PROXMOX_PASSWORD}}"
 
+    - Proxmox Backup Server:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
+        href: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
+        widget:
+          type: proxmoxbackupserver
+          url: "https://{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_IP}}:8007"
+          username: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_PASSWORD}}"
+          datastore: Synology
+
     - Synology Server:
         icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/synology-dsm.png
         href: "https://synology.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -36,17 +47,6 @@
           showEpisodeNumber: true
           expandOneStreamToTwoRows: true
           enableUser: true
-
-    - Proxmox Backup Server:
-        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/proxmox.webp
-        href: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
-        siteMonitor: "https://pbs.{{HOMEPAGE_VAR_DOMAIN}}"
-        widget:
-          type: proxmoxbackupserver
-          url: "https://{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_IP}}:8007"
-          username: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_PROXMOX_BACKUP_SERVER_PASSWORD}}"
-          datastore: Synology
 
 # ============================================================
 # NEWS - currency rates + Glance
@@ -333,7 +333,8 @@
               X-Api-Secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
             requestBody:
               type: ListStacks
-              params: {}
+              # limit 0 returns every item: without it Komodo answers with one page (its default_pagination_limit, 50)
+              params: {limit: 0}
             refreshInterval: 60000
             mappings:
               - field: "0.name"
@@ -348,7 +349,8 @@
               X-Api-Secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
             requestBody:
               type: ListAllDockerContainers
-              params: {}
+              # limit 0 returns every item: without it Komodo answers with one page (its default_pagination_limit, 50)
+              params: {limit: 0}
             refreshInterval: 60000
             mappings:
               - field: "0.name"
@@ -473,6 +475,14 @@
                 label: Busiest System
               - field: fullest
                 label: Fullest Disk
+          # not shown (custom.css hides it): the last 24 hours of CPU and memory per machine from the same helper,
+          # for the trend lines under the CPU and MEM figures on the Home tab's server cards (custom.js TREND_CARDS)
+          - type: customapi
+            url: "http://beszel-summary:8091/history"
+            refreshInterval: 600000
+            mappings:
+              - field: updated
+                label: History
 
     - Gatus:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/gatus.svg

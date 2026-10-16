@@ -10,8 +10,11 @@
 // small cards (tiles, buttons, chips; up to 140 px tall) grow a touch on hover with a spring and sink when
 // pressed, like Homepage's cards. Big cards (map, weather, calendars) keep still. HA cards sit in shadow DOMs
 // that page CSS can't reach, so each small card's shadow root gets a few CSS rules of its own (see below).
+// 16/10/2026: Liquid Glass (macOS 26), same as Homepage's "LIQUID GLASS" block and Glance: clearer cards (a 40% tint, was
+// 52%), a bright rim of light on the top edge, a lighter hairline; then the same sheen as Homepage's cards, no hover effects.
 // Install: Settings > Dashboards > Resources > Add resource, type JavaScript module (or add it with the API as an
-// inline resource). Change EMBEDS to the dashboards you show in Homepage.
+// inline resource). Change EMBEDS to the dashboards you show in Homepage; the outline drawn just outside each card is
+// used on "/dashboard-homepage" only (the tile panel), as panels made of one full-frame card would clip it.
 (function () {
   var EMBEDS = ["/dashboard-homepage", "/dashboard-calendar", "/dashboard-todo", "/epl-calendar", "/epl-standings"];
   var framed;
@@ -27,12 +30,13 @@
     "--primary-background-color: transparent !important;" +
     "--secondary-background-color: rgba(44, 44, 46, 0.55) !important;" +
     "--lovelace-background: transparent !important;" +
-    "--ha-card-background: rgba(30, 30, 32, 0.52) !important;" +
-    "--card-background-color: rgba(30, 30, 32, 0.52) !important;" +
-    "--ha-card-border-color: rgba(255, 255, 255, 0.12) !important;" +
+    "--ha-card-background: rgba(28, 28, 30, 0.40) !important;" +  // a plain colour: some cards use it as background-color, where a gradient is invalid
+    "--card-background-color: rgba(28, 28, 30, 0.40) !important;" +
+    "--ha-card-border-color: rgba(255, 255, 255, 0.16) !important;" +
     "--ha-card-border-width: 0.5px !important;" +
     "--ha-card-border-radius: 18px !important;" +
-    "--ha-card-box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;" +
+    "--ha-card-box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.22), inset 0 -0.5px 0 rgba(255, 255, 255, 0.05) !important;" +
+    "--ha-ripple-hover-opacity: 0 !important;" +  // no highlight under the pointer either (user 16/10/2026: no hover effects)
     "--primary-text-color: #ffffff !important;" +
     "--secondary-text-color: rgba(235, 235, 245, 0.6) !important;" +
     "--disabled-text-color: rgba(235, 235, 245, 0.3) !important;" +
@@ -68,20 +72,57 @@
   // few seconds here, so the hover was wiped at once.) The cards render late and change with the view, so
   // the page is scanned a few times after load and then every 5 s; a card's root gets the rules only once.
   var SPRING = "cubic-bezier(0.34, 1.45, 0.64, 1)";
-  // the growth itself always applies (as on Homepage's own cards); the spring only when the system allows motion
-  // (Chrome and Edge on Windows follow Windows' "Animation effects" setting)
+  // 16/10/2026: no growth on hover any more (user: cleaner if the cards don't resize), only the dip when clicked; the
+  // spring only when the system allows motion (Chrome and Edge on Windows follow Windows' "Animation effects" setting)
   var RULES = "@media (hover: hover) and (pointer: fine) {" +
-    "ha-card:hover { transform: scale(1.03) !important; }" +
     "ha-card:active { transform: scale(0.96) !important; }" +
     "}" +
     "@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {" +
     "ha-card { transition: transform 0.5s " + SPRING + ", background 0.3s ease, border-color 0.3s ease !important; }" +
     "ha-card:active { transition-duration: 0.12s !important; }" +
     "}";
+  // the rest of Homepage's card look (16/10/2026, user: colours and transparency must match Homepage exactly): the faint
+  // light sheen over the tint (no hover effects in these panels at all: user 16/10/2026). The tint stays the plain colour above (some cards
+  // use it as a background colour, where a gradient is invalid), so the sheen is a separate background picture, set in
+  // every card's own shadow root (page CSS can't reach it), on cards of every size
+  // (a card whose own style already holds a gradient, like the coloured glow of an active tile or the running washer, keeps it)
+  // Cards meant to be invisible (no background colour of their own, like the rows of status chips) are marked
+  // data-hp-clear on each scan and get neither (16/10/2026: the sheen drew faint boxes behind the chip rows)
+  var GLASS = "ha-card:not([style*=gradient]):not([data-hp-clear]) { background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%) !important; }" +
+    // the hairline as a ring just outside the card, the border itself see-through (16/10/2026, user: the left edge looked
+    // cut off). Measured on the user's screen: with a border, or an inner ring, one pixel of the card's tint showed
+    // outside the line when the card starts between pixels (the tint rounds outwards, the line inwards). A ring drawn
+    // outside the card always sits on its outer edge. 1 px on standard-resolution screens, half a pixel on Retina.
+    // The top rim of light is drawn outside too, right above the ring (inside, it showed as a second line one pixel
+    // below the ring: "odd double line", user 16/10/2026), so the top edge reads as one brighter line
+    // gradients (the sheen, an active tile's glow) sized to the whole card including the see-through border strip: sized
+    // to the inside only, they repeated under the strip from their far end, a dark sliver down the left of active tiles
+    "ha-card:not([data-hp-clear]) { background-origin: border-box !important; }" +
+    // HA's pointer highlight off on every card (16/10/2026, user: still a "weird animation" on hover: a 4% white fade).
+    // Button-card sets its own value on each tile, which beat the page-wide one, so it is set on the ripple itself
+    "ha-ripple, mwc-ripple, md-ripple { --md-ripple-hover-opacity: 0 !important; --ha-ripple-hover-opacity: 0 !important; --mdc-ripple-hover-opacity: 0 !important; }";
+  // Only on the Home panel: the calendar, To Do and EPL panels are one card filling the whole frame, so a ring outside it
+  // fell just beyond the frame and was cut off (user 16/10/2026: calendar borders disappearing). Those cards start on
+  // whole pixels, so they keep a plain border
+  if (p.indexOf("/dashboard-homepage") === 0) GLASS = GLASS +
+    "ha-card:not([data-hp-clear]) { border-color: transparent !important; box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.16), 0 -0.5px 0 0 rgba(255, 255, 255, 0.12) !important; }" +
+    "@media (max-resolution: 1.5dppx) { ha-card:not([data-hp-clear]) { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 -1px 0 0 rgba(255, 255, 255, 0.12) !important; } }";
   function springRoots(node) {
     if (!node) return;
     if (node.tagName === "HA-CARD") {
       var root = node.getRootNode(), h = node.getBoundingClientRect().height;
+      // invisible = no background colour AND no background picture (active tiles paint their coloured glow as a gradient
+      // with no colour under it, and must keep the outline: 16/10/2026, their left edge was missing)
+      // (the card's own style is checked for the gradient, as the sheen added here is a background picture too)
+      var bg = getComputedStyle(node).backgroundColor, own = node.getAttribute("style") || "";
+      if ((bg === "transparent" || bg === "rgba(0, 0, 0, 0)") && !/gradient|url\(/.test(own)) node.setAttribute("data-hp-clear", "");
+      else if (node.hasAttribute("data-hp-clear")) node.removeAttribute("data-hp-clear");
+      if (root !== document && root.host && !root.querySelector("style[data-hp-glass]")) {
+        var gl = document.createElement("style");
+        gl.setAttribute("data-hp-glass", "");
+        gl.textContent = GLASS;
+        root.appendChild(gl);
+      }
       // only a root holding this one card (a big card's stack would grow with it), and only small cards
       if (h > 0 && h <= 140 && root !== document && root.host && !root.querySelector("style[data-hp-spring]") &&
           root.querySelectorAll("ha-card").length === 1) {
