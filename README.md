@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>A Liquid Glass <a href="https://gethomepage.dev">Homepage</a> dashboard for a self-hosted homelab</strong><br>
-  Clear glass cards in the style of macOS 26, a wallpaper that follows the time of day and the weather, live status capsules in the menu bar, a Dock with bookmark Stacks, and Home Assistant and Glance panels that match it exactly.
+  Clear glass cards in the style of macOS 26, a wallpaper that follows the time of day and the weather, live status boxes in the menu bar, a Dock with bookmark Stacks, and Home Assistant and Glance panels that match it exactly.
 </p>
 
 <p align="center">
@@ -37,11 +37,11 @@
 ### Liquid Glass
 
 - **Clear glass cards.** Every card is a see-through panel with a light tint, a faint sheen from top to bottom, a bright rim of light along its top edge and a fine hairline, with no blur behind it, so the wallpaper and the weather show through. On standard-resolution screens the hairline is a full pixel, so every browser draws both sides evenly.
-- **A glass lens for the open tab.** The tab bar is one glass track, and the open tab is a clear lens that glides to the tab you pick.
-- **A clear menu bar.** The top bar is glass too: the crest on a squircle plate, the disks beside it, Live Activities and the weather, date and time on the right.
+- **A glass lens for the open tab.** The tab bar is one glass capsule, and the open tab is a clear lens that glides to the tab you pick, its ends rounded to match.
+- **A clear menu bar.** The top bar has no band of its own and lines up with the tab bar: the crest at the left, the disks beside it on glass boxes (names on hover, as the icons say which is which), then Live Activities and one glass box for the weather, date and time on the right.
 - **Apple type and icons.** Apple's San Francisco font on Macs and iPhones (Inter everywhere else) with Apple's text levels, one corner size for cards and a smaller one inside them, and every app logo on a light glass squircle in the macOS and iOS icon shape.
 - **Matching panels.** The Home Assistant dashboards and the Glance feed shown inside Homepage use the same tint, sheen, rim, hairline and corners, so they read as part of the page (see [Extras](#extras)).
-- **The earlier look on request.** Add `?glass=old` for the frosted look from before, or `?tabs=grey` for a grey tab segment.
+- **One standard look.** Three tiers, each defined once in the STANDARD block of `custom.css`: surfaces (cards, the menu bar's boxes, the tab bar, the Dock), rows inside cards, and floating panels (search, Stacks, banners).
 
 ### A living wallpaper
 
@@ -50,7 +50,7 @@
 
 ### Live information
 
-- **Live Activities.** Compact capsules in the menu bar that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's kick-off countdown and live score, a meeting in the next 30 minutes, a birthday or public holiday, the washer with its time left, the vacuum's progress, what is playing on Plex or Spotify, and downloads. Red for problems, amber when something may need you, a progress ring where there is one, and long text scrolls.
+- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's kick-off countdown and live score, a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
 - **Notification banners.** A new Gotify message slides in at the top right like a macOS banner, on any tab. Priority 8 and up stays until you close it, lower priorities leave after a few seconds, and 0 to 3 stay quiet.
 - **Trend lines.** The CPU and memory figures on the server cards carry a faint line of the last 24 hours, with the day's range on hover.
 - **Disk meters.** Each disk in the menu bar has its own icon and colour, turning amber at 75% and red at 90%.
@@ -131,8 +131,6 @@ Add these to the Homepage address to preview or switch things. They combine with
 | `?dock=lite` | A lighter Dock, for a browser that struggles with the full one |
 | `?dockbar=fixed` | A Dock bar that keeps its width instead of stretching (`none` hides the bar) |
 | `?docksize=72` | Another Dock icon size (default 64) |
-| `?glass=old` | The frosted look from before Liquid Glass |
-| `?tabs=grey` | A grey segment for the open tab instead of the glass lens |
 
 ## Files
 
@@ -164,11 +162,21 @@ Add these to the Homepage address to preview or switch things. They combine with
 {{ gear | select('is_state', 'connected') | list | count }}/{{ gear | count }}
 ```
 
+**Home Assistant card.** Two rows of three, all from template helpers, as the card only reads states: Lights On, Aircons On and Fans On, then People Home, Server Cost and HA Updates. Server Cost is the monthly cost of the servers' power: a Statistics helper (`sensor.server_power_24h_average`, the mean of your power sensor over 24 hours) and your tariff in `input_number.electricity_tariff`:
+
+```jinja
+{%- set w = states('sensor.server_power_24h_average') | float(none) -%}
+{%- set t = states('input_number.electricity_tariff') | float(none) -%}
+{{ (w / 1000 * 24 * 30 * t) | round(2) if w is not none and t is not none else none }}
+```
+
+`custom.js` shows it with two decimals (Home Assistant drops a trailing zero). HA Updates counts the updates waiting: `{{ states.update | selectattr('state', 'eq', 'on') | list | count }}`.
+
 **Gotify.** The top row shows the newest message and the app it came from. Messages only carry the app's id, so the `remap` list under the Gotify card turns ids into names; fill it with your own apps (the notification banners use the same names, from `NOTE_APPS` in `custom.js`). The second row comes from `extras/gotify-count.sh`, because Gotify's API has no totals.
 
 **Beszel and the trend lines.** The Beszel card's second row (the busiest system and the fullest disk) and the trend lines on the server cards both come from `extras/beszel-summary.py`, a tiny service that logs in to Beszel with the widget's user. It serves the summary at `/` and the last 24 hours of CPU and memory per machine at `/history`, read by a hidden widget on the Beszel card. Match the card names to your Beszel systems in `TREND_CARDS` in `custom.js`.
 
-**Live Activities.** The capsules are a list of sources in `custom.js` (`LIVE_SOURCES`); each reads its data and returns capsules, so adding one is a small block. They read through Homepage's own proxy, so no keys reach the browser. Home Assistant returns at most four readings per widget, so the Home Assistant card carries four hidden extra widgets with the entities the capsules watch (washer, doors, gate, blinds, sun, vacuum, Spotify accounts named "Spotify <name>", calendars); rename them to yours. The Komodo card has two hidden widgets that ask Komodo's read API for every stack and container (`params: {limit: 0}`, as Komodo otherwise answers with one page of 50), so a capsule can say which one is down. The football team is `LIVE_TEAM` in `custom.js` (ESPN's abbreviation, name and competitions); scores come from ESPN's public scoreboard.
+**Live Activities.** The boxes are a list of sources in `custom.js` (`LIVE_SOURCES`); each reads its data and returns boxes, so adding one is a small block. They read through Homepage's own proxy, so no keys reach the browser. Home Assistant returns at most four readings per widget, so the Home Assistant card carries four hidden extra widgets with the entities the capsules watch (washer, doors, gate, blinds, sun, vacuum, Spotify accounts named "Spotify <name>", calendars); rename them to yours. The Komodo card has two hidden widgets that ask Komodo's read API for every stack and container (`params: {limit: 0}`, as Komodo otherwise answers with one page of 50), so a box can say which one is down. The football team is `LIVE_TEAM` in `custom.js` (ESPN's abbreviation, name and competitions); scores come from ESPN's public scoreboard.
 
 **The Dock.** The apps are the `DOCK` list in `custom.js` (name, address, icon). The links use the domain Homepage itself is opened on, so `homepage.example.com` gives `komodo.example.com` and so on. The Stacks follow `STACKS`, your bookmark group names in the order you want them, and `DOCK_SIZE` sets the icon size.
 

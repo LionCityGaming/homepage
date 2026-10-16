@@ -85,6 +85,9 @@
       const rgb = pct > 90 ? "255, 69, 58" : pct > 75 ? "255, 159, 10" : disk[2];  // red above 90 %, amber above 75 %
       if (w.style.getPropertyValue("--bar-rgb") !== rgb) w.style.setProperty("--bar-rgb", rgb);
       setData(w, "disk", disk[1]);
+      // the name line is hidden (custom.css, 17/10/2026: the icons say which drive it is); it stays as the hover tooltip
+      const name = w.querySelector(":scope > div:last-child")?.textContent.trim();
+      if (name && w.title !== name) w.title = name;
     });
   }
 
@@ -374,6 +377,48 @@
      cards that fit are left alone ---------- */
   const FIT_MIN = 0.88;  // below this the figures read as too small next to the cards that fit
 
+  /* ---------- long card figures glide (16/10/2026, user): the Gotify card's Latest Message (was two lines) stays on
+     one line and, when too long, glides back and forth with a soft fade at
+     the edge, like the Live Activity boxes (custom.css .hp-glide). The text node stays where Homepage put it:
+     the glide is a text-indent animation, so Homepage can keep updating the value ---------- */
+  const GLIDE = [["Gotify", "Latest Message"]];
+  function glideValues() {
+    GLIDE.forEach(([card, label]) => document.querySelectorAll('li.service[data-name="' + card + '"] .service-block').forEach((b) => {
+      if ((b.querySelector(".service-block-label")?.textContent || "").trim() !== label) return;
+      const v = b.querySelector(".service-block-value");
+      if (!v) return;
+      b.classList.add("hp-glide-block");
+      const key = v.textContent + "|" + v.clientWidth + "|" + getComputedStyle(v).fontSize;  // fitBlocks may shrink the font
+      if (!v.clientWidth || v.dataset.glideKey === key) return;  // hidden tab, or unchanged
+      v.dataset.glideKey = key;
+      v.classList.add("hp-glide");
+      v.classList.remove("hp-glide-on");
+      const over = v.scrollWidth - v.clientWidth;
+      if (over > 2) {
+        v.style.setProperty("--shift", -over + "px");
+        v.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second, like the Live Activities
+        v.classList.add("hp-glide-on");
+      }
+    }));
+  }
+
+  /* ---------- top bar right box (17/10/2026): one glass shape behind the weather, date and time, drawn by
+     #information-widgets-right::before from the weather's left edge (custom.css); this keeps that edge current as the
+     Live Activities come and go or the window changes size ---------- */
+  let rightBoxWatch = null;
+  function rightBox() {
+    const row = document.getElementById("information-widgets-right");
+    if (!row || !row.querySelector(".hp-weather")) return;
+    const set = () => {  // looked up each time: Homepage can replace the weather widget when it refreshes
+      const w = row.querySelector(".hp-weather");
+      if (!w) return;
+      const left = Math.round(w.getBoundingClientRect().left - row.getBoundingClientRect().left) + "px";  // whole pixels: even edges
+      if (row.style.getPropertyValue("--tb-box-left") !== left) row.style.setProperty("--tb-box-left", left);
+    };
+    set();
+    if (!rightBoxWatch && window.ResizeObserver) { rightBoxWatch = new ResizeObserver(set); rightBoxWatch.observe(row); }
+  }
+
   function fitBlocks() {
     document.querySelectorAll("li.service .service-container").forEach((cont) => {
       const blocks = [...cont.children].filter((b) => b.classList.contains("service-block"));
@@ -644,6 +689,12 @@
     // Home Assistant card: HA states are lower case ("locked", "docked"); show them in Title Case like the rest
     document.querySelectorAll('li.service[data-name="Home Assistant"] .service-block-value')
       .forEach((el) => editText(el, (t) => t.replace(/^(\s*)([a-z])/, (m, s, c) => s + c.toUpperCase())));
+    // Server Cost always with two decimals ("$16.7/mo" -> "$16.70/mo": Home Assistant stores 16.70 as 16.7; user 16/10/2026)
+    document.querySelectorAll('li.service[data-name="Home Assistant"] .service-block').forEach((b) => {
+      if ((b.querySelector(".service-block-label")?.textContent || "").trim() !== "Server Cost") return;
+      const value = b.querySelector(".service-block-value");
+      if (value) editText(value, (t) => t.replace(/\$(\d+(?:\.\d+)?)/, (m, n) => "$" + (+n).toFixed(2)));
+    });
     // Palworld uptime too ("15h26m" -> "15h")
     document.querySelectorAll('li.service[data-name="Palworld"] .service-block').forEach((b) => {
       const label = b.querySelector(".service-block-label");
@@ -1032,18 +1083,18 @@
     const moved = pill.style.transform && pill.style.transform !== "translateX(" + x + "px)";
     pill.style.width = w + "px"; pill.style.height = h + "px"; pill.style.top = y + "px";
     pill.style.transform = "translateX(" + x + "px)";
-    if (moved && root.dataset.tabglass) {  // the Liquid Glass stretch while it slides
+    if (moved) {  // the Liquid Glass stretch while it slides
       pill.classList.remove("hp-moving"); void pill.offsetWidth; pill.classList.add("hp-moving");
     }
     if (!root.dataset.pill) requestAnimationFrame(() => requestAnimationFrame(() => { root.dataset.pill = "1"; }));  // no slide on first paint
   }
 
-  /* ---------- Live Activities (16/10/2026; on for everyone on desktop since the same day, ?live=0 hides them, ?live=demo
-     shows sample data): like the macOS
-     menu bar, compact capsules just before the weather that appear only while something is happening. Built to grow:
-     each source below reads its data (through Homepage's own proxy, so no keys reach the page; ESPN's public
-     scoreboard directly) and returns capsules; add a source by adding a block to LIVE_SOURCES. Capsules are sorted by
-     PRIORITY (problems first), at most LIVE_MAX show and the rest fold into a "+N" capsule; hover shows details ---------- */
+  /* ---------- Live Activities (16/10/2026, desktop; ?live=0 hides them, ?live=demo shows sample data): glass boxes in the
+     top bar just before the weather, there only while something is happening (two lines, the main part over the
+     detail: custom.css). Built to grow: each source below reads its data (through Homepage's own proxy, so no keys reach
+     the page; ESPN's public scoreboard directly) and returns items; add a source by adding a block to LIVE_SOURCES.
+     Items are sorted by PRIORITY (problems first), at most LIVE_MAX show and the rest fold into a "+N" item; hover shows
+     details ---------- */
   const LIVE = PARAMS.get("live") !== "0" && !PHONE.matches;  // desktop only (phones hide the menu bar's right side)
   const LIVE_DEMO = PARAMS.get("live") === "demo";
   const LIVE_MAX = 6;
@@ -1065,7 +1116,7 @@
   const hhmm = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   const pill = (o) => Object.assign({ tone: "", mono: false, pct: 0, tip: "" }, o);
 
-  // Each source: { every: seconds between reads, read: () => Promise of capsules }. Results are cached between reads.
+  // Each source: { every: seconds between reads, read: () => Promise of items }. Results are cached between reads.
   const LIVE_SOURCES = {
     // Home Assistant (hidden widgets 3-6 on the Home Assistant card): doors, blinds, washer, vacuum, Spotify, calendars
     home: { every: 15, read: () => Promise.all([3, 4, 5, 6].map(haRows)).then((ws) => {
@@ -1073,13 +1124,16 @@
       const out = [];
       if (/^on$/i.test(v("Front Door"))) out.push(pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Front Door Open", tip: "The front door is open" }));
       if (/^on$/i.test(v("Gate"))) out.push(pill({ group: "warn", icon: MDI("gate-open"), mono: true, tone: "warn", text: "Gate Unlocked", tip: "The gate lock reports unlocked" }));
+      // the one place for open-door warnings (16/10/2026: the HA panel now shows only a count), so the store room too
+      if (/^on$/i.test(v("Store Room"))) out.push(pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Store Room Open", tip: "The store room door is open" }));
       if (/^(open|opening)$/i.test(v("Blinds")) && /below/i.test(v("Sun"))) out.push(pill({ group: "warn", icon: MDI("blinds-open"), mono: true, tone: "warn", text: "Blinds Open", tip: "The blinds are still open after dark" }));
-      const ws_ = v("Washer Status"), left = parseFloat(v("Washer Left"));
+      // the washer's stage only: it never reports its time left, and guessed times were often an hour out (user 16/10/2026)
+      const ws_ = v("Washer Status");
       if (ws_ && !/^(not run|unknown|unavailable)$/i.test(ws_)) {
-        const done = /completed/i.test(ws_), stage = /^washing$/i.test(ws_) ? "" : ws_;
+        const done = /completed/i.test(ws_), first = ws_.split(" ")[0];
+        const stage = { Rinse: "Rinsing", Waiting: "Fluffing", Blowing: "Fluffing" }[first] || first;
         out.push(pill({ group: "home", icon: MDI(/dry/i.test(ws_) ? "tumble-dryer" : "washing-machine"), mono: true, tone: done ? "good" : "",
-          text: done ? "Washer Done" : "Washer" + (stage ? " · " + stage : "") + (left > 0 ? " · " + shortTime(left) : ""),
-          tip: "Washer: " + ws_ + (left > 0 && !done ? ", about " + shortTime(left) + " left" : "") }));
+          text: done ? "Washer Done" : "Washer · " + stage, tip: "Washer: " + ws_ }));
       }
       const vac = v("Vacuum"), vp = parseFloat(v("Vacuum Progress"));
       if (/^(cleaning|returning)$/i.test(vac)) out.push(pill({ group: "home", icon: MDI("robot-vacuum"), mono: true, pct: /cleaning/i.test(vac) ? vp : 0,
@@ -1178,7 +1232,7 @@
     pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Front Door Open", tip: "The front door is open" }),
     pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: "EVE 0–1 CHE · 63'", tip: "Chelsea at Everton · live" }),
     pill({ group: "soon", icon: MDI("calendar-clock"), mono: true, text: "Team Meeting · in 15 min", tip: "Team Meeting at 10:00" }),
-    pill({ group: "home", icon: MDI("washing-machine"), mono: true, text: "Washer · Rinse · 42 min", tip: "Washer: Rinse, about 42 min left" }),
+    pill({ group: "home", icon: MDI("washing-machine"), mono: true, text: "Washer · Rinsing", tip: "Washer: Rinse" }),
     pill({ group: "media", icon: ICON_URL("plex"), text: "The Bear · S04E03", pct: 38, tip: "The Bear - S04E03 · playing · 38%" }),
     pill({ group: "media", icon: ICON_URL("spotify"), text: "Please Please Please · Sabrina Carpenter", tip: "You · Please Please Please · Sabrina Carpenter" }),
     pill({ group: "download", icon: ICON_URL("sabnzbd"), text: "Downloading · 3 min", pct: 64, tip: "1 download · 64% · 48 MB/s" }),
@@ -1216,23 +1270,31 @@
       const icon = document.createElement("span");
       icon.className = "hp-live-icon" + (it.mono ? " hp-live-mono" : "");
       if (it.mono) icon.style.setProperty("--live-icon", 'url("' + it.icon + '")'); else icon.style.backgroundImage = 'url("' + it.icon + '")';
+      // two lines, like the drives beside them (17/10/2026): the main part over the detail, split at the first " · "
+      // ("Washer · Cooling", "Song · Artist", "ARS v CHE · 2-1 · 67'"); a plain warning stays one line
       const text = document.createElement("span");
       text.className = "hp-live-text";
-      const inner = document.createElement("span");
-      inner.textContent = it.text;
-      text.appendChild(inner);
+      const cut = it.text.indexOf(" · ");
+      (cut > 0 ? [it.text.slice(0, cut), it.text.slice(cut + 3)] : [it.text]).forEach((part, i) => {
+        const line = document.createElement("span");
+        line.className = "hp-live-line hp-live-l" + (i + 1);
+        const inner = document.createElement("span");
+        inner.textContent = part;
+        line.appendChild(inner);
+        text.appendChild(line);
+      });
       el.append(icon, text);
       if (it.pct > 0) {  // progress ring
         el.insertAdjacentHTML("beforeend", '<svg class="hp-live-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><circle cx="10" cy="10" r="8" pathLength="100" style="stroke-dasharray:' + Math.min(100, it.pct) + ' 100"></circle></svg>');
       }
       box.appendChild(el);
     });
-    // text too long for its capsule glides back and forth continuously (custom.css .hp-live-long), at an even reading
-    // speed, instead of being cut off with "..."
-    box.querySelectorAll(".hp-live-text").forEach((t) => {
+    // a line too long for its box glides back and forth continuously (custom.css .hp-live-glide), at an even reading
+    // speed, instead of being cut off with "..."; each of the two lines on its own
+    box.querySelectorAll(".hp-live-line").forEach((t) => {
       const over = t.firstChild.scrollWidth - t.clientWidth;
       if (over > 2) {
-        t.parentElement.classList.add("hp-live-long");
+        t.classList.add("hp-live-glide");
         t.style.setProperty("--shift", -over + "px");
         t.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second
       }
@@ -1293,6 +1355,7 @@
     widgetLabels();
     currency();
     fitNames();
+    glideValues();  // first, so the gliding figures are marked shrinkable before fitBlocks measures their rows
     fitBlocks();
     tcmNumbers();
     gotifyLatest();
@@ -1301,6 +1364,7 @@
     scrutinyReading();
     technitiumCounts();
     runningOnly();
+    glideValues();
     unifiFigures();
     statsSwitch();
     dock();
@@ -1308,6 +1372,7 @@
     dockRoom();
     trendDraw();
     liveRender();
+    rightBox();  // after the Live Activities, which move the weather
   }
 
   /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the
@@ -1359,8 +1424,6 @@
 
   sky();
   setInterval(sky, 300000);
-  if (PARAMS.get("tabs") !== "grey") root.dataset.tabglass = "1";
-  if (PARAMS.get("glass") === "old") root.dataset.glassold = "1";  // ?glass=old: the frosted look from before Liquid Glass (16/10/2026)  // macOS 26 glass tab pill, default since 16/10/2026 (?tabs=grey = old pill)
   haWeatherPoll();
   setInterval(haWeatherPoll, 300000);
   if (PARAMS.get("mood")) { previewTick(); setInterval(previewTick, 1000); }

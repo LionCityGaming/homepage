@@ -361,15 +361,15 @@
         href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
         description: Smart Home Hub
         siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
-        # two rows from Home Assistant (render token; state reads only, so counts come from template
-        # helpers: sensor.lights_on (room lights), sensor.aircons_on, sensor.fans_on)
+        # two rows of three from Home Assistant (render token, state reads only, so the figures come from template helpers):
+        # Lights On (sensor.lights_on, room lights), Aircons On, Fans On; People Home, Server Cost (sensor.server_cost_monthly:
+        # the last 24 h average power at input_number.electricity_tariff; custom.js shows two decimals), HA Updates
+        # (sensor.ha_updates: update entities waiting)
         widgets:
           - type: homeassistant
             url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
             key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
             custom:
-              - state: zone.home
-                label: People Home
               - state: sensor.lights_on
                 label: Lights On
               - state: sensor.aircons_on
@@ -380,14 +380,13 @@
             url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
             key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
             custom:
-              - state: cover.blinds
-                label: Blinds
-              - state: lock.frontdoor
-                label: Front Door
-              - state: vacuum.miemie
-                label: Vacuum
-              - state: sensor.washer_status
-                label: Washer
+              - state: zone.home
+                label: People Home
+              - state: sensor.server_cost_monthly
+                label: Server Cost
+                value: "${state}/mo"
+              - state: sensor.ha_updates
+                label: HA Updates
           # not shown (custom.css hides it): HA's weather for the background mood, the Nest Hubs' source
           # (custom.js haWeatherPoll reads it as index 2; 15/10/2026)
           - type: homeassistant
@@ -407,8 +406,6 @@
             custom:
               - state: sensor.washer_run_status
                 label: Washer Status
-              - state: sensor.washer_time_left_estimate
-                label: Washer Left
               - state: binary_sensor.front_door_sensor_contact
                 label: Front Door
               - state: binary_sensor.smart_lock_status   # on = unlocked
@@ -452,6 +449,8 @@
               - state: calendar.holidays_in_singapore
                 label: Holiday
                 value: "{state}|{attributes.message}"
+              - state: binary_sensor.storeroom_door_sensor_contact   # on = open (Live Activities only; 16/10/2026)
+                label: Store Room
 
     - Beszel:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/beszel.svg

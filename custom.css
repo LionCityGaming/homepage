@@ -71,17 +71,17 @@
   }
 }
 
-body { letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+body { -webkit-font-smoothing: antialiased; }
 /* background: Hub-style dark tonal glow (blue top-left, purple bottom-right), painted on the page
    itself and on #background, with the wrappers above it cleared */
 html, body {
-  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat fixed !important;
+  background: #070a0c center / cover no-repeat fixed !important;
 }
 /* living background: the glow layer is a little larger than the screen and drifts slowly (transform
    only, so the GPU moves it without repainting); time-of-day changes cross-fade over 20 s
    (Chrome/Edge; Firefox still switches instantly). Off when reduced motion is asked for */
 #background {
-  background: #070a0c url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjEyJSIgY3k9IjglIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBhODRmZiIgc3RvcC1vcGFjaXR5PSIwLjI0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJiIiBjeD0iOTIlIiBjeT0iOTYlIiByPSI2NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwLjE2Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYmY1YWYyIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJjIiBjeD0iNzglIiBjeT0iMTglIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY0ZDJmZiIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjRkMmZmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMDcwYTBjIi8+CiAgPHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNhKSIvPgogIDxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjYikiLz4KICA8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2MpIi8+Cjwvc3ZnPgo=") center / cover no-repeat !important;
+  background: #070a0c center / cover no-repeat !important;
   filter: none !important;
   opacity: 1 !important;
   inset: -8% !important;
@@ -91,25 +91,11 @@ html, body {
 #__next, #page_wrapper, #inner_wrapper { background: transparent !important; }
 /* color-scheme must match in the page and the embedded iframes, or browsers paint the iframe opaque */
 html { color-scheme: dark; }
-/* background follows the time of day (custom.js sets data-sky on <html>; day = the default above) */
-html[data-sky="night"], html[data-sky="night"] body, html[data-sky="night"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTUlIiBjeT0iMTAlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzFlM2E4YSIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMWUzYThhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI5MCUiIGN5PSI5NSUiIHI9IjY1JSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNWU1Y2U2IiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVlNWNlNiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0iIzA1MDcwYSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzApIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMSkiLz48L3N2Zz4=") !important;
-}
-html[data-sky="dawn"], html[data-sky="dawn"] body, html[data-sky="dawn"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTAlIiBjeT0iOTUlIiByPSI3MCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmOWYwYSIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiIGN4PSI4NSUiIGN5PSI5MCUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iMjAlIiBjeT0iNSUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGE4NGZmIiBzdG9wLW9wYWNpdHk9IjAuMTQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTg0ZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9IiMwODA5MGQiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cwKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzEpIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMikiLz48L3N2Zz4=") !important;
-}
-html[data-sky="dusk"], html[data-sky="dusk"] body, html[data-sky="dusk"] #background {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImcwIiBjeD0iMTIlIiBjeT0iOCUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY5ZjBhIiBzdG9wLW9wYWNpdHk9IjAuMTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZjlmMGEiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJnMSIgY3g9IjkyJSIgY3k9Ijk2JSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiZjVhZjIiIHN0b3Atb3BhY2l0eT0iMC4xOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2JmNWFmMiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImcyIiBjeD0iNzAlIiBjeT0iMTUlIiByPSI0NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmMzc1ZiIgc3RvcC1vcGFjaXR5PSIwLjA3Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmYzNzVmIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMGEwODBjIi8+PHJlY3Qgd2lkdGg9IjE5MjAiIGhlaWdodD0iMTA4MCIgZmlsbD0idXJsKCNnMCkiLz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI2cxKSIvPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZzIpIi8+PC9zdmc+") !important;
-}
+
 
 @media (prefers-reduced-motion: no-preference) {
-  #background { animation: bgDrift 70s ease-in-out infinite alternate; }
-}
+  }
 
-html[data-weather="cloudy"] #background { filter: saturate(0.6) brightness(0.8) !important; }
-html[data-weather="rain"] #background, html[data-weather="storm"] #background {
-  filter: saturate(0.7) brightness(0.75) !important;
-}
 html::after {
   content: "";
   position: fixed;
@@ -279,9 +265,7 @@ html[data-sky="night"] #hp-fx .fx-cloud { filter: brightness(0.7); }
 /* widget stat boxes: tinted glass pills instead of bordered boxes */
 .service-block {
   position: relative;
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
-  border-radius: 12px !important;
+      border-radius: 12px !important;
 }
 /* Tab active/hover borders */
 .service-card:hover, [id$="-tab"]:hover, [id$="-tab"][aria-selected="true"] {
@@ -339,8 +323,8 @@ html[data-sky="night"] #hp-fx .fx-cloud { filter: brightness(0.7); }
 /* app name + description */
 .service-name { font-weight: 600; color: #ffffff; }
 .service-description { color: rgba(235, 235, 245, 0.55) !important; font-weight: 400; }
-.service-block-value { color: #ffffff; font-weight: 600; font-variant-numeric: tabular-nums; }
-.service-block-label { color: rgba(235, 235, 245, 0.55); font-weight: 500; }
+.service-block-value { font-variant-numeric: tabular-nums; }
+.service-block-label { color: rgba(235, 235, 245, 0.55); }
 
 @media (pointer: coarse), (max-width: 1024px) {
   .service-card:hover { transform: none; }
@@ -402,8 +386,6 @@ html[data-sky="night"] #hp-fx .fx-cloud { filter: brightness(0.7); }
 /* Card rule kept here: it must come after the status-dot rules it overrides */
 .service-card:hover {
   background-color: var(--glass-hi) !important;
-  border-color: rgba(var(--acc-rgb), 0.55) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 0.5px rgba(var(--acc-rgb), 0.35), 0 0 18px rgba(var(--acc-rgb), 0.22) !important;
 }
 /* status dots: healthy (green) dots stay hidden until you hover the card; problems always show.
    They stay clickable (clicking a container's dot opens its stats) */
@@ -494,11 +476,8 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
 #myTab {
   display: flex;
   margin: 0 auto 30px auto;
-  padding: 0;
-  font: 18px/2 var(--font-family);
-  background: none;
-  backdrop-filter: none;
-  justify-content: center;
+    font: 18px/2 var(--font-family);
+      justify-content: center;
 }
 /* Hide Mobile tab from desktop tab bar completely */
 #myTab > :has([id*="Mobile"]) {
@@ -564,23 +543,13 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
 
 /* Section-header rule kept here: it must come after the tab rules it overrides */
 .service-group-name, .bookmark-group-name {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  font-size: 1.15rem !important;
+      font-size: 1.15rem !important;
   letter-spacing: -0.02em;
   align-items: center;
 }
-#myTab [id$="-tab"]:hover {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.22) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-}
 #myTab [id$="-tab"][aria-selected="true"] {
   background-color: rgba(255, 255, 255, 0.16) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-}
+      }
 
 /* ================================================================================================
    Top bar: crest + Cinzel title, disks with their own icons and colours, weather, date and clock
@@ -595,7 +564,6 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
 #information-widgets-right { margin-right: 0px; }
 .information-widget-datetime { margin-left: 100px; }
 .information-widget-greeting { flex-grow: 1.5; }
-.information-widget-resources { position: relative; }
 .information-widget-resource {
   display: flex;
   align-items: center;
@@ -714,18 +682,6 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
     text-align: center !important;
     transform: translateX(5px) !important;
   }
-  .information-widget-resources {
-    order: 10 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 18px !important;
-    width: 100% !important;
-    margin: 0 auto !important;
-    transform: translateX(5px) !important;
-  }
   .information-widget-resource {
     flex-direction: row !important;
     align-items: center !important;
@@ -758,28 +714,22 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
 }
 
 /* Tab rule kept here: it must come after the top-bar rules it overrides */
-#myTab { gap: 12px !important; margin-bottom: 26px !important; }
+#myTab { margin-bottom: 26px !important; }
 /* Tab rule kept here: it must come after the top-bar rules it overrides */
 #myTab [id$="-tab"] {
-  min-height: 44px !important;
-  padding: 0 30px !important;
+    padding: 0 30px !important;
   border-radius: 999px !important;
   font-size: 15px;
   font-weight: 600;
   color: rgba(235, 235, 245, 0.75);
 }
-/* Tabs as an iOS segmented control (07/10/2026): one glass track, the open tab a white pill.
-   Revert: delete this block (the separate glass pills above come back). */
+/* Tabs as a segmented control (07/10/2026): one track, the open tab marked by the moving glass pill (#hp-tab-pill) */
 #myTab {
   gap: 4px !important;
   padding: 4px !important;
-  background: var(--glass) !important;
-  border: 0.5px solid var(--hairline);
+    border: 0.5px solid var(--hairline);
   border-radius: 999px !important;
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  backdrop-filter: blur(24px) saturate(170%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
+      }
 #myTab > li { height: auto !important; }
 #myTab [id$="-tab"] {
   min-height: 40px !important;
@@ -873,13 +823,7 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
 .widget-container[data-disk] .information-widget-resource::before {
   content: "";
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  background: rgb(var(--bar-rgb));
-  -webkit-mask: var(--disk-icon) center / contain no-repeat;
-  mask: var(--disk-icon) center / contain no-repeat;
-  filter: drop-shadow(0 0 6px rgba(var(--bar-rgb), 0.5));
-}
+            }
 .widget-container[data-disk="docker"] {
   --disk-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJtZGktZG9ja2VyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0yMS44MSAxMC4yNUMyMS43NSAxMC4yMSAyMS4yNSA5LjgyIDIwLjE3IDkuODJDMTkuODkgOS44MiAxOS42MSA5Ljg1IDE5LjMzIDkuOUMxOS4xMiA4LjUgMTcuOTUgNy43OSAxNy45IDcuNzZMMTcuNjEgNy41OUwxNy40MyA3Ljg2QzE3LjE5IDguMjIgMTcgOC42MyAxNi45MiA5LjA1QzE2LjcyIDkuODUgMTYuODQgMTAuNjEgMTcuMjUgMTEuMjZDMTYuNzYgMTEuNTQgMTUuOTYgMTEuNjEgMTUuNzkgMTEuNjFIMi42MkMyLjI4IDExLjYxIDIgMTEuODkgMiAxMi4yNEMyIDEzLjM5IDIuMTggMTQuNTQgMi41OCAxNS42MkMzLjAzIDE2LjgxIDMuNzEgMTcuNjkgNC41OCAxOC4yM0M1LjU2IDE4LjgzIDcuMTcgMTkuMTcgOSAxOS4xN0M5Ljc5IDE5LjE3IDEwLjYxIDE5LjEgMTEuNDIgMTguOTVDMTIuNTQgMTguNzUgMTMuNjIgMTguMzYgMTQuNjEgMTcuNzlDMTUuNDMgMTcuMzIgMTYuMTYgMTYuNzIgMTYuNzggMTZDMTcuODMgMTQuODMgMTguNDUgMTMuNSAxOC45IDEyLjM1SDE5LjA5QzIwLjIzIDEyLjM1IDIwLjk0IDExLjg5IDIxLjMzIDExLjVDMjEuNTkgMTEuMjYgMjEuNzggMTAuOTcgMjEuOTIgMTAuNjNMMjIgMTAuMzlMMjEuODEgMTAuMjVNMy44NSAxMS4yNEg1LjYxQzUuNjkgMTEuMjQgNS43NyAxMS4xNyA1Ljc3IDExLjA4VjkuNUM1Ljc3IDkuNDIgNS43IDkuMzQgNS42MSA5LjM0SDMuODVDMy43NiA5LjM0IDMuNjkgOS40MSAzLjY5IDkuNVYxMS4wOEMzLjcgMTEuMTcgMy43NiAxMS4yNCAzLjg1IDExLjI0TTYuMjggMTEuMjRIOC4wNEM4LjEyIDExLjI0IDguMiAxMS4xNyA4LjIgMTEuMDhWOS41QzguMiA5LjQyIDguMTMgOS4zNCA4LjA0IDkuMzRINi4yOEM2LjE5IDkuMzQgNi4xMiA5LjQxIDYuMTIgOS41VjExLjA4QzYuMTMgMTEuMTcgNi4xOSAxMS4yNCA2LjI4IDExLjI0TTguNzUgMTEuMjRIMTAuNUMxMC42IDExLjI0IDEwLjY3IDExLjE3IDEwLjY3IDExLjA4VjkuNUMxMC42NyA5LjQyIDEwLjYxIDkuMzQgMTAuNSA5LjM0SDguNzVDOC42NyA5LjM0IDguNiA5LjQxIDguNiA5LjVWMTEuMDhDOC42IDExLjE3IDguNjYgMTEuMjQgOC43NSAxMS4yNE0xMS4xOSAxMS4yNEgxMi45NkMxMy4wNCAxMS4yNCAxMy4xMSAxMS4xNyAxMy4xMSAxMS4wOFY5LjVDMTMuMTEgOS40MiAxMy4wNSA5LjM0IDEyLjk2IDkuMzRIMTEuMTlDMTEuMTEgOS4zNCAxMS4wNCA5LjQxIDExLjA0IDkuNVYxMS4wOEMxMS4wNCAxMS4xNyAxMS4xMSAxMS4yNCAxMS4xOSAxMS4yNE02LjI4IDlIOC4wNEM4LjEyIDkgOC4yIDguOTEgOC4yIDguODJWNy4yNUM4LjIgNy4xNiA4LjEzIDcuMDkgOC4wNCA3LjA5SDYuMjhDNi4xOSA3LjA5IDYuMTIgNy4xNSA2LjEyIDcuMjVWOC44MkM2LjEzIDguOTEgNi4xOSA5IDYuMjggOU04Ljc1IDlIMTAuNUMxMC42IDkgMTAuNjcgOC45MSAxMC42NyA4LjgyVjcuMjVDMTAuNjcgNy4xNiAxMC42MSA3LjA5IDEwLjUgNy4wOUg4Ljc1QzguNjcgNy4wOSA4LjYgNy4xNSA4LjYgNy4yNVY4LjgyQzguNiA4LjkxIDguNjYgOSA4Ljc1IDlNMTEuMTkgOUgxMi45NkMxMy4wNCA5IDEzLjExIDguOTEgMTMuMTEgOC44MlY3LjI1QzEzLjExIDcuMTYgMTMuMDQgNy4wOSAxMi45NiA3LjA5SDExLjE5QzExLjExIDcuMDkgMTEuMDQgNy4xNSAxMS4wNCA3LjI1VjguODJDMTEuMDQgOC45MSAxMS4xMSA5IDExLjE5IDlNMTEuMTkgNi43MkgxMi45NkMxMy4wNCA2LjcyIDEzLjExIDYuNjUgMTMuMTEgNi41NlY1QzEzLjExIDQuOSAxMy4wNCA0LjgzIDEyLjk2IDQuODNIMTEuMTlDMTEuMTEgNC44MyAxMS4wNCA0Ljg5IDExLjA0IDVWNi41NkMxMS4wNCA2LjY0IDExLjExIDYuNzIgMTEuMTkgNi43Mk0xMy42NSAxMS4yNEgxNS40MUMxNS41IDExLjI0IDE1LjU3IDExLjE3IDE1LjU3IDExLjA4VjkuNUMxNS41NyA5LjQyIDE1LjUgOS4zNCAxNS40MSA5LjM0SDEzLjY1QzEzLjU3IDkuMzQgMTMuNSA5LjQxIDEzLjUgOS41VjExLjA4QzEzLjUgMTEuMTcgMTMuNTcgMTEuMjQgMTMuNjUgMTEuMjQiIC8+PC9zdmc+");
 }
@@ -922,10 +866,7 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
     transform: translateY(-50%) !important;
     margin: 0 !important;
   }
-  #widgets-wrap > .information-widget-greeting { flex: 1 1 0 !important; min-width: 0; padding-left: 80px; }
-  #widgets-wrap > .widget-container:not(:has(.information-widget-resource)):not(.information-widget-greeting):not(.information-widget-logo) {
-    display: none !important;
-  }
+  #widgets-wrap > .information-widget-greeting { flex: 1 1 0 !important; min-width: 0; }  /* 58 px crest + 30 px (16/10/2026) */
   #widgets-wrap > .widget-container:has(.information-widget-resource) {
     flex: none !important;
     margin: 0 14px !important;
@@ -975,15 +916,12 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
     background: url("/images/icons/logo.png") center / contain no-repeat;
     margin-right: 14px;
   }
-  .information-widget-greeting span { font-size: 1.45rem !important; margin: 0 !important; }
+  .information-widget-greeting span { margin: 0 !important; }
   /* phones: the three disks share one row, a third each */
   #widgets-wrap {
     flex-direction: row !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-  }
-  #widgets-wrap > .widget-container:not(:has(.information-widget-resource)):not(.information-widget-greeting):not(.information-widget-logo) {
-    display: none !important;
   }
   #widgets-wrap > .widget-container:has(.information-widget-resource) {
     flex: 1 1 0 !important;
@@ -999,15 +937,14 @@ li.service[data-name="BookStack"] .service-card > :not(.service-container) { gri
     padding: 2px 0 !important;
     justify-content: center;
   }
-  .widget-container[data-disk] .information-widget-resource::before { width: 16px; height: 16px; }
-  .information-widget-resource > div { min-width: 0 !important; margin-left: 6px !important; flex: 1 1 auto; }
+    .information-widget-resource > div { min-width: 0 !important; margin-left: 6px !important; flex: 1 1 auto; }
   .widget-container[data-disk] .text-xs { font-size: 10px !important; }
 }
 
 /* ================================================================================================
    Bookmarks
    ================================================================================================ */
-.bookmark-icon { background: rgba(var(--acc-rgb), 0.18) !important; color: #ffffff !important; }
+.bookmark-icon { color: #ffffff !important; }
 .bookmark-text {
   background: var(--glass) !important;
   -webkit-backdrop-filter: blur(24px) saturate(170%);
@@ -1023,8 +960,6 @@ li.bookmark > a, li.bookmark > div {
 }
 li.bookmark > a:hover {
   transform: translateY(-1px);
-  border-color: rgba(var(--acc-rgb), 0.55);
-  box-shadow: 0 0 20px rgba(var(--acc-rgb), 0.25);
 }
 /* Top-bar rule kept here: it must come after the bookmark rules it overrides */
 .information-widget-greeting, .information-widget-greeting * {
@@ -1054,7 +989,9 @@ li.bookmark > a:hover {
   background-color: var(--nord1) !important;
   border-color: var(--accent-color);
   box-shadow: var(--hover-shadow);
-  transform: none;
+  /* same transform as at rest (translateZ(0), the cards' own graphics layer): "none" here dropped the layer while the
+     pointer was over a panel, and the panel redrew a fraction of a pixel off (user 16/10/2026: "tiny shift" on hover) */
+  transform: translateZ(0);
 }
 .service-card:has(iframe)::before { display: none; }
 .service-card:has(iframe) iframe { position: relative; z-index: 1; }
@@ -1082,7 +1019,7 @@ iframe { width: 100%; border: 0; background-color: transparent; }
   overflow: visible !important;
 }
 .service-card:has(:is(.home-assistant, .ha-calendar, .todo, .epl, .epl-calendar)):hover {
-  transform: none;
+  transform: translateZ(0);
   background: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
@@ -1101,15 +1038,10 @@ iframe { width: 100%; border: 0; background-color: transparent; }
   backdrop-filter: none !important;
 }
 .service-card:has(.glance):hover {
-  transform: none;
+  transform: translateZ(0);
   background: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
-}
-.service-card:has(.glance) .service-block:not(:has(iframe)) {
-  background: rgba(28, 28, 30, 0.55) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.10) !important;
-  border-radius: 16px !important;
 }
 /* EPL Calendar: its Homepage label used to sit hidden under the opaque iframe; now that the frame
    is see-through it overlapped the dates, so hide it */
@@ -1178,9 +1110,6 @@ iframe { width: 100%; border: 0; background-color: transparent; }
   text-shadow: var(--text-shadow);
   font-size: 12px;
   font-weight: 400;
-}
-#headlessui-disclosure-panel-\:r6\: > ul:first-child > li:first-child > div:first-child > div:first-child {
-  margin: -100px;
 }
 /* Calendars tab: TV Episodes ended 6px above Media Releases; extend it so the column bottoms line
    up */
@@ -1268,9 +1197,7 @@ li.service[data-name="Gotify"] .service-container { display: grid !important; gr
 li.service[data-name="Gotify"] .service-container > .service-block { min-width: 0 !important; }
 li.service[data-name="Gotify"] .service-block-value {
   width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-li.service[data-name="Gotify"] .service-container:not(.service-container ~ .service-container) > .service-block:first-child .service-block-value {
-  white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3;
-  }   /* the message at the cards' normal 20px figure size, wrapping to two lines (user 15/10/2026: one size for every widget) */
+/* (the Latest Message used to wrap to two lines; since 16/10/2026 it stays on one line and glides when long: .hp-glide below) */
 /* columns line up (15/10/2026, user): the top row uses the same three columns as the bottom row, Latest Message
    across the first two and From in the third, exactly over Last Received. Every figure is the normal 20px */
 li.service[data-name="Gotify"] .service-container:not(.service-container ~ .service-container) { align-items: end !important; }   /* From's label level with Latest's when the title wraps */
@@ -1321,8 +1248,7 @@ li.service[data-name="Gotify"] .service-container:not(.service-container ~ .serv
 /* ================================================================================================
    MAC THEME (07/10/2026): macOS look. 1 wallpaper + glass, 2 fonts, 3 text levels, 4 macOS
    segmented control, 5 one corner scale, 6 stats as widget numbers, 7 top bar as a menu bar.
-   Everything is in this block and only overrides rules above. REVERT: delete from this comment to
-   the end of the file (or git revert the commit that added it), then ans-apply docker.
+   It builds on the rules above, and the blocks after it build on it.
    ================================================================================================ */
 :root {
   --mac-glass: rgba(30, 30, 32, 0.52);
@@ -1348,9 +1274,7 @@ html[data-weather="rain"] #background, html[data-weather="storm"] #background { 
 .service-card, .bookmark-text {
   background-color: var(--mac-glass) !important;
   border: 0.5px solid var(--mac-hairline) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
-  backdrop-filter: blur(30px) saturate(180%) !important;
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;  /* no drop shadow: same as Glance and the HA panels (it bled into a halo where cards sit close) */
+      box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.10) !important;  /* no drop shadow: same as Glance and the HA panels (it bled into a halo where cards sit close) */
 }
 .service-card:hover { border-color: rgba(255, 255, 255, 0.22) !important; box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14) !important; }
 
@@ -1379,14 +1303,19 @@ body { letter-spacing: -0.011em; }
   #myTab {
     background: rgba(118, 118, 128, 0.24) !important;
     border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 12px !important;
+    /* a capsule (17/10/2026, user): its ends now run parallel to the moving selector's, which is a capsule 4 px inside
+       (selector 17 px curve + 4 px = 21 px = half the 42 px bar); was 12 px corners */
+    border-radius: 999px !important;
     padding: 3px !important;
     gap: 3px !important;
     box-shadow: none !important;
+    /* 23 px to the content below, the same as from the top bar's contents above (17/10/2026, user; was 42 px on Home,
+       46 px on tabs that start with a heading) */
+    margin-bottom: 7px !important;
   }
   #myTab [id$="-tab"] {
     min-height: 34px !important;
-    border-radius: 9px !important;
+    border-radius: 999px !important;  /* capsules like the selector (was 9 px) */
     font-size: 13px !important;
     font-weight: 600 !important;
     color: var(--mac-label) !important;
@@ -1402,19 +1331,18 @@ body { letter-spacing: -0.011em; }
     /* fixed height: the disk widgets re-render on every tab switch and briefly changed the bar's height
        (52 <-> 73 px), bouncing the whole page by 21 px; 72 px leaves an even ~12 px above and below the drives; no negative side margins (they made the page
        16 px wider than the window: a horizontal scrollbar in Firefox/Zen) */
-    margin: 0 0 18px !important;
-    padding: 0 18px !important;
+    /* 18 px above, none below (16/10/2026, user: with the bar's band gone its contents sat 5 px from the top of the window
+       but 41 px above the tabs): now 23 px each side, and the tabs stay where they were */
+    margin: 18px 0 0 !important;
+    /* 36 px each side: the crest and the clock line up with the tab bar's ends below (user 16/10/2026; was 18 px, wider than the tabs) */
+    padding: 0 36px !important;
     height: 72px !important;
     min-height: 72px !important;
     max-height: 72px !important;
     box-sizing: border-box !important;
     overflow: visible !important;
     justify-content: center !important;
-    background: rgba(30, 30, 32, 0.45) !important;
-    border-bottom: 0.5px solid var(--mac-hairline) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    backdrop-filter: blur(30px) saturate(180%);
-    border-radius: 0;  /* a straight full-width bar, like the macOS menu bar */
+                    border-radius: 0;  /* a straight full-width bar, like the macOS menu bar */
   }
   .information-widget-logo img { width: 26px !important; height: 26px !important; }
   #widgets-wrap, #information-widgets-right { align-items: center !important; }
@@ -1459,13 +1387,10 @@ body { letter-spacing: -0.011em; }
   .hp-weather svg { width: 18px !important; height: 18px !important; }
   /* disks: small menu-bar items, no capsule */
   .widget-container:has(.resource-usage) {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    padding: 0 6px !important;  /* no top/bottom padding: each drive centres on its own text (even gap above and below) */
-    transform: translateY(-2px);  /* the drive name's taller line box sat it low: 2 px up makes the visible gaps even */
+    /* no top/bottom padding: each drive centres on its own text (even gap above and below) */
+    /* the drive name's taller line box sat it low: 2 px up makes the visible gaps even */
   }
   .widget-container[data-disk] .information-widget-resource::before { width: 16px; height: 16px; filter: none; }
   .information-widget-resource .resource-usage, .information-widget-resource .resource-usage > div { height: 3px !important; box-shadow: none !important; }
@@ -1494,11 +1419,7 @@ iframe[data-fade="wait"] { opacity: 0 !important; }
   backdrop-filter: blur(20px) saturate(180%) !important;
 }
 @media (pointer: fine) and (min-width: 1025px) {
-  #information-widgets {
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
   }
-}
 :is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv) { transition: opacity 0.25s ease-out; }
 :is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv):not([data-ready]) { opacity: 0; }
 
@@ -1509,7 +1430,6 @@ iframe[data-fade="wait"] { opacity: 0 !important; }
 [class*="dark:text-theme-200"], [class*="dark:text-theme-100"] { color: #ffffff !important; }
 :is(#tautulli_recent_movies, #tautulli_recent_shows, #upcomingtv) .flex.flex-row.text-right > :first-child { color: rgba(235, 235, 245, 0.60) !important; }  /* the date column only */
 :is(#tautulli_recent_movies, #tautulli_recent_shows) .flex.flex-row.text-right > :not(:first-child) { color: #ffffff !important; }  /* titles white (they share the dates' bold class) */
-#upcomingtv .flex.flex-row > .font-bold:first-child { color: rgba(235, 235, 245, 0.60) !important; }  /* Media Releases dates (rows have no .text-right) */
 
 /* section colours retired (07/10/2026, user: "remove"): with the white Mac hover the coloured dots no longer
    matched anything. Headings are plain grey like a macOS sidebar, bookmark icon tiles neutral glass, bookmark
@@ -1625,8 +1545,7 @@ li.service[data-name="Home Assistant"] .service-card > .relative.flex-row ~ .rel
    APPLE TOUCHES (15/10/2026, user: "even more Apple-like", items 1-4 + Dock preview). 1 the real San
    Francisco font on Apple devices (in --font-family at the top), 2 spring motion, 3 app icons on squircle
    plates, 4 notification banners for new Gotify messages (custom.js notes), 5 Dock with the Bookmarks
-   groups as Stacks (on for everyone on desktop; ?dock=0 hides it and brings back the Bookmarks tab). REVERT: delete from this comment to the end of the file, the notes/dock blocks
-   in custom.js, and put "Inter" back first in --font-family.
+   groups as Stacks (on for everyone on desktop; ?dock=0 hides it and brings back the Bookmarks tab; ?dock=lite is a lighter version).
    ================================================================================================ */
 :root {
   --mac-spring: cubic-bezier(0.34, 1.45, 0.64, 1);  /* a little overshoot, like a SwiftUI spring */
@@ -1733,11 +1652,9 @@ dialog:has(> input[placeholder="Search"]) { animation: mac-sheet-in 0.35s var(--
    once per frame while the pointer is over the Dock (data-mag, when transitions are off so nothing lags), only
    for the parts that moved */
 .hp-dock-bg {
-  position: absolute; inset: 0; z-index: -1; border-radius: calc(var(--ds, 52px) * 0.46); pointer-events: none;
-  background: rgba(36, 36, 40, 0.48); border: 0.5px solid rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.14), 0 12px 34px rgba(0, 0, 0, 0.35);
-  transition: transform 0.3s var(--mac-ease); will-change: transform;
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+      transition: transform 0.3s var(--mac-ease); will-change: transform;
 }
 /* room under the last row so the Dock never covers it, only on tabs that scroll anyway (custom.js dockRoom sets
    data-dockroom): giving every tab the room made Home, which fits the screen exactly, scroll by 100 px */
@@ -1753,8 +1670,7 @@ html[data-dockroom] #inner_wrapper > div { height: auto; padding-bottom: calc(va
 }
 .hp-dock-icon::before {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.06));
-  -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+    -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
 }
 .hp-dock-icon > img {
   position: absolute; inset: 18%; width: 64%; height: 64%; object-fit: contain;
@@ -1769,10 +1685,10 @@ html[data-dockroom] #inner_wrapper > div { height: auto; padding-bottom: calc(va
 .hp-dock-label {
   position: absolute; left: 50%; bottom: calc(100% + 12px); white-space: nowrap;
   transform: translateX(-50%);
-  padding: 4px 11px; border-radius: 8px; font-size: 13px; font-weight: 500; pointer-events: none; opacity: 0;
+  padding: 4px 11px; font-size: 13px; font-weight: 500; pointer-events: none; opacity: 0;
   /* no blur behind the label (15/10/2026): it moves with the magnification, so a blur had to be redone every frame;
      at 90% the background looks the same without it */
-  background: rgba(40, 40, 44, 0.9); border: 0.5px solid rgba(255, 255, 255, 0.16); color: var(--mac-label);
+  color: var(--mac-label);
   transition: opacity 0.15s var(--mac-ease), transform 0.3s var(--mac-ease);
 }
 .hp-dock-item:hover .hp-dock-label { opacity: 1; }
@@ -1850,18 +1766,13 @@ html[data-dock] #myTab > :has(#Bookmarks-tab) { display: none !important; }
 #myTab { position: relative; }
 #hp-tab-pill {
   position: absolute; left: 0; z-index: 0; border-radius: 999px; pointer-events: none;
-  /* the Mac theme's open-tab look (dark-mode macOS segmented control: grey pill, white text), see "4. macOS segmented control" */
-  background: rgba(99, 99, 102, 0.95);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
 }
-html[data-pill] #hp-tab-pill { transition: transform 0.5s var(--mac-spring), width 0.5s var(--mac-spring); }
 html[data-pill] #myTab [id$="-tab"][aria-selected="true"] { background: transparent !important; box-shadow: none !important; }
 html:not([data-pill]) #hp-tab-pill { opacity: 0; }
 @media (pointer: coarse), (max-width: 1024px) { #hp-tab-pill { display: none; } }
-/* macOS 26 "Liquid Glass" open-tab pill (16/10/2026, the default since the same day; ?tabs=grey shows the old grey pill;
-   custom.js sets html[data-tabglass]): a clear lens instead of the grey pill. It lets the bar show through a little brighter and more saturated, with a bright rim
+/* the open-tab pill, macOS 26 "Liquid Glass" (16/10/2026): a clear lens instead of a grey pill. It lets the bar show through a little brighter and more saturated, with a bright rim
    of light on its edge, and stretches briefly while it slides to another tab (custom.js adds .hp-moving), then settles */
-html[data-tabglass] #hp-tab-pill {
+#hp-tab-pill {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.12) 100%);
   -webkit-backdrop-filter: blur(4px) saturate(1.8) brightness(1.18);
   backdrop-filter: blur(4px) saturate(1.8) brightness(1.18);
@@ -1876,28 +1787,30 @@ html[data-tabglass] #hp-tab-pill {
   100% { scale: 1 1; }
 }
 /* the glass pill glides without overshooting (user: the spring's bounce was too much): Apple's standard ease-out */
-html[data-tabglass][data-pill] #hp-tab-pill { transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); }
+html[data-pill] #hp-tab-pill { transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); }
 
-/* Live Activities (custom.js LIVE_SOURCES / liveRender, 16/10/2026, on for everyone on desktop since 16/10/2026, ?live=0 hides them, ?live=demo shows samples): compact glass
-   capsules in the menu bar just before the weather, like macOS's Live Activities: icon, short text, a progress ring
-   where there is one. Red for problems, amber when something may need you, green for good news. Desktop only */
-#hp-live { display: flex; align-items: center; gap: 8px; margin-right: 14px; align-self: center; }
+/* Live Activities (custom.js LIVE_SOURCES / liveRender; ?live=0 hides them, ?live=demo shows samples), desktop only: in the
+   top bar just before the weather, the same 58 px glass boxes with 14 px corners as the drives (17/10/2026, were small
+   capsules), 30 px apart and from the weather box. Two lines like the drives, the main part over the detail (liveRender
+   splits at the first " · "), each line gliding on its own when too long; an icon, and a progress ring where there is
+   one. Red for problems, amber when something may need you, green for good news (those keep their own fill and edge) */
+#hp-live { display: flex; align-items: center; gap: 30px; margin-right: 30px; align-self: center; }
 .hp-live-pill {
-  display: flex; align-items: center; gap: 7px; height: 26px; padding: 0 10px 0 6px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12); border: 0.5px solid rgba(255, 255, 255, 0.18);
-  -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+  display: flex; align-items: center; gap: 12px; height: 58px; padding: 0 16px 0 14px; border-radius: 14px; box-sizing: border-box;
+  background: var(--std-glass); border: 0.5px solid var(--std-edge); box-shadow: var(--lg-rim-soft);
   color: var(--mac-label); font-size: 12px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap;
   animation: mac-live-in 0.5s var(--mac-spring);
 }
 @keyframes mac-live-in { from { opacity: 0; transform: scale(0.6); } }
-.hp-live-text { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
-.hp-live-text > span { display: inline-block; white-space: nowrap; }
-/* long text (custom.js marks it): no "...", a soft fade at the edge, and the text glides back and forth continuously,
-   resting at each end, like the iPhone's Now Playing (user 16/10/2026) */
-.hp-live-long .hp-live-text { text-overflow: clip; -webkit-mask: linear-gradient(90deg, #000 85%, transparent); mask: linear-gradient(90deg, #000 85%, transparent); }
-.hp-live-long .hp-live-text > span { animation: mac-live-glide var(--glide, 4s) ease-in-out 0.8s infinite alternate; }
+.hp-live-text { display: flex; flex-direction: column; justify-content: center; gap: 3px; max-width: 220px; overflow: hidden; }
+.hp-live-line { display: block; overflow: hidden; white-space: nowrap; line-height: 1.2; }
+.hp-live-line > span { display: inline-block; white-space: nowrap; }
+.hp-live-l1 { font-size: 14px; font-weight: 600; }
+.hp-live-l2 { font-size: 12px; font-weight: 500; opacity: 0.62; }
+.hp-live-line.hp-live-glide { -webkit-mask: linear-gradient(90deg, #000 85%, transparent); mask: linear-gradient(90deg, #000 85%, transparent); }
+.hp-live-line.hp-live-glide > span { animation: mac-live-glide var(--glide, 4s) ease-in-out 0.8s infinite alternate; }
 @keyframes mac-live-glide { 0%, 12% { transform: translateX(0); } 88%, 100% { transform: translateX(var(--shift, 0)); } }
-.hp-live-icon { flex: none; width: 16px; height: 16px; background: center / contain no-repeat; }
+.hp-live-icon { flex: none; width: 22px; height: 22px; background: center / contain no-repeat; }
 .hp-live-mono { background: #ffffff; -webkit-mask: var(--live-icon) center / contain no-repeat; mask: var(--live-icon) center / contain no-repeat; }
 .hp-live-warn { background: rgba(255, 159, 10, 0.22); border-color: rgba(255, 159, 10, 0.55); color: #ffd28a; }
 .hp-live-warn .hp-live-mono { background: #ff9f0a; }
@@ -1906,7 +1819,7 @@ html[data-tabglass][data-pill] #hp-tab-pill { transition: transform 0.3s cubic-b
 /* red for problems (a service, container or drive down); a live match gets a pulsing red dot, like a broadcast */
 .hp-live-bad { background: rgba(255, 69, 58, 0.24); border-color: rgba(255, 69, 58, 0.6); color: #ffb3ad; }
 .hp-live-bad .hp-live-mono { background: #ff453a; }
-.hp-live-live { position: relative; padding-left: 16px; }
+.hp-live-live { position: relative; }
 .hp-live-live::before {
   content: ""; position: absolute; left: 6px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%;
   background: #ff453a; animation: mac-live-dot 1.6s ease-in-out infinite;
@@ -1941,27 +1854,21 @@ li.service[data-name="Beszel"] .service-card > .relative.flex-row ~ .relative.fl
    after the crest, as the macOS menu bar keeps its middle free (user 16/10/2026, html[data-live] set by custom.js) */
 @media (pointer: fine) and (min-width: 1025px) {
   html[data-live] #widgets-wrap > .information-widget-greeting { display: none !important; }
-  html[data-live] #widgets-wrap { padding-left: 68px; }
-  /* a thin vertical divider between the crest and the disks, like the separators in a macOS menu bar (user) */
-  html[data-live] #widgets-wrap::before {
-    content: ""; display: block !important; position: absolute; left: 50px; top: 50%; width: 1px; height: 24px; margin-top: -12px;
-    background: rgba(255, 255, 255, 0.28);  /* display forced: an earlier rule hides this pseudo-element */
-  }
+  /* the crest (58 px) then the same 30 px gap as between the disks (measured); the thin divider that stood between them went with the
+     menu bar's band and line (user 16/10/2026: "out of place" on the seamless bar) */
+  html[data-live] #widgets-wrap { padding-left: 88px; }
   html[data-live] #widgets-wrap > .widget-container:has(.information-widget-resource) { margin: 0 22px 0 0 !important; }
 }
 
-/* the crest on a squircle plate, matching the disks' tiles beside it (user 16/10/2026, option C of three rendered):
-   a 36 px light glass plate with the crest at 28 px. Desktop menu bar only */
+/* the crest, desktop top bar: bare and 58 px, the height of the glass boxes beside it (17/10/2026, user: a round badge with
+   its own gold ring needs no second frame, and as the brand mark it isn't a status item; was on a squircle plate). Centred:
+   Homepage's wrapper round the crest has a 12 px right margin from the old layout */
 @media (pointer: fine) and (min-width: 1025px) {
-  #widgets-wrap > .information-widget-logo { width: 36px; height: 36px; display: grid !important; place-items: center; isolation: isolate; }
-  #widgets-wrap > .information-widget-logo::before {
-    content: ""; position: absolute; inset: 0; z-index: -1;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.06));
-    -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+  #widgets-wrap > .information-widget-logo {
+    width: 58px !important; height: 58px !important; display: grid !important; place-items: center;
+    background: none !important; border: none !important; box-shadow: none !important;
   }
-  #widgets-wrap > .information-widget-logo img { width: 28px !important; height: 28px !important; max-width: none !important; object-fit: contain; }
-  /* centred: Homepage's wrapper round the crest has a 12 px right margin from the old layout (it pushed the crest
-     6 px left of the plate's centre) */
+  #widgets-wrap > .information-widget-logo img { width: 58px !important; height: 58px !important; max-width: none !important; object-fit: contain; }
   #widgets-wrap > .information-widget-logo > * { margin: 0 !important; }
 }
 
@@ -1975,8 +1882,7 @@ li.service .service-block[data-trend] {
   background-size: 80% 55% !important;  /* 80 % wide and centred (user 16/10/2026: full-width lines almost touched their neighbours) */
 }
 
-/* LIQUID GLASS (macOS 26 look, 16/10/2026, user: "just apply it"; ?glass=old shows the previous frosted look; custom.js
-   sets html[data-glassold]). Clearer glass than before: a faint light-to-clear gradient over a thinner dark tint,
+/* LIQUID GLASS (macOS 26 look, 16/10/2026, user: "just apply it"). Clearer glass than before: a faint light-to-clear gradient over a thinner dark tint,
    a bright rim of light along the top edge, and a lighter hairline. Cards keep enough tint for their figures to read.
    The same look is in Glance (extras/glance-glass.css) and the Home Assistant panels (extras/home-assistant-glass-embed.js) */
 :root {
@@ -1988,7 +1894,7 @@ li.service .service-block[data-trend] {
 }
 /* cards: a little clearer, rim on top. Not the cards holding an embedded panel (HA, Glance): their frame stays
    invisible so the panel's own cards are the only glass (user 16/10/2026: a second frame looked out of place) */
-html:not([data-glassold]) .service-card:not(:has(iframe)), html:not([data-glassold]) .bookmark-text {
+.service-card:not(:has(iframe)), .bookmark-text {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
   box-shadow: var(--lg-rim-soft) !important;
@@ -1996,54 +1902,57 @@ html:not([data-glassold]) .service-card:not(:has(iframe)), html:not([data-glasso
 /* truly clear and exactly like the HA and Glance cards beside them (user 16/10/2026: "must match exactly"): those sit
    in embedded pages, which can't blur what's behind them, so Homepage's cards don't either; the wallpaper and the rain
    show through. Same 40% tint, sheen, edge, rim and 18 px corners as the HA panels (extras/home-assistant-glass-embed.js) */
-html:not([data-glassold]) .service-card:not(:has(iframe)), html:not([data-glassold]) .bookmark-text,
-html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) {
+.service-card:not(:has(iframe)), .bookmark-text,
+.service-card:has(.glance) .service-block:not(:has(iframe)) {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
-html:not([data-glassold]) .service-card:not(:has(iframe)):hover { border-color: rgba(255, 255, 255, 0.28) !important; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.30), inset 0 -0.5px 0 rgba(255, 255, 255, 0.06) !important; }
+.service-card:not(:has(iframe)):hover { border-color: rgba(255, 255, 255, 0.28) !important; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.30), inset 0 -0.5px 0 rgba(255, 255, 255, 0.06) !important; }
 /* the currency boxes beside Glance: same glass as the cards */
-html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) {
+.service-card:has(.glance) .service-block:not(:has(iframe)) {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40) !important;
   border: 0.5px solid rgba(255, 255, 255, 0.16) !important;
   box-shadow: var(--lg-rim-soft) !important;
 }
-/* menu bar: clear glass like the cards (user 16/10/2026: "glassy and transparent"): no blur, so the wallpaper and the
-   rain show through, the same faint light sheen over a light tint, and a thin bright line along its bottom edge */
+/* menu bar: no band and no divider, it melts into the page like a macOS 26 toolbar over its content (user 16/10/2026;
+   was a light glass tint with a thin bright line along its bottom edge). The bar does not stay put when the page
+   scrolls, so nothing ever slides under it and no edge blur is needed. The drive capsules keep their own glass */
 @media (pointer: fine) and (min-width: 1025px) {
-  html:not([data-glassold]) #information-widgets {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)), rgba(28, 28, 30, 0.22) !important;
+  #information-widgets {
+    background: transparent !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-bottom: none !important;
   }
 }
 /* tab bar, Dock, Stacks, banners and capsules: clear lenses */
-html:not([data-glassold]) #myTab {
-  background: var(--lg-sheen), rgba(30, 30, 32, 0.26) !important;
-  border-color: var(--lg-edge) !important;
-  box-shadow: var(--lg-rim), 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+/* tab bar and Dock in line with the cards and the top bar (17/10/2026, user: their colour was "not in line with the rest"):
+   the same 40% tint, sheen, 0.16 hairline and soft rim (were a lighter 26% tint, a brighter 0.24/0.30 edge, a strong rim
+   and drop shadows). The Dock keeps a plain blur, as it floats over the cards when the page scrolls (its brightness and
+   colour boost, the main colour difference, is gone) and a soft shadow, as floating things have on macOS */
+#myTab {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: var(--lg-rim-soft) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;  /* no blur, like the cards: nothing passes under it */
 }
-html:not([data-glassold]) .hp-dock-bg {
-  background: var(--lg-sheen), rgba(30, 30, 34, 0.26);
-  border-color: rgba(255, 255, 255, 0.30);
-  -webkit-backdrop-filter: blur(16px) saturate(190%) brightness(1.08); backdrop-filter: blur(16px) saturate(190%) brightness(1.08);
-  box-shadow: var(--lg-rim), 0 14px 36px rgba(0, 0, 0, 0.32);
+.hp-dock-bg {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40);
+  border-color: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: var(--lg-rim-soft), 0 10px 28px rgba(0, 0, 0, 0.22);
 }
-html:not([data-glassold]) #hp-stack, html:not([data-glassold]) .hp-note {
-  background: var(--lg-sheen), rgba(34, 34, 38, 0.50);
-  border-color: rgba(255, 255, 255, 0.26);
-  box-shadow: var(--lg-rim), 0 18px 48px rgba(0, 0, 0, 0.40);
-}
-html:not([data-glassold]) .hp-live-pill { box-shadow: var(--lg-rim); border-color: rgba(255, 255, 255, 0.26); }
-html:not([data-glassold]) .hp-live-pill:not(.hp-live-bad):not(.hp-live-warn) { background: var(--lg-sheen), rgba(255, 255, 255, 0.06); }
+/* (Stacks and banners: see STANDARD below) */
 /* even edges on standard-resolution screens (16/10/2026): a half-pixel border is drawn as one full pixel by Chrome but
    rounded per side by Firefox/Zen when a card sits between pixels (one edge bright, the other faint). A full 1 px
    hairline there looks the same in Chrome and even in Firefox; Retina screens keep the half-pixel hairline.
    Same rule in the HA panels (extras/home-assistant-glass-embed.js) */
 @media (max-resolution: 1.5dppx) {
-  html:not([data-glassold]) :is(.service-card:not(:has(iframe)), .bookmark-text, #myTab, .hp-dock-bg, #hp-stack, .hp-note, .hp-live-pill),
-  html:not([data-glassold]) .service-card:has(.glance) .service-block:not(:has(iframe)) { border-width: 1px !important; }
+  :is(.service-card:not(:has(iframe)), .bookmark-text, #myTab, .hp-dock-bg, #hp-stack, .hp-note, .hp-live-pill),
+  .service-card:has(.glance) .service-block:not(:has(iframe)) { border-width: 1px !important; }
+  /* the top bar's glass boxes too (17/10/2026: the weather/date/time box's right edge was the faint one) */
+  .widget-container:has(.resource-usage),
+  #information-widgets-right::before { border-width: 1px !important; }
 }
 /* the Calendars tab's list cards (Movies, TV Episodes, Media Releases) keep still on hover: no growth and no brighter edge
    (user 16/10/2026), like the calendar panels beside them */
@@ -2052,10 +1961,113 @@ li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media
 li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:active {
   transform: none !important;
 }
-html:not([data-glassold]) li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:hover {
+li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media Releases"]) .service-card:hover {
   border-color: rgba(255, 255, 255, 0.16) !important;
   box-shadow: var(--lg-rim-soft) !important;
 }
 
+/* top bar items on frosted glass (17/10/2026, user: "can the content in the top row also all have frosted glass
+   containers?", then "standardisation would be great"): ONE glass recipe for every item in the bar, the same as the cards:
+   each drive, the Live Activity capsules and one box holding the weather, date and time (the crest stands bare). Boxes 58 px
+   tall with 14 px corners; the capsules keep their round ends and their coloured warning / good / problem tones */
+:root {
+  --tb-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%), rgba(28, 28, 30, 0.40);
+  --tb-edge: 0.5px solid rgba(255, 255, 255, 0.16);
+}
+@media (pointer: fine) and (min-width: 1025px) {
+  .widget-container:has(.resource-usage) {
+    background: var(--tb-glass) !important;
+    border: var(--tb-edge) !important;
+    box-shadow: var(--lg-rim-soft) !important;
+    border-radius: 14px !important;
+    height: 58px !important;
+    box-sizing: border-box !important;
+  }
+  /* drives: the glass and a little side room; their own layout is left alone (making the box a flex column moved the name
+     beside the figure). No 2 px lift any more: with the name gone the box centres like the others */
+  .widget-container:has(.resource-usage) {
+    padding: 0 12px !important;
+    justify-content: center !important;
+    transform: none !important;
+  }
+  /* no drive names (user: the icons already say which drive it is); the name is the box's hover tooltip (custom.js disks) */
+  .widget-container:has(.resource-usage) > div:last-child:not(:first-child) { display: none !important; }
+  /* the right box: ONE glass shape behind the weather, date and time (three Homepage widgets), drawn by the row itself
+     from the weather's left edge to the end (custom.js rightBox sets --tb-box-left), so there are no seams between them */
+  #information-widgets-right { column-gap: 0 !important; position: relative; isolation: isolate; }
+  /* no paint clipping on the bar's row (17/10/2026): content-visibility: auto (from the speed pass, #information-widgets > *)
+     clips drawing to the wrapper's own box, which ends exactly at the boxes' top, bottom and right edges, so those edges
+     lost their outer half-pixel on a 1.5x screen (user: top edges cut off, the right box's right end unlike its left).
+     The bar is always on screen, so the setting saved nothing here */
+  #information-widgets > #widgets-wrap { content-visibility: visible !important; contain: none !important; }
+  #information-widgets-right::before {
+    content: ""; position: absolute; z-index: -1; right: 0; left: var(--tb-box-left, 100%); top: 50%; height: 58px; margin-top: -29px;
+    background: var(--tb-glass); border: var(--tb-edge); box-shadow: var(--lg-rim-soft); border-radius: 14px; box-sizing: border-box;
+  }
+  #information-widgets-right :is(.hp-weather, .information-widget-datetime[data-clock]) {
+    background: none !important; border: none !important; box-shadow: none !important; border-radius: 0 !important;
+    height: 58px !important; box-sizing: border-box !important; margin: 0 !important;
+    display: flex !important; flex-direction: column !important; justify-content: center !important;
+  }
+  #information-widgets-right .hp-weather { padding: 0 20px 0 18px !important; }
+  #information-widgets-right .information-widget-datetime[data-clock="date"] { padding: 0 !important; }
+  #information-widgets-right .information-widget-datetime[data-clock="time"] { padding: 0 18px 0 12px !important; }
+}
+
+/* ============================================================================================================
+   STANDARD (17/10/2026, user: "standardise EVERYTHING"): three tiers, each defined once here, so every surface on the
+   page reads from the same few values. The HA panels (extras/home-assistant-glass-embed.js) and Glance (extras/glance-glass.css)
+   already use tier 1 exactly. Deliberate exception: the tab selector (#hp-tab-pill), the raised "you are here" lens.
+   1. surfaces: cards, the top bar's boxes, the tab bar, the Dock: --std-glass, --std-edge, soft rim, 18 px corners on
+      cards, 14 px on the top bar's boxes, capsules for the tab bar and Live Activity-style controls
+   2. rows inside a surface (list rows, progress rows): Homepage's own 20% dark tint, 8 px corners (nested in the 18 px)
+   3. floating panels over the page (search, Stacks, banners, Dock tooltips): the same glass, denser (72%) and blurred so
+      their text stays readable over anything, the same edge and rim, a soft shadow, 18 px corners (tooltips 8 px)
+   ============================================================================================================ */
+:root {
+  --std-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 60%);
+  --std-glass: var(--std-sheen), rgba(28, 28, 30, 0.40);
+  --std-float: var(--std-sheen), rgba(28, 28, 30, 0.72);
+  --std-edge: rgba(255, 255, 255, 0.16);
+  --std-float-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.22), inset 0 -0.5px 0 rgba(255, 255, 255, 0.05), 0 18px 48px rgba(0, 0, 0, 0.40);
+  --std-icon-plate: linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.05));
+}
+/* 1. the boxes beside Glance had 16 px corners: 18 like every card */
+.service-card:has(.glance) .service-block:not(:has(iframe)) { border-radius: 18px !important; }
+/* the Dock's corners concentric with its icons (an app icon's squircle ~0.225 of its size, plus the 7 px the icons sit in
+   from the edge; was 0.46 of the icon size, rounder than the icons inside) */
+.hp-dock-bg { border-radius: calc(var(--ds, 52px) * 0.225 + 7px); }
+/* app icon plates: one sheen for the cards' icons and the Dock's (the Dock's was brighter) */
+.hp-dock-icon::before { background: var(--std-icon-plate); }
+/* 2. rows inside cards: one corner size (Homepage used 6 px here, 6.4 px there) */
+li.service .service-card :is(.rounded-md, .rounded-sm)[class*="bg-theme"] { border-radius: 8px !important; }
+/* 3. floating panels: one recipe (they had four tints, three edges and 20 / 22 px corners) */
+:is(dialog:has(> input[placeholder="Search"]), #hp-stack, .hp-note) {
+  background: var(--std-float) !important;
+  border: 0.5px solid var(--std-edge) !important;
+  -webkit-backdrop-filter: blur(30px) !important; backdrop-filter: blur(30px) !important;
+  box-shadow: var(--std-float-shadow) !important;
+  border-radius: 18px !important;
+}
+/* Dock tooltips: the same, without the blur (they move with the magnification, so a blur was redone every frame) and a
+   little denser to make up for it */
+.hp-dock-label {
+  background: var(--std-sheen), rgba(28, 28, 30, 0.90); border: 0.5px solid var(--std-edge);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.22); border-radius: 8px;
+}
+@media (max-resolution: 1.5dppx) {
+  :is(dialog:has(> input[placeholder="Search"]), .hp-dock-label) { border-width: 1px !important; }
+}
+
 /* END LIQUID GLASS */
 
+/* long card figures glide (custom.js glideValues, 16/10/2026, user): the Gotify card's Latest Message stays on one line; when too long they glide back and forth, resting at each end, with a soft fade at the
+   edge, the same motion as the Live Activity capsules. A text-indent animation, so the text node Homepage updates stays put */
+.service-block.hp-glide-block { min-width: 0 !important; }
+.service-block-value.hp-glide { display: block !important; width: 100%; white-space: nowrap !important; overflow: hidden !important;
+  text-overflow: clip !important; -webkit-line-clamp: unset !important; }
+.service-block-value.hp-glide-on {
+  -webkit-mask: linear-gradient(90deg, #000 88%, transparent); mask: linear-gradient(90deg, #000 88%, transparent);
+  animation: hp-glide var(--glide, 4s) ease-in-out 0.8s infinite alternate; }
+@keyframes hp-glide { 0%, 12% { text-indent: 0; } 88%, 100% { text-indent: var(--shift, 0); } }
+@media (prefers-reduced-motion: reduce) { .service-block-value.hp-glide-on { animation: none; text-overflow: ellipsis !important; } }
