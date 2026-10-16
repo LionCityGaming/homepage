@@ -321,6 +321,38 @@
             secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
             showStacks: true
             fields: [down, unhealthy, unknown]
+          # not shown (custom.css hides it): every stack's name and state for custom.js's Live Activities, so a capsule
+          # can say which stack is down (16/10/2026). Komodo's read API (a POST to /read that can only read), same
+          # key as the tile; Homepage sends it from the server, the key never reaches the page
+          - type: customapi
+            url: "{{HOMEPAGE_VAR_KOMODO_URL}}/read"
+            method: POST
+            headers:
+              Content-Type: application/json
+              X-Api-Key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+              X-Api-Secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+            requestBody:
+              type: ListStacks
+              params: {}
+            refreshInterval: 60000
+            mappings:
+              - field: "0.name"
+                label: Stacks
+          # the same for every container (name, state, health), so a capsule can name an unhealthy container
+          - type: customapi
+            url: "{{HOMEPAGE_VAR_KOMODO_URL}}/read"
+            method: POST
+            headers:
+              Content-Type: application/json
+              X-Api-Key: "{{HOMEPAGE_VAR_KOMODO_API_KEY}}"
+              X-Api-Secret: "{{HOMEPAGE_VAR_KOMODO_API_SECRET}}"
+            requestBody:
+              type: ListAllDockerContainers
+              params: {}
+            refreshInterval: 60000
+            mappings:
+              - field: "0.name"
+                label: Containers
 
     - Home Assistant:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
@@ -352,7 +384,7 @@
                 label: Front Door
               - state: vacuum.miemie
                 label: Vacuum
-              - state: sensor.mibx5_sg_991525056_f35th_status_p_2_2
+              - state: sensor.washer_status
                 label: Washer
           # not shown (custom.css hides it): HA's weather for the background mood, the Nest Hubs' source
           # (custom.js haWeatherPoll reads it as index 2; 15/10/2026)
@@ -365,6 +397,59 @@
               - state: weather.openweathermap   # its temperature, for the top-bar weather (custom.js)
                 label: Temperature
                 value: "{attributes.temperature}"
+          # not shown either: what custom.js's Live Activities read, as indexes 3-6 (Homepage returns at most four
+          # readings per Home Assistant widget, so they are split in fours; 16/10/2026)
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: sensor.washer_run_status
+                label: Washer Status
+              - state: sensor.washer_time_left_estimate
+                label: Washer Left
+              - state: binary_sensor.front_door_sensor_contact
+                label: Front Door
+              - state: binary_sensor.smart_lock_status   # on = unlocked
+                label: Gate
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: vacuum.miemie
+                label: Vacuum
+              - state: vacuum.miemie
+                label: Vacuum Progress
+                value: "{attributes.cleaning_progress}"
+              - state: cover.blinds
+                label: Blinds
+              - state: sun.sun
+                label: Sun
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: media_player.spotify_you
+                label: Spotify You
+                value: "{state}|{attributes.media_title}|{attributes.media_artist}"
+              - state: media_player.spotify_partner
+                label: Spotify Partner
+                value: "{state}|{attributes.media_title}|{attributes.media_artist}"
+              - state: calendar.work   # message / start_time describe the current or next event
+                label: Work Next
+                value: "{attributes.message}|{attributes.start_time}"
+              - state: calendar.family
+                label: Family Next
+                value: "{attributes.message}|{attributes.start_time}"
+          - type: homeassistant
+            url: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
+            key: "{{HOMEPAGE_VAR_HOME_ASSISTANT_TOKEN}}"
+            custom:
+              - state: calendar.birthdays
+                label: Birthday
+                value: "{state}|{attributes.message}"
+              - state: calendar.holidays_in_singapore
+                label: Holiday
+                value: "{state}|{attributes.message}"
 
     - Beszel:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/beszel.svg

@@ -1858,3 +1858,88 @@ html[data-pill] #hp-tab-pill { transition: transform 0.5s var(--mac-spring), wid
 html[data-pill] #myTab [id$="-tab"][aria-selected="true"] { background: transparent !important; box-shadow: none !important; }
 html:not([data-pill]) #hp-tab-pill { opacity: 0; }
 @media (pointer: coarse), (max-width: 1024px) { #hp-tab-pill { display: none; } }
+
+/* Live Activities (custom.js LIVE_SOURCES / liveRender, 16/10/2026, on for everyone on desktop since 16/10/2026, ?live=0 hides them, ?live=demo shows samples): compact glass
+   capsules in the menu bar just before the weather, like macOS's Live Activities: icon, short text, a progress ring
+   where there is one. Red for problems, amber when something may need you, green for good news. Desktop only */
+#hp-live { display: flex; align-items: center; gap: 8px; margin-right: 14px; align-self: center; }
+.hp-live-pill {
+  display: flex; align-items: center; gap: 7px; height: 26px; padding: 0 10px 0 6px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12); border: 0.5px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+  color: var(--mac-label); font-size: 12px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap;
+  animation: mac-live-in 0.5s var(--mac-spring);
+}
+@keyframes mac-live-in { from { opacity: 0; transform: scale(0.6); } }
+.hp-live-text { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.hp-live-text > span { display: inline-block; white-space: nowrap; }
+/* long text (custom.js marks it): no "...", a soft fade at the edge, and the text glides back and forth continuously,
+   resting at each end, like the iPhone's Now Playing (user 16/10/2026) */
+.hp-live-long .hp-live-text { text-overflow: clip; -webkit-mask: linear-gradient(90deg, #000 85%, transparent); mask: linear-gradient(90deg, #000 85%, transparent); }
+.hp-live-long .hp-live-text > span { animation: mac-live-glide var(--glide, 4s) ease-in-out 0.8s infinite alternate; }
+@keyframes mac-live-glide { 0%, 12% { transform: translateX(0); } 88%, 100% { transform: translateX(var(--shift, 0)); } }
+.hp-live-icon { flex: none; width: 16px; height: 16px; background: center / contain no-repeat; }
+.hp-live-mono { background: #ffffff; -webkit-mask: var(--live-icon) center / contain no-repeat; mask: var(--live-icon) center / contain no-repeat; }
+.hp-live-warn { background: rgba(255, 159, 10, 0.22); border-color: rgba(255, 159, 10, 0.55); color: #ffd28a; }
+.hp-live-warn .hp-live-mono { background: #ff9f0a; }
+.hp-live-good { background: rgba(48, 209, 88, 0.20); border-color: rgba(48, 209, 88, 0.55); color: #a8f0b8; }
+.hp-live-good .hp-live-mono { background: #30d158; }
+/* red for problems (a service, container or drive down); a live match gets a pulsing red dot, like a broadcast */
+.hp-live-bad { background: rgba(255, 69, 58, 0.24); border-color: rgba(255, 69, 58, 0.6); color: #ffb3ad; }
+.hp-live-bad .hp-live-mono { background: #ff453a; }
+.hp-live-live { position: relative; padding-left: 16px; }
+.hp-live-live::before {
+  content: ""; position: absolute; left: 6px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%;
+  background: #ff453a; animation: mac-live-dot 1.6s ease-in-out infinite;
+}
+@keyframes mac-live-dot { 50% { opacity: 0.25; } }
+.hp-live-ring { flex: none; width: 15px; height: 15px; transform: rotate(-90deg); margin-left: -1px; }
+.hp-live-ring circle { fill: none; stroke-width: 3; stroke: rgba(255, 255, 255, 0.22); }
+.hp-live-ring circle + circle { stroke: #ffffff; stroke-linecap: round; transition: stroke-dasharray 0.6s var(--mac-ease); }
+@media (pointer: coarse), (max-width: 1024px) { #hp-live { display: none; } }
+
+/* Idle dimming for the OLED monitor (custom.js idleOn / idleWake, 16/10/2026, on for everyone on desktop after 10 minutes since 16/10/2026; ?idle=<seconds> or ?idle=0): after
+   the set time without input the page fades to near black with a dim clock that drifts a little every minute, and
+   the page's own animations (wallpaper drift, weather, Dock) pause underneath it */
+#hp-idle {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; cursor: none;
+  background: #000000; opacity: 0; transition: opacity 1.5s var(--mac-ease);  /* fully black: the static page must send no light at all (at 94 % it still showed through) */
+}
+html[data-idle] #hp-idle { opacity: 1; }
+.hp-idle-clock {
+  text-align: center; color: rgba(235, 235, 245, 0.32);
+  transform: translate(var(--dx, 0), var(--dy, 0)); transition: transform 2s var(--mac-ease);
+}
+.hp-idle-time { font-size: 120px; font-weight: 200; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.hp-idle-date { margin-top: 10px; font-size: 22px; font-weight: 500; }
+html[data-idle] body *:not(#hp-idle):not(#hp-idle *) { animation-play-state: paused !important; }
+/* Komodo tile: its third widget only carries every stack's name and state for the Live Activities (custom.js), so it
+   is never shown; the tile keeps its two rows (16/10/2026) */
+li.service[data-name="Komodo"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
+/* Live Activities: the menu bar's right side fills up, so the title text steps aside and the disks sit just
+   after the crest, as the macOS menu bar keeps its middle free (user 16/10/2026, html[data-live] set by custom.js) */
+@media (pointer: fine) and (min-width: 1025px) {
+  html[data-live] #widgets-wrap > .information-widget-greeting { display: none !important; }
+  html[data-live] #widgets-wrap { padding-left: 68px; }
+  /* a thin vertical divider between the crest and the disks, like the separators in a macOS menu bar (user) */
+  html[data-live] #widgets-wrap::before {
+    content: ""; display: block !important; position: absolute; left: 50px; top: 50%; width: 1px; height: 24px; margin-top: -12px;
+    background: rgba(255, 255, 255, 0.28);  /* display forced: an earlier rule hides this pseudo-element */
+  }
+  html[data-live] #widgets-wrap > .widget-container:has(.information-widget-resource) { margin: 0 22px 0 0 !important; }
+}
+
+/* the crest on a squircle plate, matching the disks' tiles beside it (user 16/10/2026, option C of three rendered):
+   a 36 px light glass plate with the crest at 28 px. Desktop menu bar only */
+@media (pointer: fine) and (min-width: 1025px) {
+  #widgets-wrap > .information-widget-logo { width: 36px; height: 36px; display: grid !important; place-items: center; isolation: isolate; }
+  #widgets-wrap > .information-widget-logo::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.06));
+    -webkit-mask: var(--mac-squircle) center / 100% 100% no-repeat; mask: var(--mac-squircle) center / 100% 100% no-repeat;
+  }
+  #widgets-wrap > .information-widget-logo img { width: 28px !important; height: 28px !important; max-width: none !important; object-fit: contain; }
+  /* centred: Homepage's wrapper round the crest has a 12 px right margin from the old layout (it pushed the crest
+     6 px left of the plate's centre) */
+  #widgets-wrap > .information-widget-logo > * { margin: 0 !important; }
+}

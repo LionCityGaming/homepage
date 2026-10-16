@@ -989,6 +989,248 @@
     if (!root.dataset.pill) requestAnimationFrame(() => requestAnimationFrame(() => { root.dataset.pill = "1"; }));  // no slide on first paint
   }
 
+  /* ---------- Live Activities (16/10/2026; on for everyone on desktop since the same day, ?live=0 hides them, ?live=demo
+     shows sample data): like the macOS
+     menu bar, compact capsules just before the weather that appear only while something is happening. Built to grow:
+     each source below reads its data (through Homepage's own proxy, so no keys reach the page; ESPN's public
+     scoreboard directly) and returns capsules; add a source by adding a block to LIVE_SOURCES. Capsules are sorted by
+     PRIORITY (problems first), at most LIVE_MAX show and the rest fold into a "+N" capsule; hover shows details ---------- */
+  const LIVE = PARAMS.get("live") !== "0" && !PHONE.matches;  // desktop only (phones hide the menu bar's right side)
+  const LIVE_DEMO = PARAMS.get("live") === "demo";
+  const LIVE_MAX = 6;
+  // the football team followed in the menu bar: ESPN's abbreviation and display name, and the ESPN competitions to
+  // look in (league codes from site.api.espn.com/apis/site/v2/sports/soccer/<code>/scoreboard)
+  const LIVE_TEAM = { abbr: "CHE", name: "Chelsea", leagues: ["eng.1", "uefa.champions", "uefa.europa", "uefa.europa.conf", "eng.fa", "eng.league_cup"] };
+  const MDI = (name) => "https://cdn.jsdelivr.net/npm/@mdi/svg@7/svg/" + name + ".svg";
+  // lower = further left; within a group the order of the sources
+  const PRIORITY = { down: 0, warn: 1, sport: 2, soon: 3, day: 4, home: 5, media: 6, download: 7 };
+  let liveItems = [], liveTick = 0, liveCache = {};
+  const proxy = (q) => fetch("/api/services/proxy?" + q, { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+  const haRows = (i) => proxy("group=Infrastructure&service=Home%20Assistant&index=" + i).then((d) => (Array.isArray(d) ? d : []));
+  function shortTime(min) {  // the Homepage standard: "42 min", "1 hr 5 min"
+    if (!(min >= 0)) return "";
+    if (min < 60) return Math.max(1, Math.round(min)) + " min";
+    const h = Math.floor(min / 60), m = Math.round(min % 60);
+    return h + " hr" + (m ? " " + m + " min" : "");
+  }
+  const hhmm = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  const pill = (o) => Object.assign({ tone: "", mono: false, pct: 0, tip: "" }, o);
+
+  // Each source: { every: seconds between reads, read: () => Promise of capsules }. Results are cached between reads.
+  const LIVE_SOURCES = {
+    // Home Assistant (hidden widgets 3-6 on the Home Assistant card): doors, blinds, washer, vacuum, Spotify, calendars
+    home: { every: 15, read: () => Promise.all([3, 4, 5, 6].map(haRows)).then((ws) => {
+      const rows = [].concat(...ws), v = (l) => String((rows.find((x) => x.label === l) || {}).value || "").trim();
+      const out = [];
+      if (/^on$/i.test(v("Front Door"))) out.push(pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Front Door Open", tip: "The front door is open" }));
+      if (/^on$/i.test(v("Gate"))) out.push(pill({ group: "warn", icon: MDI("gate-open"), mono: true, tone: "warn", text: "Gate Unlocked", tip: "The gate lock reports unlocked" }));
+      if (/^(open|opening)$/i.test(v("Blinds")) && /below/i.test(v("Sun"))) out.push(pill({ group: "warn", icon: MDI("blinds-open"), mono: true, tone: "warn", text: "Blinds Open", tip: "The blinds are still open after dark" }));
+      const ws_ = v("Washer Status"), left = parseFloat(v("Washer Left"));
+      if (ws_ && !/^(not run|unknown|unavailable)$/i.test(ws_)) {
+        const done = /completed/i.test(ws_), stage = /^washing$/i.test(ws_) ? "" : ws_;
+        out.push(pill({ group: "home", icon: MDI(/dry/i.test(ws_) ? "tumble-dryer" : "washing-machine"), mono: true, tone: done ? "good" : "",
+          text: done ? "Washer Done" : "Washer" + (stage ? " · " + stage : "") + (left > 0 ? " · " + shortTime(left) : ""),
+          tip: "Washer: " + ws_ + (left > 0 && !done ? ", about " + shortTime(left) + " left" : "") }));
+      }
+      const vac = v("Vacuum"), vp = parseFloat(v("Vacuum Progress"));
+      if (/^(cleaning|returning)$/i.test(vac)) out.push(pill({ group: "home", icon: MDI("robot-vacuum"), mono: true, pct: /cleaning/i.test(vac) ? vp : 0,
+        text: /returning/i.test(vac) ? "Vacuum Returning" : "Vacuum" + (vp > 0 ? " · " + Math.round(vp) + "%" : ""), tip: "Vacuum: " + vac + (vp > 0 ? ", " + Math.round(vp) + "% done" : "") }));
+      // every reading labelled "Spotify <name>" (one per account in services.yaml); the name shows on hover
+      rows.filter((x) => /^Spotify /.test(x.label || "")).forEach((x) => {
+        const who = x.label.slice(8), [st, title, artist] = String(x.value || "").trim().split("|");
+        const art = artist && !/^\{/.test(artist) ? artist : "";
+        if (/^playing$/i.test(st) && title && !/^\{/.test(title)) out.push(pill({ group: "media", icon: ICON_URL("spotify"), text: title + (art ? " · " + art : ""), tip: who + " · " + title + (art ? " · " + art : "") }));
+      });
+      // calendar: an event starting within 30 minutes
+      [["Work Next", "calendar-clock"], ["Family Next", "calendar-heart"]].forEach(([l, ic]) => {
+        const [msg, start] = v(l).split("|");
+        const t = start ? Date.parse(start.replace(" ", "T")) : NaN, mins = (t - Date.now()) / 60000;
+        if (msg && !/^\{/.test(msg) && mins > 0 && mins <= 30) out.push(pill({ group: "soon", icon: MDI(ic), mono: true, text: msg + " · in " + shortTime(mins), tip: msg + " at " + hhmm(new Date(t)) }));
+      });
+      const [bOn, bMsg] = v("Birthday").split("|"), [hOn, hMsg] = v("Holiday").split("|");
+      if (/^on$/i.test(bOn) && bMsg) out.push(pill({ group: "day", icon: MDI("cake-variant"), mono: true, tone: "good", text: bMsg, tip: "Today: " + bMsg }));
+      if (/^on$/i.test(hOn) && hMsg) out.push(pill({ group: "day", icon: MDI("party-popper"), mono: true, tone: "good", text: hMsg, tip: "Public holiday: " + hMsg }));
+      return out;
+    }) },
+    // problems: services down (Gatus), containers and stacks not running or unhealthy, by name and with their state
+    // (Komodo: the hidden third and fourth widgets on its tile list every stack and container; the summary's counts
+    // catch anything the list misses), a drive failing (Scrutiny)
+    problems: { every: 30, read: () => Promise.all([
+      proxy("group=Infrastructure&service=Gatus&index=0&endpoint=status"),
+      proxy("group=Infrastructure&service=Komodo&index=0&endpoint=containers"),
+      proxy("group=Infrastructure&service=Komodo&index=2"),
+      proxy("group=Infrastructure&service=Scrutiny&index=1"),
+      proxy("group=Infrastructure&service=Komodo&index=3"),
+    ]).then(([gatus, ct, stacks, scr, cons]) => {
+      const out = [];
+      const down = (Array.isArray(gatus) ? gatus : []).filter((e) => { const r = (e.results || []).slice(-1)[0]; return r && r.success === false; }).map((e) => e.name);
+      if (down.length) out.push(pill({ group: "down", icon: MDI("alert-circle"), mono: true, tone: "bad", text: down.length === 1 ? down[0] + " Down" : down.length + " Services Down", tip: "Down (Gatus): " + down.join(", ") }));
+      // the word for a state: "Down" for stopped/exited/dead, otherwise the state itself ("Unhealthy", "Restarting")
+      const word = (st) => (/^(down|stopped|exited|dead|created|removing)$/i.test(st) ? "Down" : st.charAt(0).toUpperCase() + st.slice(1).toLowerCase());
+      const pretty = (n) => n.replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      // containers: not running, or running but reporting "(unhealthy)"
+      const badC = (Array.isArray(cons) ? cons : []).map((x) => ({ name: x.name || "", st: /unhealthy/i.test(x.status || "") ? "unhealthy" : x.state || "" }))
+        .filter((x) => x.name && !/^running$/i.test(x.st));
+      // stacks: anything but running or deploying
+      const badS = (Array.isArray(stacks) ? stacks : []).filter((x) => x && x.info && !/^(running|deploying)$/i.test(x.info.state || "running"))
+        .map((x) => ({ name: x.name, st: x.info.state }));
+      const cCount = ct ? (ct.stopped || 0) + (ct.unhealthy || 0) : 0;
+      if (badC.length) out.push(pill({ group: "down", icon: MDI("docker"), mono: true, tone: "bad",
+        text: badC.length === 1 ? pretty(badC[0].name) + " " + word(badC[0].st) : badC.length + " Containers " + (badC.every((x) => /unhealthy/i.test(x.st)) ? "Unhealthy" : "Down"),
+        tip: "Komodo: " + badC.map((x) => x.name + " " + word(x.st).toLowerCase()).join(", ") }));
+      else if (cCount) out.push(pill({ group: "down", icon: MDI("docker"), mono: true, tone: "bad", text: cCount + (cCount === 1 ? " Container " : " Containers ") + ((ct.unhealthy || 0) && !(ct.stopped || 0) ? "Unhealthy" : "Down"),
+        tip: "Komodo: " + ct.running + " of " + ct.total + " containers running, " + (ct.stopped || 0) + " stopped, " + (ct.unhealthy || 0) + " unhealthy" }));
+      if (badS.length && !badC.length) out.push(pill({ group: "down", icon: MDI("layers-triple"), mono: true, tone: "bad",
+        text: badS.length === 1 ? pretty(badS[0].name) + " Stack " + word(badS[0].st) : badS.length + " Stacks Down", tip: "Komodo stacks: " + badS.map((x) => x.name + " " + x.st).join(", ") }));
+      const drives = Object.values(((scr || {}).data || {}).summary || {}).filter((x) => !(x.device || {}).archived && ((x.device || {}).device_status || 0) !== 0);
+      if (drives.length) out.push(pill({ group: "down", icon: MDI("harddisk"), mono: true, tone: "bad", text: drives.length === 1 ? "Drive Failing" : drives.length + " Drives Failing", tip: "Scrutiny: " + drives.map((x) => (x.device || {}).device_name || (x.device || {}).model_name || "drive").join(", ") }));
+      return out;
+    }) },
+    // your team (LIVE_TEAM): kick-off countdown from 3 hours before, the live score and minute, full time for 4 hours
+    // after (ESPN's public scoreboard, read directly; every competition in LIVE_TEAM.leagues)
+    team: { every: 60, read: () => Promise.all(LIVE_TEAM.leagues.map((lg) =>
+      fetch("https://site.api.espn.com/apis/site/v2/sports/soccer/" + lg + "/scoreboard", { cache: "no-store" }).then((r) => r.json()).catch(() => null))).then((boards) => {
+      const out = [];
+      boards.forEach((b) => ((b || {}).events || []).forEach((e) => {
+        const c = (e.competitions || [])[0]; if (!c) return;
+        const teams = c.competitors || [];
+        if (!teams.some((t) => (t.team || {}).abbreviation === LIVE_TEAM.abbr || (t.team || {}).displayName === LIVE_TEAM.name)) return;
+        const home = teams.find((t) => t.homeAway === "home") || teams[0], away = teams.find((t) => t.homeAway === "away") || teams[1];
+        const ab = (t) => (t.team || {}).abbreviation || "", ko = Date.parse(e.date), now = Date.now(), state = ((c.status || {}).type || {}).state;
+        const score = ab(home) + " " + (home.score || 0) + "–" + (away.score || 0) + " " + ab(away);
+        if (state === "in") out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: score + " · " + ((c.status || {}).displayClock || "Live"), tip: e.name + " · live" }));
+        else if (state === "pre" && ko - now > 0 && ko - now <= 3 * 3600e3) out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true,
+          text: ab(home) + " v " + ab(away) + " · " + (ko - now <= 3600e3 ? "in " + shortTime((ko - now) / 60000) : hhmm(new Date(ko))), tip: e.name + " · kick-off " + hhmm(new Date(ko)) }));
+        else if (state === "post" && now - ko <= 4 * 3600e3) out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true, text: "FT " + score, tip: e.name + " · full time" }));
+      }));
+      return out;
+    }) },
+    // media: Plex (Tautulli on the Home tab's Plex card), up to two streams
+    plex: { every: 15, read: () => proxy("group=Home&service=Plex%20Media%20Server&index=0&endpoint=get_activity").then((d) =>
+      ((((d || {}).response || {}).data || {}).sessions || []).slice(0, 2).map((s) => {
+        const ep = s.media_type === "episode" && s.parent_media_index ? " · S" + String(s.parent_media_index).padStart(2, "0") + "E" + String(s.media_index).padStart(2, "0") : "";
+        const name = (s.grandparent_title || s.title || "Plex") + ep;
+        return pill({ group: "media", icon: ICON_URL("plex"), text: (s.state === "paused" ? "❚❚ " : "") + name, pct: +s.progress_percent || 0,
+          tip: (s.full_title || name) + " · " + (s.state || "playing") + " · " + (s.progress_percent || 0) + "%" + (s.player ? " · " + s.player : "") });
+      })) },
+    // downloads: SABnzbd
+    downloads: { every: 15, read: () => proxy("group=Media%20Acquisition&service=SABnzbd&index=0&endpoint=queue").then((d) => {
+      const q = (d || {}).queue;
+      if (!q || !(q.slots || []).length || !/downloading/i.test(q.status || "")) return [];
+      const mb = parseFloat(q.mb), mbleft = parseFloat(q.mbleft), pct = mb > 0 ? Math.round((1 - mbleft / mb) * 100) : 0;
+      const tl = String(q.timeleft || "").split(":").map(Number), mins = tl.length === 3 ? tl[0] * 60 + tl[1] + tl[2] / 60 : NaN;
+      return [pill({ group: "download", icon: ICON_URL("sabnzbd"), text: "Downloading" + (mins >= 0 ? " · " + shortTime(mins) : ""), pct,
+        tip: q.slots.length + (q.slots.length === 1 ? " download" : " downloads") + " · " + pct + "% · " + (q.speed || "") + "B/s" })];
+    }) },
+  };
+  const LIVE_DEMO_ITEMS = [
+    pill({ group: "down", icon: MDI("alert-circle"), mono: true, tone: "bad", text: "Immich Down", tip: "Down (Gatus): Immich" }),
+    pill({ group: "down", icon: MDI("docker"), mono: true, tone: "bad", text: "Immich Server Unhealthy", tip: "Komodo: immich_server unhealthy" }),
+    pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Front Door Open", tip: "The front door is open" }),
+    pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: "EVE 0–1 CHE · 63'", tip: "Chelsea at Everton · live" }),
+    pill({ group: "soon", icon: MDI("calendar-clock"), mono: true, text: "Team Meeting · in 15 min", tip: "Team Meeting at 10:00" }),
+    pill({ group: "home", icon: MDI("washing-machine"), mono: true, text: "Washer · Rinse · 42 min", tip: "Washer: Rinse, about 42 min left" }),
+    pill({ group: "media", icon: ICON_URL("plex"), text: "The Bear · S04E03", pct: 38, tip: "The Bear - S04E03 · playing · 38%" }),
+    pill({ group: "media", icon: ICON_URL("spotify"), text: "Please Please Please · Sabrina Carpenter", tip: "You · Please Please Please · Sabrina Carpenter" }),
+    pill({ group: "download", icon: ICON_URL("sabnzbd"), text: "Downloading · 3 min", pct: 64, tip: "1 download · 64% · 48 MB/s" }),
+  ];
+  function livePoll() {
+    if (!LIVE) return;
+    if (LIVE_DEMO) { liveItems = LIVE_DEMO_ITEMS; liveRender(); return; }
+    const due = Object.keys(LIVE_SOURCES).filter((k) => liveTick % (LIVE_SOURCES[k].every / 15) === 0);
+    liveTick++;
+    Promise.all(due.map((k) => LIVE_SOURCES[k].read().then((items) => { liveCache[k] = items; }).catch(() => {}))).then(() => {
+      const all = [].concat(...Object.keys(LIVE_SOURCES).map((k) => liveCache[k] || []));
+      all.sort((a, b) => (PRIORITY[a.group] ?? 9) - (PRIORITY[b.group] ?? 9));
+      liveItems = all.length > LIVE_MAX ? all.slice(0, LIVE_MAX - 1).concat(pill({ group: "more", icon: MDI("dots-horizontal"), mono: true,
+        text: "+" + (all.length - LIVE_MAX + 1), tip: all.slice(LIVE_MAX - 1).map((x) => x.text).join(" · ") })) : all;
+      liveRender();
+    });
+  }
+  function liveRender() {
+    if (!LIVE) return;
+    if (!root.dataset.live) root.dataset.live = "1";  // custom.css: the disks move beside the crest to make room
+    const w = document.querySelector(".hp-weather");
+    const anchor = w && (w.closest(".widget-container") || w);
+    if (!anchor || !anchor.parentElement) return;
+    let box = document.getElementById("hp-live");
+    if (!box) { box = document.createElement("div"); box.id = "hp-live"; box.setAttribute("aria-label", "Live Activities"); }
+    if (box.nextElementSibling !== anchor) anchor.parentElement.insertBefore(box, anchor);
+    const sig = liveItems.map((it) => it.text + "|" + it.pct + "|" + it.tone).join(";");
+    if (box.dataset.sig === sig) return;  // nothing changed since the last read
+    box.dataset.sig = sig;
+    box.textContent = "";
+    liveItems.forEach((it) => {
+      const el = document.createElement("div");
+      el.className = "hp-live-pill" + (it.tone ? " hp-live-" + it.tone : "");
+      el.title = it.tip;
+      const icon = document.createElement("span");
+      icon.className = "hp-live-icon" + (it.mono ? " hp-live-mono" : "");
+      if (it.mono) icon.style.setProperty("--live-icon", 'url("' + it.icon + '")'); else icon.style.backgroundImage = 'url("' + it.icon + '")';
+      const text = document.createElement("span");
+      text.className = "hp-live-text";
+      const inner = document.createElement("span");
+      inner.textContent = it.text;
+      text.appendChild(inner);
+      el.append(icon, text);
+      if (it.pct > 0) {  // progress ring
+        el.insertAdjacentHTML("beforeend", '<svg class="hp-live-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><circle cx="10" cy="10" r="8" pathLength="100" style="stroke-dasharray:' + Math.min(100, it.pct) + ' 100"></circle></svg>');
+      }
+      box.appendChild(el);
+    });
+    // text too long for its capsule glides back and forth continuously (custom.css .hp-live-long), at an even reading
+    // speed, instead of being cut off with "..."
+    box.querySelectorAll(".hp-live-text").forEach((t) => {
+      const over = t.firstChild.scrollWidth - t.clientWidth;
+      if (over > 2) {
+        t.parentElement.classList.add("hp-live-long");
+        t.style.setProperty("--shift", -over + "px");
+        t.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second
+      }
+    });
+  }
+
+  /* ---------- idle dimming for the OLED monitor (16/10/2026; on for everyone on desktop since the same day, after 10
+     minutes; ?idle=<seconds> sets another time, e.g. ?idle=10 to try it, ?idle=0 switches it off):
+     after that long without mouse, keyboard or touch, the page fades to near black with a dim clock that moves a
+     little every minute (so nothing sits still on the panel), and the page's own animations pause. Any movement
+     brings it straight back; that first click only wakes the page ---------- */
+  const IDLE_S = PARAMS.has("idle") ? parseInt(PARAMS.get("idle"), 10) || 0 : 600;
+  let idleTimer = 0, idleClock = 0;
+  function idleTick() {
+    const el = document.getElementById("hp-idle");
+    if (!el) return;
+    const now = new Date();
+    el.querySelector(".hp-idle-time").textContent = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    el.querySelector(".hp-idle-date").textContent = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+    // a small drift each minute: up to 6 % of the screen from the centre
+    const k = Math.floor(now.getTime() / 60000);
+    el.style.setProperty("--dx", ((k * 37) % 13 - 6) + "vw");
+    el.style.setProperty("--dy", ((k * 53) % 13 - 6) + "vh");
+  }
+  function idleOn() {
+    if (document.getElementById("hp-idle")) return;
+    document.body.insertAdjacentHTML("beforeend", '<div id="hp-idle" aria-hidden="true"><div class="hp-idle-clock"><div class="hp-idle-time"></div><div class="hp-idle-date"></div></div></div>');
+    idleTick();
+    idleClock = setInterval(idleTick, 15000);
+    requestAnimationFrame(() => { root.dataset.idle = "1"; });
+  }
+  function idleWake(e) {
+    const el = document.getElementById("hp-idle");
+    if (el) {
+      if (e && (e.type === "pointerdown" || e.type === "click")) { e.preventDefault(); e.stopPropagation(); }  // the waking click does nothing else
+      delete root.dataset.idle;
+      clearInterval(idleClock);
+      setTimeout(() => el.remove(), 400);
+    }
+    clearTimeout(idleTimer);
+    if (IDLE_S > 0 && !PHONE.matches) idleTimer = setTimeout(idleOn, IDLE_S * 1000);
+  }
+  if (IDLE_S > 0) {
+    ["pointermove", "pointerdown", "keydown", "wheel", "touchstart"].forEach((t) => document.addEventListener(t, idleWake, { capture: true, passive: t !== "pointerdown" }));
+    idleWake();
+  }
+
   /* ---------- run everything on load and whenever the page changes ---------- */
   function run() {
     tabs();
@@ -1015,6 +1257,7 @@
     dock();
     tabPill();
     dockRoom();
+    liveRender();
   }
 
   /* ---------- smooth loading (07/10/2026, Mac theme): a newly opened tab stays invisible while the
@@ -1079,6 +1322,8 @@
   setInterval(scrutinyPoll, 60000);
   notesPoll();
   setInterval(notesPoll, 15000);
+  livePoll();
+  if (LIVE) setInterval(livePoll, 15000);
   // sample banners: a normal one and a priority 8 one that stays; ?note=hold keeps both on screen (for screenshots)
   if (/^(test|hold)$/.test(PARAMS.get("note") || "")) setTimeout(() => {
     const hold = PARAMS.get("note") === "hold";
