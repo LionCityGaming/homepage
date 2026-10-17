@@ -1116,6 +1116,16 @@
   }
   const hhmm = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   const pill = (o) => Object.assign({ tone: "", mono: false, pct: 0, tip: "" }, o);
+  // a club badge from ESPN: its version for dark backgrounds (white where the crest is dark, e.g. Spurs), resized to
+  // 64 px by ESPN's image server; setBadge falls back to the normal badge for clubs without one (e.g. Coventry)
+  const espnBadge = (u) => String(u || "").replace(/^https:\/\/a\.espncdn\.com\/i\/teamlogos\/soccer\/500\/(.+\.png)$/, "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500-dark/$1&h=64&w=64");
+  function setBadge(el, u) {
+    if (!/\/500-dark\//.test(u)) { el.style.backgroundImage = 'url("' + u + '")'; return; }
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = 'url("' + u + '")'; };
+    im.onerror = () => { el.style.backgroundImage = 'url("' + u.replace("/500-dark/", "/500/") + '")'; };
+    im.src = u;
+  }
 
   // Each source: { every: seconds between reads, read: () => Promise of items }. Results are cached between reads.
   const LIVE_SOURCES = {
@@ -1202,10 +1212,19 @@
         const home = teams.find((t) => t.homeAway === "home") || teams[0], away = teams.find((t) => t.homeAway === "away") || teams[1];
         const ab = (t) => (t.team || {}).abbreviation || "", ko = Date.parse(e.date), now = Date.now(), state = ((c.status || {}).type || {}).state;
         const score = ab(home) + " " + (home.score || 0) + "–" + (away.score || 0) + " " + ab(away);
-        if (state === "in") out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: score + " · " + ((c.status || {}).displayClock || "Live"), tip: e.name + " · live" }));
-        else if (state === "pre" && ko - now > 0 && ko - now <= 3 * 3600e3) out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true,
-          text: ab(home) + " v " + ab(away) + " · " + (ko - now <= 3600e3 ? "in " + shortTime((ko - now) / 60000) : hhmm(new Date(ko))), tip: e.name + " · kick-off " + hhmm(new Date(ko)) }));
-        else if (state === "post" && now - ko <= 4 * 3600e3) out.push(pill({ group: "sport", icon: MDI("soccer"), mono: true, text: "FT " + score, tip: e.name + " · full time" }));
+        // the two club badges either side of the text, home then away like the score (espnBadge; user 17/10/2026);
+        // the football icon stays if a badge is missing
+        const logo = (t) => espnBadge((t.team || {}).logo);
+        const badges = logo(home) && logo(away) ? { icon: logo(home), mono: false, badge2: logo(away) } : {};
+        const p = (o) => pill(Object.assign(o, badges));
+        // the first line is always the score (or "EVE v CHE" before kick-off), centred between the badges; the match
+        // state goes on the second line: the minute, Half-Time, Kick-Off time, Full-Time (user 17/10/2026)
+        const st = ((c.status || {}).type || {}).name || "";
+        const phase = { STATUS_HALFTIME: "Half-Time", STATUS_END_OF_REGULATION: "End of 90", STATUS_HALFTIME_ET: "Extra Time Half-Time", STATUS_SHOOTOUT: "Penalties" }[st];
+        if (state === "in") out.push(p({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: score + " · " + (phase || (c.status || {}).displayClock || "Live"), tip: e.name + " · live" }));
+        else if (state === "pre" && ko - now > 0 && ko - now <= 3 * 3600e3) out.push(p({ group: "sport", icon: MDI("soccer"), mono: true,
+          text: ab(home) + " v " + ab(away) + " · Kick-Off " + (ko - now <= 3600e3 ? "in " + shortTime((ko - now) / 60000) : hhmm(new Date(ko))), tip: e.name + " · kick-off " + hhmm(new Date(ko)) }));
+        else if (state === "post" && now - ko <= 4 * 3600e3) out.push(p({ group: "sport", icon: MDI("soccer"), mono: true, text: score + " · Full-Time", tip: e.name + " · full time" }));
       }));
       return out;
     }) },
@@ -1232,7 +1251,8 @@
     pill({ group: "down", icon: MDI("alert-circle"), mono: true, tone: "bad", text: "Immich Down", tip: "Down (Gatus): Immich" }),
     pill({ group: "down", icon: MDI("docker"), mono: true, tone: "bad", text: "Immich Server Unhealthy", tip: "Komodo: immich_server unhealthy" }),
     pill({ group: "warn", icon: MDI("door-open"), mono: true, tone: "warn", text: "Front Door Open", tip: "The front door is open" }),
-    pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: "EVE 0–1 CHE · 63'", tip: "Chelsea at Everton · live" }),
+    pill({ group: "sport", icon: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500-dark/368.png&h=64&w=64", badge2: "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500-dark/363.png&h=64&w=64",
+      tone: "live", text: "EVE 0–1 CHE · 63'", tip: "Chelsea at Everton · live" }),
     pill({ group: "soon", icon: MDI("calendar-clock"), mono: true, text: "Team Meeting · in 15 min", tip: "Team Meeting at 10:00" }),
     pill({ group: "home", icon: MDI("washing-machine"), mono: true, text: "Washer · Rinsing", tip: "Washer: Rinse" }),
     pill({ group: "media", icon: ICON_URL("plex"), text: "The Bear · S04E03 · Sam", pct: 38, tip: "The Bear - S04E03 · playing · 38%" }),
@@ -1271,7 +1291,7 @@
       el.title = it.tip;
       const icon = document.createElement("span");
       icon.className = "hp-live-icon" + (it.mono ? " hp-live-mono" : "");
-      if (it.mono) icon.style.setProperty("--live-icon", 'url("' + it.icon + '")'); else icon.style.backgroundImage = 'url("' + it.icon + '")';
+      if (it.mono) icon.style.setProperty("--live-icon", 'url("' + it.icon + '")'); else setBadge(icon, it.icon);
       // two lines, like the drives beside them (17/10/2026): the main part over the detail, split at the first " · "
       // ("Washer · Cooling", "Song · Artist", "ARS v CHE · 2-1 · 67'"); a plain warning stays one line
       const text = document.createElement("span");
@@ -1286,6 +1306,12 @@
         text.appendChild(line);
       });
       el.append(icon, text);
+      if (it.badge2) {  // a match: the away club's badge after the text
+        const b2 = document.createElement("span");
+        b2.className = "hp-live-icon hp-live-badge";
+        setBadge(b2, it.badge2);
+        el.appendChild(b2);
+      }
       if (it.pct > 0) {  // progress ring
         el.insertAdjacentHTML("beforeend", '<svg class="hp-live-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><circle cx="10" cy="10" r="8" pathLength="100" style="stroke-dasharray:' + Math.min(100, it.pct) + ' 100"></circle></svg>');
       }
@@ -1302,6 +1328,113 @@
       }
     });
   }
+
+  /* ---------- this gameweek's Premier League matches (18/10/2026, user: "a way to show all of this gameweek's EPL
+     results"): a small "Gameweek 7" button in the empty top-left corner of the EPL table card (user: "tiny button
+     top-left"; it sat in the menu bar for the first hour), or the match Live Activity, opens a floating panel with every match
+     of the gameweek by day: badges, score or kick-off time, and the state (the minute, HT, FT). Fantasy Premier League
+     says which gameweek is on and its match days (hidden widget 7 on the Home Assistant card); ESPN's scoreboard for
+     each of those days gives the rest. LIVE_TEAM's match is highlighted. Click outside, the button again or Esc closes
+     it; while open it refreshes every minute ---------- */
+  let gwTimer = 0, gwNum = 0;
+  // the button: Homepage's side, over the table (the table itself is a Home Assistant page in a frame), lined up with
+  // the table's rows (15 px in) and centred on its column headings (measured 18/10/2026)
+  function gwButton() {
+    const f = document.querySelector("iframe.epl");
+    if (!f || !f.offsetWidth || PHONE.matches) return;
+    const card = f.closest(".service-card");
+    let b = document.getElementById("hp-gw-btn");
+    if (!b || b.parentElement !== card) {
+      if (b) b.remove();
+      b = document.createElement("button"); b.id = "hp-gw-btn"; b.type = "button";
+      b.title = "Premier League: this gameweek's matches";
+      b.innerHTML = '<span class="hp-gw-btn-icon"></span><span class="hp-gw-btn-text">' + (gwNum ? "Gameweek " + gwNum : "Gameweek") + "</span>";
+      // the Premier League lion (simple-icons, one colour, drawn white like the other icons; user 18/10/2026)
+      b.firstChild.style.setProperty("--live-icon", 'url("https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/premierleague.svg")');
+      card.appendChild(b);
+      if (!gwNum) proxy("group=Infrastructure&service=Home%20Assistant&index=7").then((st) => {
+        gwNum = ((((st || {}).status || [])[0]) || {}).event || 0;
+        const t = document.querySelector("#hp-gw-btn .hp-gw-btn-text");
+        if (t && gwNum) t.textContent = "Gameweek " + gwNum;
+      });
+    }
+    const fr = f.getBoundingClientRect(), cr = card.getBoundingClientRect();
+    const left = Math.round(fr.left - cr.left + 15) + "px", top = Math.round(fr.top - cr.top + 14) + "px";
+    if (b.style.left !== left) b.style.left = left;
+    if (b.style.top !== top) b.style.top = top;
+  }
+  const gwDay = (d) => d.toLocaleDateString("en-GB", { weekday: "short" }) + " " + d.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" });
+  function gwLoad() {
+    return proxy("group=Infrastructure&service=Home%20Assistant&index=7").then((st) => {
+      const days = ((st || {}).status || []).map((x) => x.date).filter(Boolean), num = (((st || {}).status || [])[0] || {}).event;
+      if (num) gwNum = num;
+      if (!days.length) throw new Error("no gameweek");
+      return Promise.all(days.map((d) => fetch("https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=" + d.replace(/-/g, ""), { cache: "no-store" })
+        .then((r) => r.json()).catch(() => null))).then((boards) => {
+        const seen = {}, games = [];
+        boards.forEach((b) => ((b || {}).events || []).forEach((e) => { if (!seen[e.id]) { seen[e.id] = 1; games.push(e); } }));
+        games.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+        return { num, games };
+      });
+    });
+  }
+  function gwRender(panel, data) {
+    const body = panel.querySelector(".hp-gw-body");
+    if (!data) { body.innerHTML = '<div class="hp-gw-empty">Couldn\'t load the gameweek</div>'; return; }
+    panel.querySelector(".hp-gw-title").textContent = data.num ? "Gameweek " + data.num : "This Gameweek";
+    body.textContent = "";
+    let lastDay = "";
+    data.games.forEach((e) => {
+      const c = (e.competitions || [])[0] || {}, teams = c.competitors || [];
+      const home = teams.find((t) => t.homeAway === "home") || teams[0] || {}, away = teams.find((t) => t.homeAway === "away") || teams[1] || {};
+      const ko = new Date(e.date), type = (c.status || {}).type || {}, state = type.state;
+      const day = gwDay(ko);
+      if (day !== lastDay) { lastDay = day; const h = document.createElement("div"); h.className = "hp-gw-day"; h.textContent = day; body.appendChild(h); }
+      const row = document.createElement("div");
+      const ours = [home, away].some((t) => (t.team || {}).abbreviation === LIVE_TEAM.abbr);
+      row.className = "hp-gw-row" + (ours ? " hp-gw-ours" : "") + (state === "in" ? " hp-gw-live" : "");
+      const cell = (cls, text) => { const x = document.createElement("span"); x.className = cls; if (text != null) x.textContent = text; return x; };
+      const badge = (t) => { const x = cell("hp-gw-badge"), u = espnBadge((t.team || {}).logo); if (u) setBadge(x, u); return x; };
+      const name = (t) => (t.team || {}).shortDisplayName || (t.team || {}).displayName || (t.team || {}).abbreviation || "";
+      const mid = state === "pre" ? "v" : (home.score || 0) + "–" + (away.score || 0);
+      const status = state === "pre" ? hhmm(ko) : type.name === "STATUS_HALFTIME" ? "HT" : state === "in" ? ((c.status || {}).displayClock || "Live") : (type.shortDetail || "FT");
+      row.append(cell("hp-gw-home", name(home)), badge(home), cell("hp-gw-score" + (state === "pre" ? " hp-gw-v" : ""), mid), badge(away), cell("hp-gw-away", name(away)), cell("hp-gw-state", status));
+      row.title = (e.name || "") + " · " + (type.description || "");
+      body.appendChild(row);
+    });
+    if (!data.games.length) body.innerHTML = '<div class="hp-gw-empty">No matches found</div>';
+  }
+  function gwClose() {
+    const panel = document.getElementById("hp-gw");
+    clearInterval(gwTimer); gwTimer = 0;
+    if (!panel) return;
+    panel.dataset.out = "1";
+    setTimeout(() => panel.remove(), 200);
+  }
+  function gwOpen(from) {
+    const panel = document.createElement("div");
+    panel.id = "hp-gw"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Premier League gameweek");
+    panel.innerHTML = '<div class="hp-gw-head"><span class="hp-gw-league">Premier League</span><span class="hp-gw-title">Gameweek</span></div><div class="hp-gw-body"><div class="hp-gw-empty">Loading…</div></div>';
+    document.body.appendChild(panel);
+    // under what was clicked, kept on screen: from the table's button it drops down over the table, its left edge
+    // just outside the button's; from the match box it is centred under the box
+    const r = from.getBoundingClientRect(), onTable = from.id === "hp-gw-btn";
+    panel.style.top = Math.round(r.bottom + (onTable ? 8 : 12)) + "px";
+    const want = onTable ? r.left - 8 : r.left + r.width / 2 - panel.offsetWidth / 2;
+    panel.style.left = Math.round(Math.max(12, Math.min(window.innerWidth - panel.offsetWidth - 12, want))) + "px";
+    const load = () => gwLoad().then((d) => gwRender(panel, d)).catch(() => gwRender(panel, null));
+    load();
+    gwTimer = setInterval(() => { if (document.getElementById("hp-gw")) load(); }, 60000);
+  }
+  document.addEventListener("click", (ev) => {
+    const open = document.getElementById("hp-gw"), from = ev.target.closest && ev.target.closest("#hp-gw-btn, .hp-live-pill:has(.hp-live-badge)");
+    if (from) { if (open) gwClose(); else gwOpen(from); return; }
+    if (open && !ev.target.closest("#hp-gw")) gwClose();
+  });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && document.getElementById("hp-gw")) gwClose(); });
+  // it is placed for where the button was, so scrolling the page or switching tabs closes it
+  window.addEventListener("scroll", () => { if (document.getElementById("hp-gw")) gwClose(); }, { passive: true });
+  document.addEventListener("click", (ev) => { if (ev.target.closest && ev.target.closest('#myTab [role="tab"]') && document.getElementById("hp-gw")) gwClose(); }, true);
 
   /* ---------- idle dimming for the OLED monitor (16/10/2026; on for everyone on desktop since the same day, after 10
      minutes; ?idle=<seconds> sets another time, e.g. ?idle=10 to try it, ?idle=0 switches it off):
@@ -1374,6 +1507,7 @@
     dockRoom();
     trendDraw();
     liveRender();
+    gwButton();
     rightBox();  // after the Live Activities, which move the weather
   }
 

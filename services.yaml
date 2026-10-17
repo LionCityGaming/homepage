@@ -451,6 +451,14 @@
                 value: "{state}|{attributes.message}"
               - state: binary_sensor.storeroom_door_sensor_contact   # on = open (Live Activities only; 16/10/2026)
                 label: Store Room
+          # not shown: the Premier League gameweek now on (number and its match days) from Fantasy Premier League,
+          # read by custom.js's gameweek pop-up as index 7; FPL can't be read from the browser, so it comes through here
+          - type: customapi
+            url: "https://fantasy.premierleague.com/api/event-status/"
+            refreshInterval: 900000
+            mappings:
+              - field: status.0.event
+                label: Gameweek
 
     - Beszel:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/beszel.svg

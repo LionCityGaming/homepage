@@ -50,7 +50,8 @@
 
 ### Live information
 
-- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's kick-off countdown and live score, a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex (and who is watching) or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
+- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's match (both club badges either side of the score, with the kick-off time, the minute, half-time or full-time underneath), a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex (and who is watching) or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
+- **Gameweek results.** A small Gameweek button on the Premier League table opens every match of the current gameweek by day: badges, scores or kick-off times, and the minute, HT or FT. Your team's match is highlighted and the list refreshes every minute while open. Clicking your team's Live Activity opens it too.
 - **Notification banners.** A new Gotify message slides in at the top right like a macOS banner, on any tab. Priority 8 and up stays until you close it, lower priorities leave after a few seconds, and 0 to 3 stay quiet.
 - **Trend lines.** The CPU and memory figures on the server cards carry a faint line of the last 24 hours, with the day's range on hover.
 - **Disk meters.** Each disk in the menu bar has its own icon and colour, turning amber at 75% and red at 90%.
@@ -75,6 +76,10 @@
 **Calendars:** family calendar and to-do list (blurred), Premier League fixtures and table, recently downloaded films and episodes, and upcoming releases:
 
 ![The Calendars tab](screenshots/calendars.png)
+
+**This gameweek's matches**, opened from the Gameweek button on the table:
+
+![The gameweek results](screenshots/gameweek.png)
 
 **A clear night:** stars behind the glass (`?mood=clear&sky=night`):
 
@@ -176,7 +181,9 @@ Add these to the Homepage address to preview or switch things. They combine with
 
 **Beszel and the trend lines.** The Beszel card's second row (the busiest system and the fullest disk) and the trend lines on the server cards both come from `extras/beszel-summary.py`, a tiny service that logs in to Beszel with the widget's user. It serves the summary at `/` and the last 24 hours of CPU and memory per machine at `/history`, read by a hidden widget on the Beszel card. Match the card names to your Beszel systems in `TREND_CARDS` in `custom.js`.
 
-**Live Activities.** The boxes are a list of sources in `custom.js` (`LIVE_SOURCES`); each reads its data and returns boxes, so adding one is a small block. They read through Homepage's own proxy, so no keys reach the browser. Home Assistant returns at most four readings per widget, so the Home Assistant card carries four hidden extra widgets with the entities the capsules watch (washer, doors, gate, blinds, sun, vacuum, Spotify accounts named "Spotify <name>", calendars); rename them to yours. The Komodo card has two hidden widgets that ask Komodo's read API for every stack and container (`params: {limit: 0}`, as Komodo otherwise answers with one page of 50), so a box can say which one is down. The football team is `LIVE_TEAM` in `custom.js` (ESPN's abbreviation, name and competitions); scores come from ESPN's public scoreboard.
+**Live Activities.** The boxes are a list of sources in `custom.js` (`LIVE_SOURCES`); each reads its data and returns boxes, so adding one is a small block. They read through Homepage's own proxy, so no keys reach the browser. Home Assistant returns at most four readings per widget, so the Home Assistant card carries four hidden extra widgets with the entities the capsules watch (washer, doors, gate, blinds, sun, vacuum, Spotify accounts named "Spotify <name>", calendars); rename them to yours. The Komodo card has two hidden widgets that ask Komodo's read API for every stack and container (`params: {limit: 0}`, as Komodo otherwise answers with one page of 50), so a box can say which one is down. The football team is `LIVE_TEAM` in `custom.js` (ESPN's abbreviation, name and competitions); scores and club badges come from ESPN's public scoreboard, using ESPN's versions of the badges made for dark backgrounds where a club has one.
+
+**Gameweek results.** The button sits over the Premier League table card (the iframe with class `epl`), so keep that class or point `gwButton()` in `custom.js` at your own card. Fantasy Premier League says which gameweek is on and its match days; its API can't be read from a browser, so the Home Assistant card carries one more hidden widget (a `customapi` reading `https://fantasy.premierleague.com/api/event-status/`, index 7). ESPN's scoreboard for each of those days gives the scores, state and badges.
 
 **The Dock.** The apps are the `DOCK` list in `custom.js` (name, address, icon). The links use the domain Homepage itself is opened on, so `homepage.example.com` gives `komodo.example.com` and so on. The Stacks follow `STACKS`, your bookmark group names in the order you want them, and `DOCK_SIZE` sets the icon size.
 
@@ -196,9 +203,10 @@ Add these to the Homepage address to preview or switch things. They combine with
 
 - [Homepage](https://github.com/gethomepage/homepage) by the gethomepage team
 - Fonts: Apple's San Francisco (the system font on Apple devices) and [Inter](https://rsms.me/inter/) from Google Fonts everywhere else
-- Icons: [Material Design Icons](https://pictogrammers.com/library/mdi/) (embedded) and [dashboard icons](https://github.com/homarr-labs/dashboard-icons)
+- Icons: [Material Design Icons](https://pictogrammers.com/library/mdi/) (embedded), [dashboard icons](https://github.com/homarr-labs/dashboard-icons) and [Simple Icons](https://simpleicons.org/) (the Premier League lion)
 - Weather: [OpenWeatherMap](https://openweathermap.org/)
-- Scores: ESPN's public scoreboard
+- Scores and club badges: ESPN's public scoreboard
+- Gameweeks: [Fantasy Premier League](https://fantasy.premierleague.com/)
 
 ## License
 

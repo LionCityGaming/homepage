@@ -1812,6 +1812,11 @@ html[data-pill] #hp-tab-pill { transition: transform 0.3s cubic-bezier(0.25, 0.1
 @keyframes mac-live-glide { 0%, 12% { transform: translateX(0); } 88%, 100% { transform: translateX(var(--shift, 0)); } }
 .hp-live-icon { flex: none; width: 22px; height: 22px; background: center / contain no-repeat; }
 .hp-live-mono { background: #ffffff; -webkit-mask: var(--live-icon) center / contain no-repeat; mask: var(--live-icon) center / contain no-repeat; }
+/* club badges on a match (custom.js team source): full colour, a faint light outline so dark crests show on the glass */
+.hp-live-pill:has(.hp-live-badge) .hp-live-icon { width: 24px; height: 24px; filter: drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.45)); }
+/* a match is symmetrical: equal padding both sides, both lines centred between the badges */
+.hp-live-pill:has(.hp-live-badge) { padding: 0 15px; }
+.hp-live-pill:has(.hp-live-badge) .hp-live-text { align-items: center; text-align: center; }
 .hp-live-warn { background: rgba(255, 159, 10, 0.22); border-color: rgba(255, 159, 10, 0.55); color: #ffd28a; }
 .hp-live-warn .hp-live-mono { background: #ff9f0a; }
 .hp-live-good { background: rgba(48, 209, 88, 0.20); border-color: rgba(48, 209, 88, 0.55); color: #a8f0b8; }
@@ -1829,6 +1834,46 @@ html[data-pill] #hp-tab-pill { transition: transform 0.3s cubic-bezier(0.25, 0.1
 .hp-live-ring circle { fill: none; stroke-width: 3; stroke: rgba(255, 255, 255, 0.22); }
 .hp-live-ring circle + circle { stroke: #ffffff; stroke-linecap: round; transition: stroke-dasharray 0.6s var(--mac-ease); }
 @media (pointer: coarse), (max-width: 1024px) { #hp-live { display: none; } }
+/* the gameweek button (custom.js gwButton): a small capsule in the empty top-left corner of the EPL table, over the frame */
+.service-card:has(.epl) { position: relative; }
+#hp-gw-btn {
+  position: absolute; z-index: 5; display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px;
+  border-radius: 12px; background: var(--std-glass); border: 0.5px solid var(--std-edge); box-shadow: var(--lg-rim-soft);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  color: var(--mac-label); font-size: 11px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; cursor: pointer;
+  transition: transform 0.3s var(--mac-spring), background 0.2s var(--mac-ease);
+}
+#hp-gw-btn:hover { transform: scale(1.06); background: var(--std-sheen), rgba(255, 255, 255, 0.10); }
+#hp-gw-btn:active { transform: scale(0.94); }
+.hp-gw-btn-icon { width: 14px; height: 14px; background: #ffffff; -webkit-mask: var(--live-icon) center / contain no-repeat; mask: var(--live-icon) center / contain no-repeat; }
+.hp-live-pill:has(.hp-live-badge) { cursor: pointer; }
+/* the gameweek panel: a floating panel (STANDARD tier 3), every match by day */
+#hp-gw {
+  position: fixed; z-index: 47; width: 440px; max-height: calc(100vh - 140px); overflow-y: auto; padding: 14px 12px 10px;
+  color: var(--mac-label); transform-origin: 30px 0; animation: mac-gw-in 0.4s var(--mac-spring);
+  transition: opacity 0.2s var(--mac-ease), transform 0.2s var(--mac-ease);
+}
+#hp-gw[data-out] { opacity: 0; transform: scale(0.94) translateY(-6px); }
+@keyframes mac-gw-in { from { opacity: 0; transform: scale(0.88) translateY(-12px); } }
+.hp-gw-head { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 0 8px; }
+.hp-gw-league { font-size: 11px; font-weight: 500; opacity: 0.62; }
+.hp-gw-title { font-size: 15px; font-weight: 600; }
+.hp-gw-day { padding: 10px 8px 4px; font-size: 11px; font-weight: 600; opacity: 0.62; }
+.hp-gw-row {
+  display: grid; grid-template-columns: 1fr 22px 52px 22px 1fr 44px; align-items: center; gap: 8px; height: 34px; padding: 0 8px;
+  border-radius: 8px; font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.hp-gw-row:hover { background: rgba(255, 255, 255, 0.06); }
+.hp-gw-ours, .hp-gw-ours:hover { background: rgba(255, 255, 255, 0.10); font-weight: 600; }
+.hp-gw-home { text-align: right; overflow: hidden; text-overflow: ellipsis; }
+.hp-gw-away { overflow: hidden; text-overflow: ellipsis; }
+.hp-gw-badge { width: 22px; height: 22px; background: center / contain no-repeat; filter: drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.45)); }
+.hp-gw-score { text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hp-gw-v { font-weight: 500; opacity: 0.62; }
+.hp-gw-state { text-align: right; font-size: 11px; opacity: 0.62; font-variant-numeric: tabular-nums; }
+.hp-gw-live .hp-gw-state { color: #ff453a; opacity: 1; font-weight: 600; }
+.hp-gw-empty { padding: 18px 8px; text-align: center; font-size: 12px; opacity: 0.62; }
+@media (pointer: coarse), (max-width: 1024px) { #hp-gw-btn { display: none; } }
 
 /* Idle dimming for the OLED monitor (custom.js idleOn / idleWake, 16/10/2026, on for everyone on desktop after 10 minutes since 16/10/2026; ?idle=<seconds> or ?idle=0): after
    the set time without input the page fades to near black with a dim clock that drifts a little every minute, and
@@ -2042,7 +2087,7 @@ li.service:is([data-name="Movies"], [data-name="TV Episodes"], [data-name="Media
 /* 2. rows inside cards: one corner size (Homepage used 6 px here, 6.4 px there) */
 li.service .service-card :is(.rounded-md, .rounded-sm)[class*="bg-theme"] { border-radius: 8px !important; }
 /* 3. floating panels: one recipe (they had four tints, three edges and 20 / 22 px corners) */
-:is(dialog:has(> input[placeholder="Search"]), #hp-stack, .hp-note) {
+:is(dialog:has(> input[placeholder="Search"]), #hp-stack, .hp-note, #hp-gw) {
   background: var(--std-float) !important;
   border: 0.5px solid var(--std-edge) !important;
   -webkit-backdrop-filter: blur(30px) !important; backdrop-filter: blur(30px) !important;
