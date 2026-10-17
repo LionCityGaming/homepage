@@ -50,7 +50,7 @@
 
 ### Live information
 
-- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's kick-off countdown and live score, a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
+- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's kick-off countdown and live score, a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex (and who is watching) or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
 - **Notification banners.** A new Gotify message slides in at the top right like a macOS banner, on any tab. Priority 8 and up stays until you close it, lower priorities leave after a few seconds, and 0 to 3 stay quiet.
 - **Trend lines.** The CPU and memory figures on the server cards carry a faint line of the last 24 hours, with the day's range on hover.
 - **Disk meters.** Each disk in the menu bar has its own icon and colour, turning amber at 75% and red at 90%.
@@ -186,7 +186,7 @@ Add these to the Homepage address to preview or switch things. They combine with
 
 | File | What it does |
 |---|---|
-| `extras/home-assistant-glass-embed.js` | Gives Home Assistant dashboards shown inside Homepage the same Liquid Glass look: see-through page, matching tint, sheen, rim and hairline, the same font, and no hover effects. It only applies inside an iframe, so Home Assistant itself looks unchanged. Set `EMBEDS` at the top to your dashboards and add it as a dashboard resource (instructions in the file) |
+| `extras/home-assistant-glass-embed.js` | Gives Home Assistant dashboards shown inside Homepage the same Liquid Glass look: see-through page, matching tint, sheen, rim and hairline, the same font, no hover effects, and button names too long for their tile glide like Homepage's instead of being cut off. It only applies inside an iframe, so Home Assistant itself looks unchanged. Set `EMBEDS` at the top to your dashboards and add it as a dashboard resource (instructions in the file) |
 | `extras/home-assistant-touch-spring.js` | An iOS-style press and bounce for tiles on phone and wall-tablet dashboards, without Android's square tap highlight. Set `PAGES` at the top to your dashboards |
 | `extras/glance-glass.css` | The same look for [Glance](https://github.com/glanceapp/glance): add it to the end of your Glance custom CSS |
 | `extras/beszel-summary.py` | Serves the Beszel card's second row and the trend-line history. Run it next to Beszel with `BESZEL_USER` and `BESZEL_PASSWORD` set, on the same Docker network as Homepage |

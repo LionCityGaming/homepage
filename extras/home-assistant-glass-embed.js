@@ -12,6 +12,8 @@
 // that page CSS can't reach, so each small card's shadow root gets a few CSS rules of its own (see below).
 // 16/10/2026: Liquid Glass (macOS 26), same as Homepage's "LIQUID GLASS" block and Glance: clearer cards (a 40% tint, was
 // 52%), a bright rim of light on the top edge, a lighter hairline; then the same sheen as Homepage's cards, no hover effects.
+// 17/10/2026: a button's name or status that is too long glides to its end and back (like Homepage's Gotify message and
+// Live Activities) instead of being cut off with "...".
 // Install: Settings > Dashboards > Resources > Add resource, type JavaScript module (or add it with the API as an
 // inline resource). Change EMBEDS to the dashboards you show in Homepage; the outline drawn just outside each card is
 // used on "/dashboard-homepage" only (the tile panel), as panels made of one full-frame card would clip it.
@@ -100,13 +102,39 @@
     "ha-card:not([data-hp-clear]) { background-origin: border-box !important; }" +
     // HA's pointer highlight off on every card (16/10/2026, user: still a "weird animation" on hover: a 4% white fade).
     // Button-card sets its own value on each tile, which beat the page-wide one, so it is set on the ripple itself
-    "ha-ripple, mwc-ripple, md-ripple { --md-ripple-hover-opacity: 0 !important; --ha-ripple-hover-opacity: 0 !important; --mdc-ripple-hover-opacity: 0 !important; }";
+    "ha-ripple, mwc-ripple, md-ripple { --md-ripple-hover-opacity: 0 !important; --ha-ripple-hover-opacity: 0 !important; --mdc-ripple-hover-opacity: 0 !important; }" +
+    // long names glide (glide() below marks them): same timing, pause and fade as Homepage's .hp-glide (custom.css)
+    ".hp-glide { text-overflow: clip !important; }" +
+    ".hp-glide-on { -webkit-mask: linear-gradient(90deg, #000 88%, transparent); mask: linear-gradient(90deg, #000 88%, transparent);" +
+    " animation: hp-glide var(--glide, 4s) ease-in-out 0.8s infinite alternate; }" +
+    "@keyframes hp-glide { 0%, 12% { text-indent: 0; } 88%, 100% { text-indent: var(--shift, 0); } }" +
+    "@media (prefers-reduced-motion: reduce) { .hp-glide-on { animation: none; -webkit-mask: none; mask: none; text-overflow: ellipsis !important; } }";
   // Only on the Home panel: the calendar, To Do and EPL panels are one card filling the whole frame, so a ring outside it
   // fell just beyond the frame and was cut off (user 16/10/2026: calendar borders disappearing). Those cards start on
   // whole pixels, so they keep a plain border
   if (p.indexOf("/dashboard-homepage") === 0) GLASS = GLASS +
     "ha-card:not([data-hp-clear]) { border-color: transparent !important; box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.16), 0 -0.5px 0 0 rgba(255, 255, 255, 0.12) !important; }" +
     "@media (max-resolution: 1.5dppx) { ha-card:not([data-hp-clear]) { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 -1px 0 0 rgba(255, 255, 255, 0.12) !important; } }";
+  // a button-card's name, status or state that doesn't fit: measured again only when its text or the button's width
+  // changes, so a running glide isn't restarted by every scan
+  function glide(el) {
+    var host = el.getRootNode().host, key = el.textContent + "|" + (host ? host.offsetWidth : 0);
+    // (the class is checked too: button-card can rewrite an element's classes when its entity updates)
+    if (!el.clientWidth || (el.getAttribute("data-glide-key") === key && el.classList.contains("hp-glide"))) return;
+    el.setAttribute("data-glide-key", key);
+    el.classList.add("hp-glide");
+    el.classList.remove("hp-glide-on");
+    el.style.removeProperty("width");
+    var over = el.scrollWidth - el.clientWidth;
+    if (over > 2) {
+      // held at its resting width: button-card's grid sizes the name to its text, so the box (and its fade) shrank as
+      // the text slid, and the fade caught the last letter again
+      el.style.width = el.clientWidth + "px";
+      el.style.setProperty("--shift", -(over + Math.ceil(el.clientWidth * 0.12)) + "px");  // past the end by the fade (right 12%), so the last letter shows
+      el.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second, like Homepage
+      el.classList.add("hp-glide-on");
+    }
+  }
   function springRoots(node) {
     if (!node) return;
     if (node.tagName === "HA-CARD") {
@@ -123,6 +151,7 @@
         gl.textContent = GLASS;
         root.appendChild(gl);
       }
+      if (root !== document && root.host && root.host.tagName === "BUTTON-CARD") root.querySelectorAll("#name, #label, #state").forEach(glide);
       // only a root holding this one card (a big card's stack would grow with it), and only small cards
       if (h > 0 && h <= 140 && root !== document && root.host && !root.querySelector("style[data-hp-spring]") &&
           root.querySelectorAll("ha-card").length === 1) {

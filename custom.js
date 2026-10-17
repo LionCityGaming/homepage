@@ -395,7 +395,8 @@
       v.classList.remove("hp-glide-on");
       const over = v.scrollWidth - v.clientWidth;
       if (over > 2) {
-        v.style.setProperty("--shift", -over + "px");
+        // past the end by the fade's width (the right 12%, custom.css), so the last letter stops clear of it (user 17/10/2026)
+        v.style.setProperty("--shift", -(over + Math.ceil(v.clientWidth * 0.12)) + "px");
         v.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second, like the Live Activities
         v.classList.add("hp-glide-on");
       }
@@ -1208,12 +1209,13 @@
       }));
       return out;
     }) },
-    // media: Plex (Tautulli on the Home tab's Plex card), up to two streams
+    // media: Plex (Tautulli on the Home tab's Plex card), up to two streams; the second line ends with who is watching
+    // (Tautulli's friendly name for the Plex user; user 17/10/2026)
     plex: { every: 15, read: () => proxy("group=Home&service=Plex%20Media%20Server&index=0&endpoint=get_activity").then((d) =>
       ((((d || {}).response || {}).data || {}).sessions || []).slice(0, 2).map((s) => {
         const ep = s.media_type === "episode" && s.parent_media_index ? " · S" + String(s.parent_media_index).padStart(2, "0") + "E" + String(s.media_index).padStart(2, "0") : "";
-        const name = (s.grandparent_title || s.title || "Plex") + ep;
-        return pill({ group: "media", icon: ICON_URL("plex"), text: (s.state === "paused" ? "❚❚ " : "") + name, pct: +s.progress_percent || 0,
+        const name = (s.grandparent_title || s.title || "Plex") + ep, who = s.friendly_name || s.user || "";
+        return pill({ group: "media", icon: ICON_URL("plex"), text: (s.state === "paused" ? "❚❚ " : "") + name + (who ? " · " + who : ""), pct: +s.progress_percent || 0,
           tip: (s.full_title || name) + " · " + (s.state || "playing") + " · " + (s.progress_percent || 0) + "%" + (s.player ? " · " + s.player : "") });
       })) },
     // downloads: SABnzbd
@@ -1233,7 +1235,7 @@
     pill({ group: "sport", icon: MDI("soccer"), mono: true, tone: "live", text: "EVE 0–1 CHE · 63'", tip: "Chelsea at Everton · live" }),
     pill({ group: "soon", icon: MDI("calendar-clock"), mono: true, text: "Team Meeting · in 15 min", tip: "Team Meeting at 10:00" }),
     pill({ group: "home", icon: MDI("washing-machine"), mono: true, text: "Washer · Rinsing", tip: "Washer: Rinse" }),
-    pill({ group: "media", icon: ICON_URL("plex"), text: "The Bear · S04E03", pct: 38, tip: "The Bear - S04E03 · playing · 38%" }),
+    pill({ group: "media", icon: ICON_URL("plex"), text: "The Bear · S04E03 · Sam", pct: 38, tip: "The Bear - S04E03 · playing · 38%" }),
     pill({ group: "media", icon: ICON_URL("spotify"), text: "Please Please Please · Sabrina Carpenter", tip: "You · Please Please Please · Sabrina Carpenter" }),
     pill({ group: "download", icon: ICON_URL("sabnzbd"), text: "Downloading · 3 min", pct: 64, tip: "1 download · 64% · 48 MB/s" }),
   ];
@@ -1295,7 +1297,7 @@
       const over = t.firstChild.scrollWidth - t.clientWidth;
       if (over > 2) {
         t.classList.add("hp-live-glide");
-        t.style.setProperty("--shift", -over + "px");
+        t.style.setProperty("--shift", -(over + Math.ceil(t.clientWidth * 0.15)) + "px");  // past the end by the fade (right 15%), so the last letter shows
         t.style.setProperty("--glide", Math.max(2, over / 30).toFixed(1) + "s");  // about 30 px a second
       }
     });
