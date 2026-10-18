@@ -67,6 +67,10 @@
 
 ## Screenshots
 
+**Video tour** (84 seconds): the menu bar and its Live Activities, the glass lens gliding between tabs, the section folds, the Dock and a Stack, notification banners, this gameweek's results, the night sky, idle dimming and the phone view. Click the preview to watch it.
+
+[![A video tour of the dashboard](screenshots/tour-preview.webp)](screenshots/tour.mp4)
+
 **Applications**, with figures, and with every section folded:
 
 ![The Applications tab](screenshots/applications.png)
@@ -148,7 +152,7 @@ Add these to the Homepage address to preview or switch things. They combine with
 | `custom.js` | The Live Activities, idle dimming, the Dock and its Stacks, notification banners, the gliding tab lens, trend lines, weather moods, disk colours, the phone layout and small tidy-ups (tidier dates, one row per show in Media Releases, numbers that fit their cards) |
 | `.env.example` | Every variable the config uses, with no values |
 | `extras/` | Matching styles for Home Assistant and Glance, and small helpers for the Gotify and Beszel cards |
-| `screenshots/` | The pictures in this README, taken with sample data and personal details blurred |
+| `screenshots/` | The pictures and the video tour in this README, taken with sample data and personal details blurred |
 
 ## Setup
 
