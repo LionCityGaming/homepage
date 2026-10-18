@@ -67,7 +67,7 @@
 
 ## Screenshots
 
-**Video tour** (84 seconds): the menu bar and its Live Activities, the glass lens gliding between tabs, the section folds, the Dock and a Stack, notification banners, this gameweek's results, the night sky, idle dimming and the phone view. Click the preview to watch it.
+**Video tour** (85 seconds, with captions saying what each part shows): the menu bar and its Live Activities, the glass lens gliding between tabs, the section folds, the Dock and a Stack, notification banners, this gameweek's results, the night sky, idle dimming and the phone view. Click the preview to watch it.
 
 [![A video tour of the dashboard](screenshots/tour-preview.webp)](screenshots/tour.mp4)
 
