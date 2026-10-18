@@ -4,7 +4,6 @@
 </p>
 
 <h1 align="center">The Lion's Den</h1>
-https://github.com/user-attachments/assets/5666d434-a94a-4de2-ac34-3cd0f8348b94
 <p align="center">
   <strong>A Liquid Glass <a href="https://gethomepage.dev">Homepage</a> dashboard for a self-hosted homelab</strong><br>
   Clear glass cards in the style of macOS 26, a wallpaper that follows the time of day and the weather, live status boxes in the menu bar, a Dock with bookmark Stacks, and Home Assistant and Glance panels that match it exactly.
@@ -71,6 +70,11 @@ https://github.com/user-attachments/assets/5666d434-a94a-4de2-ac34-3cd0f8348b94
 **Video tour** (85 seconds, with captions saying what each part shows): the menu bar and its Live Activities, the glass lens gliding between tabs, the section folds, the Dock and a Stack, notification banners, this gameweek's results, the night sky, idle dimming and the phone view. Click the preview to watch it.
 
 [![A video tour of the dashboard](screenshots/tour-preview.webp)](screenshots/tour.mp4)
+
+
+https://github.com/user-attachments/assets/a0920f5e-8045-4456-943b-8a0c60069179
+
+
 
 **Applications**, with figures, and with every section folded:
 
