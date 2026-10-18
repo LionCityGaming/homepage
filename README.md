@@ -1,9 +1,10 @@
+
 <p align="center">
   <img src="logo.png" alt="The Lion's Den" width="160">
 </p>
 
 <h1 align="center">The Lion's Den</h1>
-
+https://github.com/user-attachments/assets/5666d434-a94a-4de2-ac34-3cd0f8348b94
 <p align="center">
   <strong>A Liquid Glass <a href="https://gethomepage.dev">Homepage</a> dashboard for a self-hosted homelab</strong><br>
   Clear glass cards in the style of macOS 26, a wallpaper that follows the time of day and the weather, live status boxes in the menu bar, a Dock with bookmark Stacks, and Home Assistant and Glance panels that match it exactly.
