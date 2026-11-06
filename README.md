@@ -69,7 +69,7 @@
 
 **Video tour** (2:51, with captions saying what each part shows): disk meters, Live Activities and trend lines, the glass lens gliding between tabs, status dots, the section folds, the Dock and a Stack, Home Assistant, exchange rates and news, glass search, notification banners, the calendars, this gameweek's results, downloads and releases, every wallpaper look, idle dimming and the phone view. A sharper copy is at [screenshots/tour.mp4](screenshots/tour.mp4).
 
-https://github.com/user-attachments/assets/a0920f5e-8045-4456-943b-8a0c60069179
+https://github.com/user-attachments/assets/d232b423-3a7f-46ff-8e88-a7dba1d809ad
 
 **Applications**, with figures, and with every section folded:
 
