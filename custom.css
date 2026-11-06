@@ -1895,6 +1895,7 @@ html[data-idle] body *:not(#hp-idle):not(#hp-idle *) { animation-play-state: pau
 li.service[data-name="Komodo"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
 /* Beszel's third widget only carries the trend-line readings for custom.js (16/10/2026) */
 li.service[data-name="Beszel"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }
+li.service[data-name="Gatus"] .service-card > .relative.flex-row ~ .relative.flex-row ~ .relative.flex-row { display: none !important; }  /* Healthchecks, for the menu bar */
 /* Live Activities: the menu bar's right side fills up, so the title text steps aside and the disks sit just
    after the crest, as the macOS menu bar keeps its middle free (user 16/10/2026, html[data-live] set by custom.js) */
 @media (pointer: fine) and (min-width: 1025px) {

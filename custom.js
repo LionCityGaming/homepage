@@ -800,7 +800,7 @@
     10: ["Wallos", "wallos"], 11: ["Free Games", null], 13: ["Seerr", "seerr"], 16: ["Komodo", "komodo"],
     17: ["Maintainerr", "maintainerr"], 18: ["PBS", "proxmox"], 19: ["Bazarr", "bazarr"], 20: ["Prowlarr", "prowlarr"],
     22: ["BookStack", "bookstack"], 23: ["Authentik", "authentik"], 24: ["Gatus", "gatus"], 25: ["Synology", "synology"],
-    26: ["Bambuddy", null], 27: ["PosterFlow", null],
+    26: ["Bambuddy", null], 27: ["PosterFlow", null], 29: ["Healthchecks", "healthchecks"],
   };
   const ICON_URL = (slug) => "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/" + slug + ".webp";
   let noteLast = null;
@@ -1166,7 +1166,8 @@
       if (/^on$/i.test(hOn) && hMsg) out.push(pill({ group: "day", icon: MDI("party-popper"), mono: true, tone: "good", text: hMsg, tip: "Public holiday: " + hMsg }));
       return out;
     }) },
-    // problems: services down (Gatus), containers and stacks not running or unhealthy, by name and with their state
+    // problems: services down (Gatus), scheduled jobs late or down (Healthchecks: the hidden third widget on the Gatus
+    // card; down = failed or never ran; 20/10/2026), containers and stacks not running or unhealthy, by name and with their state
     // (Komodo: the hidden third and fourth widgets on its tile list every stack and container; the summary's counts
     // catch anything the list misses), a drive failing (Scrutiny)
     problems: { every: 30, read: () => Promise.all([
@@ -1175,10 +1176,17 @@
       proxy("group=Infrastructure&service=Komodo&index=2"),
       proxy("group=Infrastructure&service=Scrutiny&index=1"),
       proxy("group=Infrastructure&service=Komodo&index=3"),
-    ]).then(([gatus, ct, stacks, scr, cons]) => {
+      proxy("group=Infrastructure&service=Gatus&index=2"),
+    ]).then(([gatus, ct, stacks, scr, cons, hc]) => {
       const out = [];
       const down = (Array.isArray(gatus) ? gatus : []).filter((e) => { const r = (e.results || []).slice(-1)[0]; return r && r.success === false; }).map((e) => e.name);
       if (down.length) out.push(pill({ group: "down", icon: MDI("alert-circle"), mono: true, tone: "bad", text: down.length === 1 ? down[0] + " Down" : down.length + " Services Down", tip: "Down (Gatus): " + down.join(", ") }));
+      const jobs = ((hc || {}).checks || []);
+      [["down", "bad", "down", "Down", "failed or didn't run on time"], ["grace", "warn", "warn", "Late", "running late"]].forEach(([st, tone, group, word, why]) => {
+        const names = jobs.filter((j) => j.status === st).map((j) => j.name);
+        if (names.length) out.push(pill({ group, icon: MDI("clock-alert-outline"), mono: true, tone, text: names.length === 1 ? names[0] + " " + word : names.length + " Jobs " + word,
+          tip: "Healthchecks, " + why + ": " + names.join(", ") }));
+      });
       // the word for a state: "Down" for stopped/exited/dead, otherwise the state itself ("Unhealthy", "Restarting")
       const word = (st) => (/^(down|stopped|exited|dead|created|removing)$/i.test(st) ? "Down" : st.charAt(0).toUpperCase() + st.slice(1).toLowerCase());
       const pretty = (n) => n.replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());

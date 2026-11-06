@@ -358,7 +358,7 @@
 
     - Home Assistant:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/home-assistant.webp
-        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}?disable_km"
+        href: "{{HOMEPAGE_VAR_HOME_ASSISTANT_URL}}"
         description: Smart Home Hub
         siteMonitor: "{{HOMEPAGE_VAR_HOME_ASSISTANT_INTERNAL_URL}}"
         # two rows of three from Home Assistant (render token, state reads only, so the figures come from template helpers):
@@ -504,27 +504,37 @@
           - type: customapi
             url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8070/api/v1/endpoints/statuses?page=1&pageSize=1"
             mappings:
-              - field: 11.results.0.success
+              - field: 13.results.0.success
                 label: Proxmox
                 remap:
                   - value: true
                     to: Up
                   - any: true
                     to: Down
-              - field: 12.results.0.success
+              - field: 14.results.0.success
                 label: Synology
                 remap:
                   - value: true
                     to: Up
                   - any: true
                     to: Down
-              - field: 10.results.0.success
+              - field: 12.results.0.success
                 label: PBS
                 remap:
                   - value: true
                     to: Up
                   - any: true
                     to: Down
+          # not shown (custom.css hides it): every Healthchecks check and its state, for custom.js's Live Activities
+          # (a job late or failed shows in the menu bar; 20/10/2026). Read-only API key
+          - type: customapi
+            url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8000/api/v3/checks/"
+            headers:
+              X-Api-Key: "{{HOMEPAGE_VAR_HEALTHCHECKS_KEY}}"
+            refreshInterval: 60000
+            mappings:
+              - field: checks.0.status
+                label: Jobs
 
     - Gotify:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gotify.webp
@@ -581,6 +591,8 @@
                   - value: 26
                     to: "Bambuddy"
                   - value: 27
+                  - value: 29
+                    to: "Healthchecks"
                     to: "PosterFlow"
           # second row from extras/gotify-count.sh (run every 15 s on the Docker host): Gotify's API has no
           # message totals (the built-in widget counts one page, "100"), so the counts come from its database,
@@ -804,6 +816,17 @@
               label: Queued
               format: size
 
+    - Soulseek:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/slskd.webp
+        href: "https://slskd.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Peer Music Source for DroppedNeedle
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5030"
+        widget:
+          type: slskd
+          url: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5030"
+          key: "{{HOMEPAGE_VAR_SLSKD_KEY}}"
+          fields: ["slskStatus", "downloads", "sharedFiles"]
+
     - Profilarr:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/profilarr.webp
         href: "https://profilarr.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -949,6 +972,12 @@
         href: "https://ecm.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Bulk Channel Editor
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:6100"
+
+    - Scrobbler:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/multi-scrobbler.webp
+        href: "https://scrobbler.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Plex Music Plays to ListenBrainz
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9078"
 
 - Personal & Productivity:
     - Immich:
@@ -1180,6 +1209,11 @@
         href: "https://degoog.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Private Web Search
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:4445"
+    - Neko:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/neko-light.webp
+        href: "https://neko.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Private Browser
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8097"
 
 - 3D Printing:
     - MakerWorld:
@@ -1212,6 +1246,10 @@
         icon: https://haveibeenpwned.com/apple-touch-icon-180x180.png
         href: "https://haveibeenpwned.com"
         description: Check for Leaked Accounts
+    - Healthchecks:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/healthchecks.webp
+        href: "https://healthchecks.{{HOMEPAGE_VAR_DOMAIN}}"
+        description: Scheduled Jobs on Time
     - SLZB-06M:
         icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/smlight.webp
         href: "https://slzb.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1537,6 +1575,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/metube.webp
         href: "https://metube.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8081"
+    - Neko:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/neko-light.webp
+        href: "https://neko.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8097"
     - Palworld:
         icon: /images/icons/palworld.png
         href: "https://palworld.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1574,6 +1616,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/sabnzbd.webp
         href: "https://sabnzbd.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8080"
+    - Scrobbler:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/multi-scrobbler.webp
+        href: "https://scrobbler.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:9078"
     - Scrutiny:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/scrutiny.svg
         href: "https://scrutiny.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -1586,6 +1632,10 @@
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/sonarr-radarr-light.webp
         href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
         siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:8989"
+    - Soulseek:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/slskd.webp
+        href: "https://slskd.{{HOMEPAGE_VAR_DOMAIN}}"
+        siteMonitor: "http://{{HOMEPAGE_VAR_DOCKER_HOST}}:5030"
     - Suwayomi:
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/suwayomi.webp
         href: "https://suwayomi.{{HOMEPAGE_VAR_DOMAIN}}"

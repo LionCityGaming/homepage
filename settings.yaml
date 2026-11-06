@@ -71,7 +71,7 @@ layout:
     header: true
     tab: Applications
     style: row
-    columns: 6
+    columns: 7
   3D Printing:
     disableCollapse: true
     header: true

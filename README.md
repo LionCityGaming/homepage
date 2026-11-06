@@ -50,7 +50,7 @@
 
 ### Live information
 
-- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a door open, your football team's match (both club badges either side of the score, with the kick-off time, the minute, half-time or full-time underneath), a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex (and who is watching) or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
+- **Live Activities.** Two-line glass boxes in the menu bar, like the disks, that only appear while something is happening: a service or container down (named, with its state), a scheduled job late or failed (from Healthchecks), a door open, your football team's match (both club badges either side of the score, with the kick-off time, the minute, half-time or full-time underneath), a meeting in the next 30 minutes, a birthday or public holiday, the washer with its stage, the vacuum's progress, what is playing on Plex (and who is watching) or Spotify, and downloads. Red for problems, amber when something may need you and green for good news, each with a matching edge; a progress ring where there is one, and long lines glide.
 - **Gameweek results.** A small Gameweek button on the Premier League table opens every match of the current gameweek by day: badges, scores or kick-off times, and the minute, HT or FT. Your team's match is highlighted and the list refreshes every minute while open. Clicking your team's Live Activity opens it too.
 - **Notification banners.** A new Gotify message slides in at the top right like a macOS banner, on any tab. Priority 8 and up stays until you close it, lower priorities leave after a few seconds, and 0 to 3 stay quiet.
 - **Trend lines.** The CPU and memory figures on the server cards carry a faint line of the last 24 hours, with the day's range on hover.
@@ -67,7 +67,7 @@
 
 ## Screenshots
 
-**Video tour** (85 seconds, with captions saying what each part shows): the menu bar and its Live Activities, the glass lens gliding between tabs, the section folds, the Dock and a Stack, notification banners, this gameweek's results, the night sky, idle dimming and the phone view.
+**Video tour** (2:51, with captions saying what each part shows): disk meters, Live Activities and trend lines, the glass lens gliding between tabs, status dots, the section folds, the Dock and a Stack, Home Assistant, exchange rates and news, glass search, notification banners, the calendars, this gameweek's results, downloads and releases, every wallpaper look, idle dimming and the phone view. A sharper copy is at [screenshots/tour.mp4](screenshots/tour.mp4).
 
 https://github.com/user-attachments/assets/a0920f5e-8045-4456-943b-8a0c60069179
 
